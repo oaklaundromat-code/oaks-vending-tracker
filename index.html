@@ -5,271 +5,154 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Oaks Vending Tracker</title>
 <style>
-:root{--navy:#17365D;--blue:#1F4E78;--bg:#F7F9FC;--line:#D9E2F3;--green:#E2F0D9;--yellow:#FFF2CC;--orange:#FCE4D6;--red:#F4CCCC}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#111827}
-header{background:var(--navy);color:white;padding:16px}header h1{margin:0;font-size:22px}header p{margin:5px 0 0;font-size:13px}
-nav{display:flex;gap:8px;flex-wrap:wrap;background:white;padding:10px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-nav button{border:0;background:#eef3f8;padding:10px 14px;border-radius:10px;font-weight:700;color:var(--navy)}nav button.active{background:var(--blue);color:white}
-main{max-width:1050px;margin:auto;padding:16px}.page{display:none}.page.active{display:block}
-.card{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
-h2{margin:0 0 12px;color:var(--navy)}label{display:block;font-size:13px;font-weight:700;margin:10px 0 5px}
-select,input,textarea{width:100%;padding:11px;border:1px solid #cfd8e3;border-radius:9px;font-size:16px}
-.primary{width:100%;padding:13px;border:0;border-radius:10px;background:var(--blue);color:white;font-weight:800;margin-top:12px}
-.secondary{padding:9px 12px;border:1px solid var(--line);background:white;border-radius:9px;font-weight:700;color:var(--navy)}
-.danger{padding:7px 10px;border:0;background:#b91c1c;color:white;border-radius:8px;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{background:white;border:1px solid var(--line);border-radius:12px;padding:14px}
-.metric .label{font-size:12px;color:#6b7280}.metric .value{font-size:23px;font-weight:800;color:var(--navy)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.small{font-size:12px;color:#6b7280}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-table{width:100%;border-collapse:collapse;font-size:14px}th{background:var(--blue);color:white;text-align:left;padding:9px}td{padding:9px;border-bottom:1px solid #edf1f5}
-.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.hot{background:var(--green)}.watch{background:var(--yellow)}.slow{background:var(--orange)}.dead{background:var(--red)}
-.secondary.on{background:var(--blue);color:white}.gone{background:#e5e7eb}
-.cat{font-weight:800;color:var(--navy);margin-top:14px}
-@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.row2{grid-template-columns:1fr}table{font-size:12px}}
+:root{--navy:#17365d;--blue:#1f4e78;--bg:#f7f9fc;--line:#d9e2f3}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#18212e}
+header{background:var(--navy);color:#fff;padding:17px}h1{font-size:22px;margin:0}header p{margin:5px 0 0;font-size:13px}
+nav{display:flex;flex-wrap:wrap;gap:7px;background:#fff;padding:10px;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+button{cursor:pointer}nav button,.secondary{background:#edf3f9;color:var(--navy);border:0;border-radius:9px;padding:10px 12px;font-weight:700}
+nav button.active,.secondary.on{background:var(--blue);color:#fff}main{max-width:1050px;margin:auto;padding:16px}
+.page{display:none}.page.active{display:block}.card,.metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:14px}
+h2{margin:0 0 12px;color:var(--navy);font-size:20px}label{display:block;font-size:13px;font-weight:bold;margin:11px 0 5px}
+select,input,textarea{width:100%;border:1px solid #ccd5e0;border-radius:8px;padding:10px;font:inherit}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metric{margin:0}.metric small{color:#606b78}.metric b{display:block;font-size:24px;color:var(--navy);margin-top:5px}
+.primary{width:100%;background:var(--blue);color:white;border:0;border-radius:9px;padding:12px;margin-top:12px;font-weight:bold}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 12px}.danger{background:#b42323;color:white;border:0;border-radius:7px;padding:7px 10px}
+.small{font-size:13px;color:#586474}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--blue);color:white;text-align:left;padding:9px}td{padding:9px;border-bottom:1px solid #e8edf4}
+.pill{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:bold}
+.hot{background:#e2f0d9}.watch{background:#fff2cc}.slow{background:#fce4d6}.dead{background:#f4cccc}.gone{background:#e5e7eb}
+.item-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eee}
+@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}table{font-size:12px}}
 </style>
 </head>
 <body>
-<header><h1>The Oaks Vending Tracker</h1><p>Track item movement from each restock.</p></header>
-<nav>
-<button class="tab active" data-page="restock">Restock Entry</button>
-<button class="tab" data-page="dashboard">Dashboard</button>
-<button class="tab" data-page="history">History</button>
-<button class="tab" data-page="items">Items</button>
-</nav>
+<header><h1>The Oaks Vending Tracker</h1><p>Track snack and laundry machine restocks separately.</p></header>
+<nav><button class="tab active" data-page="restock">Restock Entry</button><button class="tab" data-page="dashboard">Dashboard</button><button class="tab" data-page="history">History</button><button class="tab" data-page="items">Items</button></nav>
 <main>
-
 <section id="restock" class="page active">
-<div class="card">
-<h2>Record a Restock</h2>
-<div class="row2">
-<div><label>Date</label><input type="date" id="dateInput"></div>
-<div><label>Category</label><select id="categorySelect"></select></div>
-</div>
-<label>Item</label><select id="itemSelect"></select>
-<label>Quantity Replaced</label><input type="number" id="qtyInput" min="1" step="1" inputmode="numeric" placeholder="e.g. 6">
-<label>Slot (optional)</label><input id="slotInput" placeholder="e.g. B5">
-<label>Note (optional)</label><textarea id="noteInput" rows="2" placeholder="Sold out, nearly empty, etc."></textarea>
-<button class="primary" id="saveRestock">Save Restock</button>
-<div id="saveMessage" class="small" style="margin-top:8px"></div>
-</div>
-<div class="card"><b>How it works:</b> <span class="small">Each quantity you add is counted as movement. This is most accurate when the machine is normally filled to a consistent level each visit.</span></div>
+<div class="card"><h2>Record a Restock</h2>
+<div class="row"><div><label for="restockMachine">Machine</label><select id="restockMachine"></select></div><div><label for="dateInput">Date</label><input type="date" id="dateInput"></div></div>
+<div class="row"><div><label for="categorySelect">Category</label><select id="categorySelect"></select></div><div><label for="itemSelect">Item</label><select id="itemSelect"></select></div></div>
+<label for="qtyInput">Quantity replaced</label><input type="number" id="qtyInput" min="1" step="1" inputmode="numeric" placeholder="e.g. 6">
+<label for="slotInput">Slot (optional)</label><input id="slotInput" placeholder="e.g. B5">
+<label for="noteInput">Note (optional)</label><textarea id="noteInput" rows="2"></textarea>
+<button class="primary" id="saveRestock">Save Restock</button><p id="saveMessage" class="small" role="status"></p></div>
+<div class="card small">Quantity replaced is used as an estimate of units moved. The estimate works best if you fill each slot to the same level each visit.</div>
 </section>
-
 <section id="dashboard" class="page">
-<div class="grid">
-<div class="metric"><div class="label">Units moved — 7 days</div><div class="value" id="m7">0</div></div>
-<div class="metric"><div class="label">Units moved — 30 days</div><div class="value" id="m30">0</div></div>
-<div class="metric"><div class="label">Items in machine</div><div class="value" id="mItems">0</div></div>
-<div class="metric"><div class="label">Restock entries — 30 days</div><div class="value" id="mEntries">0</div></div>
-</div>
-<div class="card" style="margin-top:14px">
-<h2>Item Movement</h2>
-<div class="toolbar" id="filterBar"></div>
-<div style="overflow:auto"><table><thead><tr><th>Item</th><th>Category</th><th>7d</th><th>30d</th><th>Weekly pace</th><th>Last restock</th><th>Status</th></tr></thead><tbody id="movementBody"></tbody></table></div>
-<p class="small" id="paceNote"></p>
-</div>
-<div class="card"><h2>Quick Read</h2><div id="quickRead" class="small"></div></div>
+<div class="card"><label for="dashboardMachine">Show machine</label><select id="dashboardMachine"></select></div>
+<div class="grid"><div class="metric"><small>Units moved · 7 days</small><b id="m7">0</b></div><div class="metric"><small>Units moved · 30 days</small><b id="m30">0</b></div><div class="metric"><small>Current items</small><b id="mItems">0</b></div><div class="metric"><small>Restock entries · 30 days</small><b id="mEntries">0</b></div></div>
+<div class="card" style="margin-top:14px"><h2>Item Movement</h2><div class="toolbar" id="filterBar"></div>
+<div class="scroll"><table><thead><tr><th>Machine</th><th>Item</th><th>Category</th><th>7d</th><th>30d</th><th>Weekly pace</th><th>Last restock</th><th>Status</th></tr></thead><tbody id="movementBody"></tbody></table></div><p class="small" id="paceNote"></p></div>
+<div class="card"><h2>Quick Read</h2><div class="small" id="quickRead"></div></div>
 </section>
-
-<section id="history" class="page">
-<div class="card">
-<h2>Restock History</h2>
-<div class="toolbar">
-<button class="secondary" id="exportCsv">Export CSV</button>
-<button class="secondary" id="importCsv">Import CSV</button>
-<button class="secondary" id="clearHistory">Clear History</button>
-<input type="file" id="importFile" accept=".csv,text/csv" hidden>
-</div>
-<p class="small" id="backupNote"></p>
-<div style="overflow:auto"><table><thead><tr><th>Date</th><th>Category</th><th>Item</th><th>Qty</th><th>Slot</th><th>Note</th><th></th></tr></thead><tbody id="historyBody"></tbody></table></div>
-</div>
-</section>
-
-<section id="items" class="page">
-<div class="card">
-<h2>Vending Items</h2><p class="small">Edit this list whenever you change products.</p>
-<div class="row2">
-<div><label>Category</label><select id="newCategory"><option>Drinks</option><option>Chips</option><option>Candy</option></select></div>
-<div><label>Item name</label><input id="newItemName" placeholder="e.g. Celsius Peach Vibe"></div>
-</div>
-<button class="primary" id="addItem">Add Item</button>
-</div>
-<div class="card"><div id="itemManager"></div></div>
-</section>
+<section id="history" class="page"><div class="card"><h2>Restock History</h2>
+<label for="historyMachine">Show machine</label><select id="historyMachine"></select>
+<div class="toolbar" style="margin-top:12px"><button class="secondary" id="exportCsv">Export CSV</button><button class="secondary" id="importCsv">Import CSV</button><button class="secondary" id="clearHistory">Clear shown history</button><input type="file" id="importFile" accept=".csv,text/csv" hidden></div>
+<p class="small" id="backupNote"></p><div class="scroll"><table><thead><tr><th>Date</th><th>Machine</th><th>Category</th><th>Item</th><th>Qty</th><th>Slot</th><th>Note</th><th></th></tr></thead><tbody id="historyBody"></tbody></table></div></div></section>
+<section id="items" class="page"><div class="card"><h2>Vending Items</h2><p class="small">Choose the machine, then add or remove products. Removed products stay in history.</p>
+<label for="itemMachine">Machine</label><select id="itemMachine"></select>
+<div class="row"><div><label for="newCategory">Category</label><select id="newCategory"></select></div><div><label for="newItemName">Item name</label><input id="newItemName" placeholder="e.g. Tide 25 oz"></div></div>
+<button class="primary" id="addItem">Add Item</button></div><div class="card" id="itemManager"></div></section>
 </main>
-
 <script>
-const DEFAULT_ITEMS={
-Drinks:["Coke","Diet Coke","Ginger Ale","Dr Pepper","Sprite","Mountain Dew"],
-Chips:["Doritos Nacho Cheese","Doritos Cool Ranch","Cheetos Crunchy","Cheetos Flamin' Hot","Miss Vickie's Smokehouse BBQ","Miss Vickie's Sea Salt & Vinegar","Miss Vickie's Jalapeño","Takis / Spicy Chips"],
-Candy:["Snickers","M&M's Milk Chocolate","M&M's Peanut","Skittles","Starburst","Kirkland Trail Mix"]
+const MACHINE_NAMES={snacks:"Snack & Drink Machine",laundry:"Laundry Vending Machine"};
+const DEFAULT_SNACKS={
+ Drinks:["Coke","Diet Coke","Ginger Ale","Dr Pepper","Sprite","Mountain Dew"],
+ Chips:["Doritos Nacho Cheese","Doritos Cool Ranch","Cheetos Crunchy","Cheetos Flamin' Hot","Miss Vickie's Smokehouse BBQ","Miss Vickie's Sea Salt & Vinegar","Miss Vickie's Jalapeño","Takis / Spicy Chips"],
+ Candy:["Snickers","M&M's Milk Chocolate","M&M's Peanut","Skittles","Starburst","Kirkland Trail Mix"]
 };
-const K_ITEMS="oaksVendingItems",K_HIST="oaksVendingHistory",K_EXPORT="oaksVendingLastExport";
-
-function load(k,fallback){try{const v=JSON.parse(localStorage.getItem(k));return v??fallback}catch(e){return fallback}}
-let items=load(K_ITEMS,null)||JSON.parse(JSON.stringify(DEFAULT_ITEMS));
-let history=load(K_HIST,[]);
-function save(){
- try{localStorage.setItem(K_ITEMS,JSON.stringify(items));localStorage.setItem(K_HIST,JSON.stringify(history))}
- catch(e){alert("Couldn't save to this browser's storage. Export your history now so nothing is lost.")}
-}
-// Ask the browser not to auto-purge this site's storage (helps on iOS/Chrome when supported)
-if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
-
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// The laundry list is a starting point. Edit it in Items to match the actual machine.
+const DEFAULT_LAUNDRY={Detergent:["Tide 25 oz"],Softener:["Downy 10 oz"],Bleach:["Bleach"]};
+const K_ITEMS="oaksVendingItemsV2",K_HIST="oaksVendingHistoryV2",K_EXPORT="oaksVendingLastExportV2";
+function load(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
+function clone(x){return JSON.parse(JSON.stringify(x))}
+// One-time migration: all records from the original single-machine tracker belong to snacks.
+let items=load(K_ITEMS,null);
+if(!items||!items.snacks||!items.laundry)items={snacks:load("oaksVendingItems",clone(DEFAULT_SNACKS)),laundry:clone(DEFAULT_LAUNDRY)};
+let history=load(K_HIST,null);
+if(!Array.isArray(history))history=load("oaksVendingHistory",[]).map(h=>({...h,machine:"snacks"}));
+history=history.map(h=>({...h,machine:h.machine==="laundry"?"laundry":"snacks"}));
+function save(){try{localStorage.setItem(K_ITEMS,JSON.stringify(items));localStorage.setItem(K_HIST,JSON.stringify(history));return true}catch{alert("Browser storage is full or blocked. Export your history before leaving this page.");return false}}
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pad=n=>String(n).padStart(2,"0");
 function today(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
-function dval(s){return new Date(s+"T12:00:00")}
+function dateOf(s){return new Date(s+"T12:00:00")}
 function cutoff(days){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-days);return d}
-dateInput.value=today();
-
-/* ---------- Restock entry ---------- */
-function renderCats(){
- const prev=categorySelect.value,cats=Object.keys(items);
- categorySelect.innerHTML=cats.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
- if(cats.includes(prev))categorySelect.value=prev;
- renderItemOptions();
-}
-function renderItemOptions(){
- const prev=itemSelect.value,list=(items[categorySelect.value]||[]).slice().sort();
- itemSelect.innerHTML=list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
- if(list.includes(prev))itemSelect.value=prev;
-}
-categorySelect.onchange=renderItemOptions;
-
-saveRestock.onclick=()=>{
- const qty=Number(qtyInput.value),item=itemSelect.value,category=categorySelect.value,date=dateInput.value;
- if(!date||!item){saveMessage.textContent="Pick a date and an item.";return}
- if(!Number.isInteger(qty)||qty<1){saveMessage.textContent="Quantity must be a whole number, 1 or more.";return}
- if(date>today()&&!confirm(`${date} is in the future. Save anyway?`))return;
- history.push({id:Date.now(),date,category,item,qty,slot:slotInput.value.trim(),note:noteInput.value.trim()});
- save();qtyInput.value="";slotInput.value="";noteInput.value="";
- saveMessage.textContent=`Saved: ${qty} × ${item}`;renderAll();qtyInput.focus();
-};
-
-/* ---------- Dashboard ---------- */
-// Pace window: days since first entry (min 7 so a single visit doesn't inflate pace), max 30
-function paceDays(){
- if(!history.length)return 30;
- const first=history.reduce((a,h)=>h.date<a?h.date:a,history[0].date);
- const span=Math.round((dval(today())-dval(first))/86400000)+1;
- return Math.min(30,Math.max(7,span));
-}
-function movement(){
- const m={},now=dval(today()),c30=cutoff(29),c7=cutoff(6);
- Object.entries(items).forEach(([c,a])=>a.forEach(i=>m[c+"|"+i]={item:i,category:c,d7:0,d30:0,last:"",removed:false}));
- history.forEach(h=>{
-  const k=h.category+"|"+h.item,d=dval(h.date);
-  if(d>now)return;
-  if(!m[k])m[k]={item:h.item,category:h.category,d7:0,d30:0,last:"",removed:true};
-  if(d>=c30)m[k].d30+=+h.qty;
-  if(d>=c7)m[k].d7+=+h.qty;
-  if(!m[k].last||h.date>m[k].last)m[k].last=h.date;
- });
- return Object.values(m).filter(x=>!x.removed||x.d30>0);
-}
-function status(x,pd){
- if(x.removed)return["REMOVED","gone"];
- const w=x.d30/pd*7;
- if(x.d30===0)return["NO MOVEMENT","dead"];if(w>=8)return["HOT","hot"];if(w>=4)return["GOOD","hot"];if(w>=1.5)return["WATCH","watch"];return["SLOW","slow"];
-}
-
-let filter="ALL";
-function renderFilters(){
- filterBar.innerHTML=["ALL",...Object.keys(items)].map(f=>`<button class="secondary${f===filter?" on":""}" data-filter="${esc(f)}">${f==="ALL"?"All":esc(f)}</button>`).join("");
-}
-filterBar.onclick=e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;renderDashboard()};
-
-function renderDashboard(){
- renderFilters();
- const arr=movement(),pd=paceDays(),live=arr.filter(x=>!x.removed);
- m7.textContent=arr.reduce((a,b)=>a+b.d7,0);
- m30.textContent=arr.reduce((a,b)=>a+b.d30,0);
- mItems.textContent=Object.values(items).reduce((a,l)=>a+l.length,0);
- mEntries.textContent=history.filter(h=>{const d=dval(h.date);return d>=cutoff(29)&&d<=dval(today())}).length;
- const shown=arr.filter(x=>filter==="ALL"||x.category===filter).sort((a,b)=>b.d30-a.d30);
- movementBody.innerHTML=shown.map(x=>{const s=status(x,pd);return `<tr><td><b>${esc(x.item)}</b></td><td>${esc(x.category)}</td><td>${x.d7}</td><td>${x.d30}</td><td>${(x.d30/pd*7).toFixed(1)}/wk</td><td>${x.last||"—"}</td><td><span class="pill ${s[1]}">${s[0]}</span></td></tr>`}).join("")||'<tr><td colspan="7">No data</td></tr>';
- paceNote.textContent=pd<30?`Weekly pace is based on ${pd} days of data so far. It becomes a true 30-day average once you have a month of entries.`:"";
+function selectOptions(id,values,selected){$(id).innerHTML=values.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join("");if(values.some(x=>x[0]===selected))$(id).value=selected}
+function machineOptions(all=false){return [...(all?[["all","All machines"]]:[]),...Object.entries(MACHINE_NAMES)]}
+function renderMachineOptions(){for(const id of ["restockMachine","itemMachine","dashboardMachine","historyMachine"]){const prev=$(id).value;selectOptions(id,machineOptions(id==="dashboardMachine"||id==="historyMachine"),prev)}}
+function renderCats(){const machine=$("restockMachine").value,prev=$("categorySelect").value;selectOptions("categorySelect",Object.keys(items[machine]||{}).map(c=>[c,c]),prev);renderItemOptions()}
+function renderItemOptions(){const list=(items[$("restockMachine").value]?.[$("categorySelect").value]||[]).slice().sort();selectOptions("itemSelect",list.map(x=>[x,x]),$("itemSelect").value)}
+$("restockMachine").onchange=renderCats;$("categorySelect").onchange=renderItemOptions;
+$("dateInput").value=today();
+$("saveRestock").onclick=()=>{const machine=$("restockMachine").value,category=$("categorySelect").value,item=$("itemSelect").value,date=$("dateInput").value,qty=Number($("qtyInput").value);
+ if(!date||!item){$("saveMessage").textContent="Pick a date and item.";return}
+ if(!Number.isInteger(qty)||qty<1){$("saveMessage").textContent="Enter a whole-number quantity of at least 1.";return}
+ if(date>today()&&!confirm("This date is in the future. Save anyway?"))return;
+ const entry={id:crypto.randomUUID?.()||String(Date.now())+Math.random(),date,machine,category,item,qty,slot:$("slotInput").value.trim(),note:$("noteInput").value.trim()};
+ history.push(entry);if(!save()){history.pop();return}$("qtyInput").value="";$("slotInput").value="";$("noteInput").value="";
+ $("saveMessage").textContent=`Saved ${qty} × ${item} to ${MACHINE_NAMES[machine]}.`;renderAll();$("qtyInput").focus()};
+function currentHistory(machine){return history.filter(h=>machine==="all"||h.machine===machine)}
+function paceDays(entries){if(!entries.length)return 30;const first=entries.reduce((a,h)=>h.date<a?h.date:a,entries[0].date);return Math.min(30,Math.max(7,Math.round((dateOf(today())-dateOf(first))/86400000)+1))}
+function movement(machine){const map=new Map(),now=dateOf(today()),c7=cutoff(6),c30=cutoff(29),machines=machine==="all"?Object.keys(MACHINE_NAMES):[machine];
+ for(const m of machines)for(const [cat,list] of Object.entries(items[m]||{}))for(const item of list)map.set(JSON.stringify([m,cat,item]),{machine:m,category:cat,item,d7:0,d30:0,last:"",removed:false});
+ for(const h of currentHistory(machine)){const d=dateOf(h.date);if(Number.isNaN(+d)||d>now)continue;const key=JSON.stringify([h.machine,h.category,h.item]);
+ if(!map.has(key))map.set(key,{machine:h.machine,category:h.category,item:h.item,d7:0,d30:0,last:"",removed:true});const x=map.get(key);
+ if(d>=c30)x.d30+=Number(h.qty)||0;if(d>=c7)x.d7+=Number(h.qty)||0;if(!x.last||h.date>x.last)x.last=h.date}
+ return [...map.values()].filter(x=>!x.removed||x.d30>0)}
+function status(x,days){if(x.removed)return["REMOVED","gone"];const pace=x.d30/days*7;if(!x.d30)return["NO MOVEMENT","dead"];if(pace>=8)return["HOT","hot"];if(pace>=4)return["GOOD","hot"];if(pace>=1.5)return["WATCH","watch"];return["SLOW","slow"]}
+let filter="all";
+function renderDashboard(){const machine=$("dashboardMachine").value;const categories=[...new Set((machine==="all"?Object.values(items):[items[machine]||{}]).flatMap(x=>Object.keys(x)))];
+ if(filter!=="all"&&!categories.includes(filter))filter="all";
+ $("filterBar").innerHTML=[["all","All"],...categories.map(c=>[c,c])].map(([v,t])=>`<button class="secondary${filter===v?" on":""}" data-filter="${esc(v)}">${esc(t)}</button>`).join("");
+ const entries=currentHistory(machine),arr=movement(machine),days=paceDays(entries),live=arr.filter(x=>!x.removed);
+ $("m7").textContent=arr.reduce((a,x)=>a+x.d7,0);$("m30").textContent=arr.reduce((a,x)=>a+x.d30,0);$("mItems").textContent=live.length;
+ $("mEntries").textContent=entries.filter(h=>dateOf(h.date)>=cutoff(29)&&dateOf(h.date)<=dateOf(today())).length;
+ const shown=arr.filter(x=>filter==="all"||x.category===filter).sort((a,b)=>b.d30-a.d30);
+ $("movementBody").innerHTML=shown.map(x=>{const s=status(x,days);return `<tr><td>${esc(MACHINE_NAMES[x.machine])}</td><td><b>${esc(x.item)}</b></td><td>${esc(x.category)}</td><td>${x.d7}</td><td>${x.d30}</td><td>${(x.d30/days*7).toFixed(1)}/wk</td><td>${esc(x.last)||"—"}</td><td><span class="pill ${s[1]}">${s[0]}</span></td></tr>`}).join("")||'<tr><td colspan="8">No items to show.</td></tr>';
+ $("paceNote").textContent=days<30?`Weekly pace uses ${days} days of available history. Export regularly; entries are stored on this device and browser.`:"Entries are stored on this device and browser. Export regularly.";
  const ranked=live.filter(x=>x.d30>0).sort((a,b)=>b.d30-a.d30);
- quickRead.innerHTML=`<b>Top movers:</b> ${ranked.slice(0,5).map(x=>`${esc(x.item)} (${x.d30})`).join(", ")||"No movement yet"}<br><br><b>No 30-day movement:</b> ${live.filter(x=>x.d30===0).length} item(s).`;
-}
-
-/* ---------- History ---------- */
-function renderHistory(){
- historyBody.innerHTML=[...history].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(h=>`<tr><td>${esc(h.date)}</td><td>${esc(h.category)}</td><td>${esc(h.item)}</td><td><b>${h.qty}</b></td><td>${esc(h.slot)}</td><td>${esc(h.note)}</td><td><button class="danger" data-del="${h.id}">Delete</button></td></tr>`).join("")||'<tr><td colspan="7">No restocks recorded yet.</td></tr>';
- const last=localStorage.getItem(K_EXPORT);
- backupNote.textContent=history.length?(last?`Last export: ${last}. Export weekly — your data lives only in this browser.`:"Not exported yet. Export weekly — your data lives only in this browser."):"";
-}
-historyBody.onclick=e=>{
- const b=e.target.closest("[data-del]");if(!b)return;
- const h=history.find(x=>x.id===Number(b.dataset.del));if(!h)return;
- if(confirm(`Delete ${h.qty} × ${h.item} on ${h.date}?`)){history=history.filter(x=>x!==h);save();renderAll()}
-};
-
-exportCsv.onclick=()=>{
- const rows=[["Date","Category","Item","Quantity","Slot","Note"],...history.map(h=>[h.date,h.category,h.item,h.qty,h.slot,h.note])];
- const csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");
- const url=URL.createObjectURL(new Blob([csv],{type:"text/csv"})),a=document.createElement("a");
- a.href=url;a.download=`oaks_vending_restock_history_${today()}.csv`;document.body.appendChild(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
- try{localStorage.setItem(K_EXPORT,today())}catch(e){}
- renderHistory();
-};
-
-function parseCSV(t){
- const rows=[];let row=[],f="",q=false;
- for(let i=0;i<t.length;i++){const c=t[i];
-  if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
-  else if(c==='"')q=true;
-  else if(c===","){row.push(f);f=""}
-  else if(c==="\n"||c==="\r"){if(c==="\r"&&t[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f=""}
-  else f+=c;
- }
- if(f||row.length){row.push(f);rows.push(row)}
- return rows;
-}
-importCsv.onclick=()=>importFile.click();
-importFile.onchange=async e=>{
- const file=e.target.files[0];if(!file)return;
- const [hdr,...data]=parseCSV((await file.text()).replace(/^\uFEFF/,""));
- if(!hdr||hdr[0]!=="Date"||hdr[2]!=="Item"){alert("That file isn't an Oaks Vending export.");e.target.value="";return}
- const key=h=>[h.date,h.category,h.item,h.qty,h.slot,h.note].join("|"),seen=new Set(history.map(key));
- let added=0;
- data.forEach((r,i)=>{
-  if(r.length<4)return;
-  const h={id:Date.now()+i,date:r[0],category:r[1],item:r[2],qty:Number(r[3]),slot:r[4]||"",note:r[5]||""};
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(h.date)||!h.item||!Number.isInteger(h.qty)||h.qty<1||seen.has(key(h)))return;
-  seen.add(key(h));history.push(h);added++;
- });
- save();renderAll();e.target.value="";
- alert(`Imported ${added} new entr${added===1?"y":"ies"}. Duplicates were skipped.`);
-};
-clearHistory.onclick=()=>{if(confirm("Clear all restock history? Export first if you want a backup.")){history=[];save();renderAll()}};
-
-/* ---------- Items ---------- */
-function renderItems(){
- itemManager.innerHTML=Object.entries(items).map(([cat,arr])=>`<div class="cat">${esc(cat)}</div>`+arr.slice().sort().map(i=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #eee"><span>${esc(i)}</span><button class="danger" data-cat="${esc(cat)}" data-item="${esc(i)}">Remove</button></div>`).join("")).join("");
-}
-itemManager.onclick=e=>{
- const b=e.target.closest("[data-item]");if(!b)return;
- const cat=b.dataset.cat,item=b.dataset.item;
- if(confirm(`Remove ${item}? Its restock history is kept.`)){items[cat]=items[cat].filter(x=>x!==item);save();renderAll()}
-};
-addItem.onclick=()=>{
- const c=newCategory.value,n=newItemName.value.trim();if(!n)return;
- if(!items[c])items[c]=[];
- if(items[c].some(x=>x.toLowerCase()===n.toLowerCase())){alert(`${n} is already in ${c}.`);return}
- items[c].push(n);newItemName.value="";save();renderAll();
-};
-
-/* ---------- Tabs ---------- */
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- b.classList.add("active");document.getElementById(b.dataset.page).classList.add("active");
- if(b.dataset.page==="dashboard")renderDashboard();
-});
-
-function renderAll(){renderCats();renderDashboard();renderHistory();renderItems()}
+ $("quickRead").innerHTML=`<b>Top movers:</b> ${ranked.slice(0,5).map(x=>`${esc(x.item)} (${x.d30})`).join(", ")||"No movement yet"}<br><br><b>No 30-day movement:</b> ${live.filter(x=>!x.d30).length} item(s).`}
+$("dashboardMachine").onchange=()=>{filter="all";renderDashboard()};
+$("filterBar").onclick=e=>{const b=e.target.closest("[data-filter]");if(b){filter=b.dataset.filter;renderDashboard()}};
+function renderHistory(){const shown=currentHistory($("historyMachine").value).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ $("historyBody").innerHTML=shown.map(h=>`<tr><td>${esc(h.date)}</td><td>${esc(MACHINE_NAMES[h.machine])}</td><td>${esc(h.category)}</td><td>${esc(h.item)}</td><td><b>${esc(h.qty)}</b></td><td>${esc(h.slot)}</td><td>${esc(h.note)}</td><td><button class="danger" data-id="${esc(h.id)}">Delete</button></td></tr>`).join("")||'<tr><td colspan="8">No restocks recorded.</td></tr>';
+ const last=localStorage.getItem(K_EXPORT);$("backupNote").textContent=history.length?`Export all history regularly. It is only stored in this browser.${last?" Last export: "+last:""}`:""}
+$("historyMachine").onchange=renderHistory;
+$("historyBody").onclick=e=>{const b=e.target.closest("[data-id]");if(!b)return;const i=history.findIndex(h=>String(h.id)===b.dataset.id);if(i<0)return;
+ if(confirm(`Delete ${history[i].qty} × ${history[i].item} on ${history[i].date}?`)){const [removed]=history.splice(i,1);if(!save())history.splice(i,0,removed);renderAll()}};
+function csvCell(v){return `"${String(v??"").replaceAll('"','""')}"`}
+$("exportCsv").onclick=()=>{const rows=[["Date","Machine","Category","Item","Quantity","Slot","Note"],...history.map(h=>[h.date,h.machine,h.category,h.item,h.qty,h.slot,h.note])];
+ const url=URL.createObjectURL(new Blob([rows.map(r=>r.map(csvCell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download=`oaks_vending_all_machines_${today()}.csv`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ try{localStorage.setItem(K_EXPORT,today())}catch{}renderHistory()};
+function parseCSV(text){let rows=[],row=[],field="",quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(quoted){if(c==='"'&&text[i+1]==='"'){field+='"';i++}else if(c==='"')quoted=false;else field+=c}else if(c==='"'&&field==="")quoted=true;else if(c===","){row.push(field);field=""}else if(c==="\n"||c==="\r"){if(c==="\r"&&text[i+1]==="\n")i++;row.push(field);rows.push(row);row=[];field=""}else field+=c}if(field!==""||row.length){row.push(field);rows.push(row)}return rows}
+function rowKey(h){return JSON.stringify([h.date,h.machine,h.category,h.item,h.qty,h.slot,h.note])}
+$("importCsv").onclick=()=>$("importFile").click();
+$("importFile").onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const [head,...data]=parseCSV((await file.text()).replace(/^\uFEFF/,""));
+ const old=JSON.stringify(head)==='["Date","Category","Item","Quantity","Slot","Note"]';const current=JSON.stringify(head)==='["Date","Machine","Category","Item","Quantity","Slot","Note"]';
+ if(!old&&!current){alert("Choose an Oaks Vending export CSV. The headers did not match.");return}
+ const seen=new Set(history.map(rowKey)),added=[];for(const r of data){if(r.length<(old?6:7))continue;const [date,machine,category,item,qty,slot,note]=old?[r[0],"snacks",...r.slice(1)]:r;
+ const h={id:crypto.randomUUID?.()||String(Date.now())+Math.random(),date,machine,category,item,qty:Number(qty),slot,note};
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(+dateOf(date))||!MACHINE_NAMES[machine]||!item||!Number.isInteger(h.qty)||h.qty<1||seen.has(rowKey(h)))continue;
+ seen.add(rowKey(h));added.push(h)}
+ history.push(...added);if(!save())history.splice(-added.length,added.length);renderAll();alert(`Imported ${added.length} new entries. Duplicates were skipped.`)
+ }catch{alert("Could not read this CSV.")}finally{e.target.value=""}};
+$("clearHistory").onclick=()=>{const machine=$("historyMachine").value,shown=currentHistory(machine);if(!shown.length)return;
+ if(confirm(`Clear ${shown.length} ${machine==="all"?"entries from BOTH machines":"entries from "+MACHINE_NAMES[machine]}? Export first if you want a backup.`)){const previous=history;history=history.filter(h=>machine!=="all"&&h.machine!==machine);if(!save())history=previous;renderAll()}};
+function renderItems(){const machine=$("itemMachine").value,cats=Object.keys(items[machine]||{});selectOptions("newCategory",cats.map(c=>[c,c]),$("newCategory").value);
+ $("itemManager").innerHTML=cats.map(cat=>`<h3>${esc(cat)}</h3>`+(items[machine][cat]||[]).slice().sort().map(item=>`<div class="item-row"><span>${esc(item)}</span><button class="danger" data-cat="${esc(cat)}" data-item="${esc(item)}">Remove</button></div>`).join("")).join("")}
+$("itemMachine").onchange=renderItems;
+$("itemManager").onclick=e=>{const b=e.target.closest("[data-item]");if(!b)return;const machine=$("itemMachine").value,cat=b.dataset.cat,item=b.dataset.item;
+ if(confirm(`Remove ${item} from ${MACHINE_NAMES[machine]}? Its history stays.`)){const old=items[machine][cat];items[machine][cat]=old.filter(x=>x!==item);if(!save())items[machine][cat]=old;renderAll()}};
+$("addItem").onclick=()=>{const machine=$("itemMachine").value,cat=$("newCategory").value,name=$("newItemName").value.trim();if(!name||!cat)return;
+ if(items[machine][cat].some(x=>x.toLowerCase()===name.toLowerCase())){alert("That item already exists in this category.");return}
+ items[machine][cat].push(name);if(!save()){items[machine][cat].pop();return}$("newItemName").value="";renderAll()};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab,.page").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.page).classList.add("active");renderAll()});
+function renderAll(){renderMachineOptions();renderCats();renderDashboard();renderHistory();renderItems()}
 renderAll();
 </script>
-</body></html>
+</body>
+</html>
