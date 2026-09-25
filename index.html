@@ -1,3 +1,6 @@
+Hover over the top right of the box below and click the copy button to get everything. Then, in GitHub's editor, press Ctrl+A to select all, Ctrl+V to paste, and commit.
+
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,7 +11,7 @@
 :root{--navy:#17365D;--blue:#1F4E78;--bg:#F7F9FC;--line:#D9E2F3;--green:#E2F0D9;--yellow:#FFF2CC;--orange:#FCE4D6;--red:#F4CCCC}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#111827}
 header{background:var(--navy);color:white;padding:16px}header h1{margin:0;font-size:22px}header p{margin:5px 0 0;font-size:13px}
-nav{display:flex;gap:8px;flex-wrap:wrap;background:white;padding:10px;border-bottom:1px solid var(--line);position:sticky;top:0}
+nav{display:flex;gap:8px;flex-wrap:wrap;background:white;padding:10px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
 nav button{border:0;background:#eef3f8;padding:10px 14px;border-radius:10px;font-weight:700;color:var(--navy)}nav button.active{background:var(--blue);color:white}
 main{max-width:1050px;margin:auto;padding:16px}.page{display:none}.page.active{display:block}
 .card{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
@@ -22,6 +25,7 @@ select,input,textarea{width:100%;padding:11px;border:1px solid #cfd8e3;border-ra
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.small{font-size:12px;color:#6b7280}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 table{width:100%;border-collapse:collapse;font-size:14px}th{background:var(--blue);color:white;text-align:left;padding:9px}td{padding:9px;border-bottom:1px solid #edf1f5}
 .pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.hot{background:var(--green)}.watch{background:var(--yellow)}.slow{background:var(--orange)}.dead{background:var(--red)}
+.secondary.on{background:var(--blue);color:white}.gone{background:#e5e7eb}
 .cat{font-weight:800;color:var(--navy);margin-top:14px}
 @media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}.row2{grid-template-columns:1fr}table{font-size:12px}}
 </style>
@@ -44,7 +48,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th{background:var(--blu
 <div><label>Category</label><select id="categorySelect"></select></div>
 </div>
 <label>Item</label><select id="itemSelect"></select>
-<label>Quantity Replaced</label><input type="number" id="qtyInput" min="1" step="1" placeholder="e.g. 6">
+<label>Quantity Replaced</label><input type="number" id="qtyInput" min="1" step="1" inputmode="numeric" placeholder="e.g. 6">
 <label>Slot (optional)</label><input id="slotInput" placeholder="e.g. B5">
 <label>Note (optional)</label><textarea id="noteInput" rows="2" placeholder="Sold out, nearly empty, etc."></textarea>
 <button class="primary" id="saveRestock">Save Restock</button>
@@ -57,18 +61,14 @@ table{width:100%;border-collapse:collapse;font-size:14px}th{background:var(--blu
 <div class="grid">
 <div class="metric"><div class="label">Units moved — 7 days</div><div class="value" id="m7">0</div></div>
 <div class="metric"><div class="label">Units moved — 30 days</div><div class="value" id="m30">0</div></div>
-<div class="metric"><div class="label">Active items</div><div class="value" id="mItems">0</div></div>
+<div class="metric"><div class="label">Items in machine</div><div class="value" id="mItems">0</div></div>
 <div class="metric"><div class="label">Restock entries — 30 days</div><div class="value" id="mEntries">0</div></div>
 </div>
 <div class="card" style="margin-top:14px">
 <h2>Item Movement</h2>
-<div class="toolbar">
-<button class="secondary" data-filter="ALL">All</button>
-<button class="secondary" data-filter="Drinks">Drinks</button>
-<button class="secondary" data-filter="Chips">Chips</button>
-<button class="secondary" data-filter="Candy">Candy</button>
-</div>
+<div class="toolbar" id="filterBar"></div>
 <div style="overflow:auto"><table><thead><tr><th>Item</th><th>Category</th><th>7d</th><th>30d</th><th>Weekly pace</th><th>Last restock</th><th>Status</th></tr></thead><tbody id="movementBody"></tbody></table></div>
+<p class="small" id="paceNote"></p>
 </div>
 <div class="card"><h2>Quick Read</h2><div id="quickRead" class="small"></div></div>
 </section>
@@ -76,7 +76,13 @@ table{width:100%;border-collapse:collapse;font-size:14px}th{background:var(--blu
 <section id="history" class="page">
 <div class="card">
 <h2>Restock History</h2>
-<div class="toolbar"><button class="secondary" id="exportCsv">Export CSV</button><button class="secondary" id="clearHistory">Clear History</button></div>
+<div class="toolbar">
+<button class="secondary" id="exportCsv">Export CSV</button>
+<button class="secondary" id="importCsv">Import CSV</button>
+<button class="secondary" id="clearHistory">Clear History</button>
+<input type="file" id="importFile" accept=".csv,text/csv" hidden>
+</div>
+<p class="small" id="backupNote"></p>
 <div style="overflow:auto"><table><thead><tr><th>Date</th><th>Category</th><th>Item</th><th>Qty</th><th>Slot</th><th>Note</th><th></th></tr></thead><tbody id="historyBody"></tbody></table></div>
 </div>
 </section>
@@ -100,71 +106,174 @@ Drinks:["Coke","Diet Coke","Ginger Ale","Dr Pepper","Sprite","Mountain Dew"],
 Chips:["Doritos Nacho Cheese","Doritos Cool Ranch","Cheetos Crunchy","Cheetos Flamin' Hot","Miss Vickie's Smokehouse BBQ","Miss Vickie's Sea Salt & Vinegar","Miss Vickie's Jalapeño","Takis / Spicy Chips"],
 Candy:["Snickers","M&M's Milk Chocolate","M&M's Peanut","Skittles","Starburst","Kirkland Trail Mix"]
 };
-let items=JSON.parse(localStorage.getItem("oaksVendingItems")||"null")||DEFAULT_ITEMS;
-let history=JSON.parse(localStorage.getItem("oaksVendingHistory")||"[]");
+const K_ITEMS="oaksVendingItems",K_HIST="oaksVendingHistory",K_EXPORT="oaksVendingLastExport";
 
-function save(){localStorage.setItem("oaksVendingItems",JSON.stringify(items));localStorage.setItem("oaksVendingHistory",JSON.stringify(history))}
-function today(){return new Date().toISOString().slice(0,10)}
+function load(k,fallback){try{const v=JSON.parse(localStorage.getItem(k));return v??fallback}catch(e){return fallback}}
+let items=load(K_ITEMS,null)||JSON.parse(JSON.stringify(DEFAULT_ITEMS));
+let history=load(K_HIST,[]);
+function save(){
+ try{localStorage.setItem(K_ITEMS,JSON.stringify(items));localStorage.setItem(K_HIST,JSON.stringify(history))}
+ catch(e){alert("Couldn't save to this browser's storage. Export your history now so nothing is lost.")}
+}
+// Ask the browser not to auto-purge this site's storage (helps on iOS/Chrome when supported)
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+function today(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function dval(s){return new Date(s+"T12:00:00")}
+function cutoff(days){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-days);return d}
 dateInput.value=today();
 
+/* ---------- Restock entry ---------- */
 function renderCats(){
- categorySelect.innerHTML=Object.keys(items).map(x=>`<option>${x}</option>`).join("");
+ const prev=categorySelect.value,cats=Object.keys(items);
+ categorySelect.innerHTML=cats.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+ if(cats.includes(prev))categorySelect.value=prev;
  renderItemOptions();
 }
 function renderItemOptions(){
- const cat=categorySelect.value;
- itemSelect.innerHTML=(items[cat]||[]).slice().sort().map(x=>`<option>${x}</option>`).join("");
+ const prev=itemSelect.value,list=(items[categorySelect.value]||[]).slice().sort();
+ itemSelect.innerHTML=list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+ if(list.includes(prev))itemSelect.value=prev;
 }
 categorySelect.onchange=renderItemOptions;
 
 saveRestock.onclick=()=>{
- const qty=Number(qtyInput.value), item=itemSelect.value, category=categorySelect.value, date=dateInput.value;
- if(!date||!item||!qty||qty<1){saveMessage.textContent="Enter date, item and quantity.";return}
+ const qty=Number(qtyInput.value),item=itemSelect.value,category=categorySelect.value,date=dateInput.value;
+ if(!date||!item){saveMessage.textContent="Pick a date and an item.";return}
+ if(!Number.isInteger(qty)||qty<1){saveMessage.textContent="Quantity must be a whole number, 1 or more.";return}
+ if(date>today()&&!confirm(`${date} is in the future. Save anyway?`))return;
  history.push({id:Date.now(),date,category,item,qty,slot:slotInput.value.trim(),note:noteInput.value.trim()});
- save(); qtyInput.value="";slotInput.value="";noteInput.value="";saveMessage.textContent=`Saved: ${qty} × ${item}`;renderAll();
+ save();qtyInput.value="";slotInput.value="";noteInput.value="";
+ saveMessage.textContent=`Saved: ${qty} × ${item}`;renderAll();qtyInput.focus();
 };
 
-function cutoff(days){let d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-days);return d}
-function dval(s){return new Date(s+"T12:00:00")}
-function movement(){
- const m={};Object.entries(items).forEach(([c,a])=>a.forEach(i=>m[i]={item:i,category:c,d7:0,d30:0,last:""}));
- history.forEach(h=>{if(!m[h.item])m[h.item]={item:h.item,category:h.category,d7:0,d30:0,last:""};let d=dval(h.date);if(d>=cutoff(29))m[h.item].d30+=+h.qty;if(d>=cutoff(6))m[h.item].d7+=+h.qty;if(!m[h.item].last||h.date>m[h.item].last)m[h.item].last=h.date});
- return Object.values(m);
+/* ---------- Dashboard ---------- */
+// Pace window: days since first entry (min 7 so a single visit doesn't inflate pace), max 30
+function paceDays(){
+ if(!history.length)return 30;
+ const first=history.reduce((a,h)=>h.date<a?h.date:a,history[0].date);
+ const span=Math.round((dval(today())-dval(first))/86400000)+1;
+ return Math.min(30,Math.max(7,span));
 }
-function status(x){let w=x.d30/30*7;if(x.d30===0)return["NO MOVEMENT","dead"];if(w>=8)return["HOT","hot"];if(w>=4)return["GOOD","hot"];if(w>=1.5)return["WATCH","watch"];return["SLOW","slow"]}
+function movement(){
+ const m={},now=dval(today()),c30=cutoff(29),c7=cutoff(6);
+ Object.entries(items).forEach(([c,a])=>a.forEach(i=>m[c+"|"+i]={item:i,category:c,d7:0,d30:0,last:"",removed:false}));
+ history.forEach(h=>{
+  const k=h.category+"|"+h.item,d=dval(h.date);
+  if(d>now)return;
+  if(!m[k])m[k]={item:h.item,category:h.category,d7:0,d30:0,last:"",removed:true};
+  if(d>=c30)m[k].d30+=+h.qty;
+  if(d>=c7)m[k].d7+=+h.qty;
+  if(!m[k].last||h.date>m[k].last)m[k].last=h.date;
+ });
+ return Object.values(m).filter(x=>!x.removed||x.d30>0);
+}
+function status(x,pd){
+ if(x.removed)return["REMOVED","gone"];
+ const w=x.d30/pd*7;
+ if(x.d30===0)return["NO MOVEMENT","dead"];if(w>=8)return["HOT","hot"];if(w>=4)return["GOOD","hot"];if(w>=1.5)return["WATCH","watch"];return["SLOW","slow"];
+}
 
 let filter="ALL";
-function renderDashboard(){
- let arr=movement();
- m7.textContent=arr.reduce((a,b)=>a+b.d7,0);m30.textContent=arr.reduce((a,b)=>a+b.d30,0);mItems.textContent=arr.length;mEntries.textContent=history.filter(h=>dval(h.date)>=cutoff(29)).length;
- let shown=arr.filter(x=>filter==="ALL"||x.category===filter).sort((a,b)=>b.d30-a.d30);
- movementBody.innerHTML=shown.map(x=>{let s=status(x);return `<tr><td><b>${x.item}</b></td><td>${x.category}</td><td>${x.d7}</td><td>${x.d30}</td><td>${(x.d30/30*7).toFixed(1)}/wk</td><td>${x.last||"—"}</td><td><span class="pill ${s[1]}">${s[0]}</span></td></tr>`}).join("")||'<tr><td colspan="7">No data</td></tr>';
- let ranked=arr.filter(x=>x.d30>0).sort((a,b)=>b.d30-a.d30);
- quickRead.innerHTML=`<b>Top movers:</b> ${ranked.slice(0,5).map(x=>`${x.item} (${x.d30})`).join(", ")||"No movement yet"}<br><br><b>No 30-day movement:</b> ${arr.filter(x=>x.d30===0).length} item(s).`;
+function renderFilters(){
+ filterBar.innerHTML=["ALL",...Object.keys(items)].map(f=>`<button class="secondary${f===filter?" on":""}" data-filter="${esc(f)}">${f==="ALL"?"All":esc(f)}</button>`).join("");
 }
-document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;renderDashboard()});
+filterBar.onclick=e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;renderDashboard()};
 
-function renderHistory(){
- historyBody.innerHTML=[...history].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(h=>`<tr><td>${h.date}</td><td>${h.category}</td><td>${h.item}</td><td><b>${h.qty}</b></td><td>${h.slot||""}</td><td>${h.note||""}</td><td><button class="danger" onclick="delEntry(${h.id})">Delete</button></td></tr>`).join("")||'<tr><td colspan="7">No restocks recorded yet.</td></tr>';
+function renderDashboard(){
+ renderFilters();
+ const arr=movement(),pd=paceDays(),live=arr.filter(x=>!x.removed);
+ m7.textContent=arr.reduce((a,b)=>a+b.d7,0);
+ m30.textContent=arr.reduce((a,b)=>a+b.d30,0);
+ mItems.textContent=Object.values(items).reduce((a,l)=>a+l.length,0);
+ mEntries.textContent=history.filter(h=>{const d=dval(h.date);return d>=cutoff(29)&&d<=dval(today())}).length;
+ const shown=arr.filter(x=>filter==="ALL"||x.category===filter).sort((a,b)=>b.d30-a.d30);
+ movementBody.innerHTML=shown.map(x=>{const s=status(x,pd);return `<tr><td><b>${esc(x.item)}</b></td><td>${esc(x.category)}</td><td>${x.d7}</td><td>${x.d30}</td><td>${(x.d30/pd*7).toFixed(1)}/wk</td><td>${x.last||"—"}</td><td><span class="pill ${s[1]}">${s[0]}</span></td></tr>`}).join("")||'<tr><td colspan="7">No data</td></tr>';
+ paceNote.textContent=pd<30?`Weekly pace is based on ${pd} days of data so far. It becomes a true 30-day average once you have a month of entries.`:"";
+ const ranked=live.filter(x=>x.d30>0).sort((a,b)=>b.d30-a.d30);
+ quickRead.innerHTML=`<b>Top movers:</b> ${ranked.slice(0,5).map(x=>`${esc(x.item)} (${x.d30})`).join(", ")||"No movement yet"}<br><br><b>No 30-day movement:</b> ${live.filter(x=>x.d30===0).length} item(s).`;
 }
-function delEntry(id){history=history.filter(x=>x.id!==id);save();renderAll()}
+
+/* ---------- History ---------- */
+function renderHistory(){
+ historyBody.innerHTML=[...history].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(h=>`<tr><td>${esc(h.date)}</td><td>${esc(h.category)}</td><td>${esc(h.item)}</td><td><b>${h.qty}</b></td><td>${esc(h.slot)}</td><td>${esc(h.note)}</td><td><button class="danger" data-del="${h.id}">Delete</button></td></tr>`).join("")||'<tr><td colspan="7">No restocks recorded yet.</td></tr>';
+ const last=localStorage.getItem(K_EXPORT);
+ backupNote.textContent=history.length?(last?`Last export: ${last}. Export weekly — your data lives only in this browser.`:"Not exported yet. Export weekly — your data lives only in this browser."):"";
+}
+historyBody.onclick=e=>{
+ const b=e.target.closest("[data-del]");if(!b)return;
+ const h=history.find(x=>x.id===Number(b.dataset.del));if(!h)return;
+ if(confirm(`Delete ${h.qty} × ${h.item} on ${h.date}?`)){history=history.filter(x=>x!==h);save();renderAll()}
+};
 
 exportCsv.onclick=()=>{
  const rows=[["Date","Category","Item","Quantity","Slot","Note"],...history.map(h=>[h.date,h.category,h.item,h.qty,h.slot,h.note])];
  const csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");
- const blob=new Blob([csv],{type:"text/csv"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="oaks_vending_restock_history.csv";a.click();URL.revokeObjectURL(url);
+ const url=URL.createObjectURL(new Blob([csv],{type:"text/csv"})),a=document.createElement("a");
+ a.href=url;a.download=`oaks_vending_restock_history_${today()}.csv`;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ try{localStorage.setItem(K_EXPORT,today())}catch(e){}
+ renderHistory();
 };
-clearHistory.onclick=()=>{if(confirm("Clear all restock history?")){history=[];save();renderAll()}};
 
-function renderItems(){
- itemManager.innerHTML=Object.entries(items).map(([cat,arr])=>`<div class="cat">${cat}</div>`+arr.slice().sort().map(i=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #eee"><span>${i}</span><button class="danger" onclick="removeItem('${cat}',${JSON.stringify(i)})">Remove</button></div>`).join("")).join("");
+function parseCSV(t){
+ const rows=[];let row=[],f="",q=false;
+ for(let i=0;i<t.length;i++){const c=t[i];
+  if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+  else if(c==='"')q=true;
+  else if(c===","){row.push(f);f=""}
+  else if(c==="\n"||c==="\r"){if(c==="\r"&&t[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f=""}
+  else f+=c;
+ }
+ if(f||row.length){row.push(f);rows.push(row)}
+ return rows;
 }
-function removeItem(cat,item){if(confirm(`Remove ${item}?`)){items[cat]=items[cat].filter(x=>x!==item);save();renderAll()}}
-addItem.onclick=()=>{let c=newCategory.value,n=newItemName.value.trim();if(!n)return;if(!items[c].includes(n))items[c].push(n);newItemName.value="";save();renderAll()};
+importCsv.onclick=()=>importFile.click();
+importFile.onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ const [hdr,...data]=parseCSV((await file.text()).replace(/^\uFEFF/,""));
+ if(!hdr||hdr[0]!=="Date"||hdr[2]!=="Item"){alert("That file isn't an Oaks Vending export.");e.target.value="";return}
+ const key=h=>[h.date,h.category,h.item,h.qty,h.slot,h.note].join("|"),seen=new Set(history.map(key));
+ let added=0;
+ data.forEach((r,i)=>{
+  if(r.length<4)return;
+  const h={id:Date.now()+i,date:r[0],category:r[1],item:r[2],qty:Number(r[3]),slot:r[4]||"",note:r[5]||""};
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(h.date)||!h.item||!Number.isInteger(h.qty)||h.qty<1||seen.has(key(h)))return;
+  seen.add(key(h));history.push(h);added++;
+ });
+ save();renderAll();e.target.value="";
+ alert(`Imported ${added} new entr${added===1?"y":"ies"}. Duplicates were skipped.`);
+};
+clearHistory.onclick=()=>{if(confirm("Clear all restock history? Export first if you want a backup.")){history=[];save();renderAll()}};
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.page).classList.add("active");if(b.dataset.page==="dashboard")renderDashboard()});
+/* ---------- Items ---------- */
+function renderItems(){
+ itemManager.innerHTML=Object.entries(items).map(([cat,arr])=>`<div class="cat">${esc(cat)}</div>`+arr.slice().sort().map(i=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #eee"><span>${esc(i)}</span><button class="danger" data-cat="${esc(cat)}" data-item="${esc(i)}">Remove</button></div>`).join("")).join("");
+}
+itemManager.onclick=e=>{
+ const b=e.target.closest("[data-item]");if(!b)return;
+ const cat=b.dataset.cat,item=b.dataset.item;
+ if(confirm(`Remove ${item}? Its restock history is kept.`)){items[cat]=items[cat].filter(x=>x!==item);save();renderAll()}
+};
+addItem.onclick=()=>{
+ const c=newCategory.value,n=newItemName.value.trim();if(!n)return;
+ if(!items[c])items[c]=[];
+ if(items[c].some(x=>x.toLowerCase()===n.toLowerCase())){alert(`${n} is already in ${c}.`);return}
+ items[c].push(n);newItemName.value="";save();renderAll();
+};
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ b.classList.add("active");document.getElementById(b.dataset.page).classList.add("active");
+ if(b.dataset.page==="dashboard")renderDashboard();
+});
 
 function renderAll(){renderCats();renderDashboard();renderHistory();renderItems()}
 renderAll();
 </script>
 </body></html>
+```
