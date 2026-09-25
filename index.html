@@ -28,7 +28,13 @@ th{background:var(--blue);color:white;text-align:left;padding:9px}td{padding:9px
 </head>
 <body>
 <header><h1>The Oaks Vending Tracker</h1><p>Track snack and laundry machine restocks separately.</p></header>
-<nav><button class="tab active" data-page="restock">Restock Entry</button><button class="tab" data-page="dashboard">Dashboard</button><button class="tab" data-page="history">History</button><button class="tab" data-page="items">Items</button></nav>
+<nav>
+<button class="tab active" data-page="restock">Restock Entry</button>
+<button class="tab" data-page="dashboard">Dashboard</button>
+<button class="tab" data-page="history">History</button>
+<button class="tab" data-page="items">Items</button>
+<button class="tab" data-page="buying">Buying</button>
+</nav>
 <main>
 <section id="restock" class="page active">
 <div class="card"><h2>Record a Restock</h2>
@@ -53,8 +59,13 @@ th{background:var(--blue);color:white;text-align:left;padding:9px}td{padding:9px
 <p class="small" id="backupNote"></p><div class="scroll"><table><thead><tr><th>Date</th><th>Machine</th><th>Category</th><th>Item</th><th>Qty</th><th>Slot</th><th>Note</th><th></th></tr></thead><tbody id="historyBody"></tbody></table></div></div></section>
 <section id="items" class="page"><div class="card"><h2>Vending Items</h2><p class="small">Choose the machine, then add or remove products. Removed products stay in history.</p>
 <label for="itemMachine">Machine</label><select id="itemMachine"></select>
-<div class="row"><div><label for="newCategory">Category</label><select id="newCategory"></select></div><div><label for="newItemName">Item name</label><input id="newItemName" placeholder="e.g. Tide 25 oz"></div></div>
+<div class="row"><div><label for="newCategory">Category</label><select id="newCategory"></select></div><div><label for="newItemName">Item name</label><input id="newItemName" placeholder="e.g. Dryer sheets"></div></div>
 <button class="primary" id="addItem">Add Item</button></div><div class="card" id="itemManager"></div></section>
+<section id="buying" class="page"><div class="card"><h2>Buying Plan</h2>
+<p>Your retail, snack vending, and laundry vending products have separate rows in the same buying workbook. Use <b>Buying Plan</b> to enter stock counts, targets, and buy dates; use <b>Purchase Log</b> when you place an order.</p>
+<p><a class="primary" style="display:block;text-align:center;text-decoration:none" href="https://docs.google.com/spreadsheets/d/1vZcOHkbQgvd_bPb_AhoDvQksWuYPlw2i/edit" target="_blank" rel="noopener noreferrer">Open Oaks Buying Workbook</a></p>
+<p class="small">Restock entries here remain in this browser. The workbook does not update automatically from this page. Export your history as a backup, and enter your current stock counts in the workbook to generate its buy list. Check package sizes and vendor prices before ordering.</p>
+</div></section>
 </main>
 <script>
 const MACHINE_NAMES={snacks:"Snack & Drink Machine",laundry:"Laundry Vending Machine"};
@@ -63,20 +74,39 @@ const DEFAULT_SNACKS={
  Chips:["Doritos Nacho Cheese","Doritos Cool Ranch","Cheetos Crunchy","Cheetos Flamin' Hot","Miss Vickie's Smokehouse BBQ","Miss Vickie's Sea Salt & Vinegar","Miss Vickie's Jalapeño","Takis / Spicy Chips"],
  Candy:["Snickers","M&M's Milk Chocolate","M&M's Peanut","Skittles","Starburst","Kirkland Trail Mix"]
 };
-// The laundry list is a starting point. Edit it in Items to match the actual machine.
-const DEFAULT_LAUNDRY={Detergent:["Tide 25 oz"],Softener:["Downy 10 oz"],Bleach:["Bleach"]};
+// Based on the photographed machine. Use the Slot field for products in multiple slots.
+const DEFAULT_LAUNDRY={
+ Detergent:["Tide powder box","Tide powder packet","Ariel Poder y Cuidado packet","Tide small liquid bottle","Gain small liquid bottle"],
+ "Dryer Sheets":["Bounce dryer sheets","Gain dryer sheets","Suavitel Complete dryer sheets","Downy dryer sheets"],
+ Softener:["Suavitel yellow bottle"],
+ Bleach:["Clorox small bleach bottle"],
+ "Stain Remover":["Soilove stain remover"],
+ Supplies:["Blue trash bags"]
+};
 const K_ITEMS="oaksVendingItemsV2",K_HIST="oaksVendingHistoryV2",K_EXPORT="oaksVendingLastExportV2";
 function load(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
 function clone(x){return JSON.parse(JSON.stringify(x))}
-// One-time migration: all records from the original single-machine tracker belong to snacks.
+// Existing entries from the original single-machine tracker belong to snacks.
 let items=load(K_ITEMS,null);
 if(!items||!items.snacks||!items.laundry)items={snacks:load("oaksVendingItems",clone(DEFAULT_SNACKS)),laundry:clone(DEFAULT_LAUNDRY)};
 let history=load(K_HIST,null);
 if(!Array.isArray(history))history=load("oaksVendingHistory",[]).map(h=>({...h,machine:"snacks"}));
 history=history.map(h=>({...h,machine:h.machine==="laundry"?"laundry":"snacks"}));
 function save(){try{localStorage.setItem(K_ITEMS,JSON.stringify(items));localStorage.setItem(K_HIST,JSON.stringify(history));return true}catch{alert("Browser storage is full or blocked. Export your history before leaving this page.");return false}}
+// Correct the earlier placeholder laundry catalog without deleting history.
+const K_CATALOG_FIX="oaksVendingLaundryPhotoCatalogV2";
+if(!localStorage.getItem(K_CATALOG_FIX)){
+ for(const [category,list] of Object.entries(items.laundry)){
+  items.laundry[category]=list.filter(name=>!["Tide 25 oz","Downy 10 oz","Bleach"].includes(name));
+ }
+ for(const [category,list] of Object.entries(DEFAULT_LAUNDRY)){
+  items.laundry[category]??=[];
+  for(const name of list)if(!items.laundry[category].some(x=>x.toLowerCase()===name.toLowerCase()))items.laundry[category].push(name);
+ }
+ if(save())try{localStorage.setItem(K_CATALOG_FIX,"1")}catch{}
+}
 const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 const pad=n=>String(n).padStart(2,"0");
 function today(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
 function dateOf(s){return new Date(s+"T12:00:00")}
@@ -118,7 +148,7 @@ function renderDashboard(){const machine=$("dashboardMachine").value;const categ
  $("quickRead").innerHTML=`<b>Top movers:</b> ${ranked.slice(0,5).map(x=>`${esc(x.item)} (${x.d30})`).join(", ")||"No movement yet"}<br><br><b>No 30-day movement:</b> ${live.filter(x=>!x.d30).length} item(s).`}
 $("dashboardMachine").onchange=()=>{filter="all";renderDashboard()};
 $("filterBar").onclick=e=>{const b=e.target.closest("[data-filter]");if(b){filter=b.dataset.filter;renderDashboard()}};
-function renderHistory(){const shown=currentHistory($("historyMachine").value).slice().sort((a,b)=>b.date.localeCompare(a.date));
+function renderHistory(){const shown=currentHistory($("historyMachine").value).slice().sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
  $("historyBody").innerHTML=shown.map(h=>`<tr><td>${esc(h.date)}</td><td>${esc(MACHINE_NAMES[h.machine])}</td><td>${esc(h.category)}</td><td>${esc(h.item)}</td><td><b>${esc(h.qty)}</b></td><td>${esc(h.slot)}</td><td>${esc(h.note)}</td><td><button class="danger" data-id="${esc(h.id)}">Delete</button></td></tr>`).join("")||'<tr><td colspan="8">No restocks recorded.</td></tr>';
  const last=localStorage.getItem(K_EXPORT);$("backupNote").textContent=history.length?`Export all history regularly. It is only stored in this browser.${last?" Last export: "+last:""}`:""}
 $("historyMachine").onchange=renderHistory;
