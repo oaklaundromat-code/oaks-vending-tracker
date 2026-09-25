@@ -1,807 +1,1086 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oaks Vending Tracker</title>
 
-  <title>Oaks Vending Tracker</title>
+<style>
+:root{
+  font-family:Arial,sans-serif;
+  color:#18212e;
+  background:#f7f9fc;
+  font-size:24px;
+}
 
-  <style>
-    :root {
-      font-family: Arial, sans-serif;
-      color: #18212e;
-      background: #f7f9fc;
-      font-size: 22px;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
 
-    html {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
+body{
+  margin:0;
+  line-height:1.42;
+  font-size:24px;
+}
 
-    body {
-      margin: 0;
-      line-height: 1.4;
-      font-size: 22px;
-    }
+header{
+  background:#17365d;
+  color:white;
+  padding:18px 16px;
+}
 
-    header {
-      background: #17365d;
-      color: white;
-      padding: 20px 16px;
-    }
+h1{
+  font-size:32px;
+  line-height:1.15;
+  margin:0;
+}
 
-    h1 {
-      font-size: 30px;
-      line-height: 1.15;
-      margin: 0;
-    }
+header p{
+  font-size:19px;
+  margin:6px 0 0;
+  opacity:.9;
+}
 
-    header p {
-      font-size: 18px;
-      margin: 8px 0 0;
-    }
+nav{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  background:white;
+  padding:10px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  border-bottom:1px solid #d9e2f3;
+}
 
-    nav {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: white;
-      padding: 10px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid #d9e2f3;
-    }
+button{
+  cursor:pointer;
+  border:0;
+  border-radius:14px;
+  min-height:64px;
+  padding:15px 12px;
+  font-size:21px;
+  font-weight:700;
+  background:#eaf0f7;
+  color:#17365d;
+}
 
-    button {
-      cursor: pointer;
-      border: 0;
-      border-radius: 12px;
-      min-height: 60px;
-      padding: 14px 12px;
-      font-size: 20px;
-      font-weight: 700;
-      background: #eaf0f7;
-      color: #17365d;
-    }
+button.active,
+.primary{
+  background:#1f4e78;
+  color:white;
+}
 
-    button.active,
-    .primary {
-      background: #1f4e78;
-      color: white;
-    }
+.danger{
+  background:#b42323;
+  color:white;
+  min-height:56px;
+  padding:12px 16px;
+  font-size:19px;
+}
 
-    .danger {
-      background: #b42323;
-      color: white;
-      min-height: 54px;
-      padding: 12px 16px;
-      font-size: 18px;
-    }
+.toggle{
+  min-height:56px;
+  font-size:19px;
+  padding:12px 16px;
+  margin-bottom:14px;
+}
 
-    main {
-      width: 100%;
-      max-width: 700px;
-      margin: auto;
-      padding: 12px;
-    }
+main{
+  width:100%;
+  max-width:760px;
+  margin:auto;
+  padding:12px;
+}
 
-    .page {
-      display: none;
-    }
+.page{
+  display:none;
+}
 
-    .page.active {
-      display: block;
-    }
+.page.active{
+  display:block;
+}
 
-    .card {
-      width: 100%;
-      background: white;
-      border: 1px solid #d9e2f3;
-      border-radius: 14px;
-      padding: 18px 14px;
-      margin-bottom: 16px;
-    }
+.card{
+  width:100%;
+  background:white;
+  border:1px solid #d9e2f3;
+  border-radius:16px;
+  padding:18px 14px;
+  margin-bottom:16px;
+}
 
-    h2 {
-      color: #17365d;
-      font-size: 28px;
-      line-height: 1.15;
-      margin: 0 0 16px;
-    }
+h2{
+  color:#17365d;
+  font-size:29px;
+  line-height:1.15;
+  margin:0 0 16px;
+}
 
-    .small {
-      font-size: 18px;
-      line-height: 1.45;
-      color: #596675;
-    }
+.small{
+  font-size:19px;
+  line-height:1.5;
+  color:#596675;
+}
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
+.row{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
 
-    label {
-      display: block;
-      font-size: 20px;
-      font-weight: 700;
-      margin: 18px 0 8px;
-    }
+label{
+  display:block;
+  font-size:22px;
+  font-weight:700;
+  margin:20px 0 8px;
+}
 
-    input,
-    select,
-    textarea {
-      display: block;
-      width: 100%;
-      min-height: 62px;
-      font-family: Arial, sans-serif;
-      font-size: 21px;
-      border: 2px solid #aebbc9;
-      border-radius: 12px;
-      padding: 14px;
-      background: white;
-      color: #18212e;
-    }
+input,
+select,
+textarea{
+  display:block;
+  width:100%;
+  min-height:68px;
+  font-family:Arial,sans-serif;
+  font-size:23px;
+  border:2px solid #aebbc9;
+  border-radius:14px;
+  padding:15px;
+  background:white;
+  color:#18212e;
+}
 
-    select {
-      min-height: 64px;
-    }
+select{
+  min-height:70px;
+}
 
-    input[type="number"] {
-      font-size: 24px;
-      font-weight: 600;
-    }
+input[type="number"]{
+  font-size:26px;
+  font-weight:600;
+}
 
-    input[type="date"] {
-      font-size: 20px;
-    }
+input[type="date"]{
+  font-size:22px;
+}
 
-    textarea {
-      min-height: 105px;
-    }
+textarea{
+  min-height:115px;
+}
 
-    .wide {
-      width: 100%;
-      min-height: 66px;
-      margin-top: 20px;
-      font-size: 22px;
-    }
+.wide{
+  width:100%;
+  min-height:70px;
+  margin-top:22px;
+  font-size:23px;
+}
 
-    #message {
-      margin: 0;
-      padding: 14px 16px;
-      font-size: 19px;
-      line-height: 1.4;
-      display: none;
-    }
+#message{
+  margin:0;
+  padding:15px 16px;
+  font-size:20px;
+  line-height:1.4;
+  display:none;
+}
 
-    a {
-      color: #1f4e78;
-      font-size: 19px;
-      overflow-wrap: anywhere;
-    }
+a{
+  color:#1f4e78;
+  font-size:20px;
+  overflow-wrap:anywhere;
+}
 
-    .scroll {
-      overflow: visible;
-    }
+.scroll{
+  overflow:visible;
+}
 
-    table,
-    thead,
-    tbody,
-    tr,
-    th,
-    td {
-      display: block;
-    }
+table,
+thead,
+tbody,
+tr,
+th,
+td{
+  display:block;
+}
 
-    table {
-      width: 100%;
-    }
+table{
+  width:100%;
+}
 
-    thead {
-      display: none;
-    }
+thead{
+  display:none;
+}
 
-    tbody {
-      display: grid;
-      gap: 14px;
-    }
+tbody{
+  display:grid;
+  gap:14px;
+}
 
-    tr {
-      width: 100%;
-      border: 2px solid #d9e2f3;
-      border-radius: 14px;
-      background: white;
-      padding: 12px 14px;
-    }
+tr{
+  width:100%;
+  border:2px solid #d9e2f3;
+  border-radius:15px;
+  background:white;
+  padding:12px 14px;
+}
 
-    td {
-      display: grid;
-      grid-template-columns: 110px minmax(0, 1fr);
-      gap: 12px;
-      width: 100%;
-      padding: 10px 0;
-      border: 0;
-      border-bottom: 1px solid #e8edf4;
-      font-size: 19px;
-      line-height: 1.35;
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
+td{
+  display:grid;
+  grid-template-columns:115px minmax(0,1fr);
+  gap:12px;
+  width:100%;
+  padding:11px 0;
+  border:0;
+  border-bottom:1px solid #e8edf4;
+  font-size:20px;
+  line-height:1.4;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
 
-    td:last-child {
-      border-bottom: 0;
-    }
+td:last-child{
+  border-bottom:0;
+}
 
-    td::before {
-      content: attr(data-label);
-      font-size: 17px;
-      font-weight: 700;
-      color: #596675;
-    }
+td::before{
+  content:attr(data-label);
+  font-size:18px;
+  font-weight:700;
+  color:#596675;
+}
 
-    #buyRows td:nth-child(2) {
-      display: block;
-      font-size: 23px;
-      font-weight: 700;
-      color: #17365d;
-      padding-bottom: 14px;
-    }
+#buyRows td:nth-child(2){
+  display:block;
+  font-size:25px;
+  font-weight:700;
+  color:#17365d;
+  padding-bottom:14px;
+}
 
-    #buyRows td:nth-child(2)::before {
-      display: block;
-      margin-bottom: 4px;
-    }
+#buyRows td:nth-child(2)::before{
+  display:block;
+  margin-bottom:4px;
+}
 
-    #buyRows td:nth-child(5),
-    #buyRows td:nth-child(7),
-    #buyRows td:nth-child(10) {
-      font-size: 21px;
-      font-weight: 700;
-    }
+#buyRows td:nth-child(5),
+#buyRows td:nth-child(7),
+#buyRows td:nth-child(10){
+  font-size:22px;
+  font-weight:700;
+}
 
-    #historyRows td:nth-child(4) {
-      display: block;
-      font-size: 22px;
-      font-weight: 700;
-      color: #17365d;
-    }
+#historyRows td:nth-child(4){
+  display:block;
+  font-size:24px;
+  font-weight:700;
+  color:#17365d;
+}
 
-    @media (min-width: 700px) {
-      nav {
-        grid-template-columns: repeat(4, 1fr);
-      }
+.empty{
+  padding:18px;
+  font-size:20px;
+  color:#596675;
+  text-align:center;
+}
 
-      .row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-      }
+@media (min-width:700px){
+  :root{
+    font-size:18px;
+  }
 
-      table {
-        display: table;
-        border-collapse: collapse;
-      }
+  body{
+    font-size:18px;
+  }
 
-      thead {
-        display: table-header-group;
-      }
+  nav{
+    grid-template-columns:repeat(4,1fr);
+  }
 
-      tbody {
-        display: table-row-group;
-      }
+  .row{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
 
-      tr {
-        display: table-row;
-        border: 0;
-        padding: 0;
-      }
+  table{
+    display:table;
+    border-collapse:collapse;
+  }
 
-      th,
-      td {
-        display: table-cell;
-        padding: 10px;
-        border-bottom: 1px solid #e8edf4;
-        font-size: 16px;
-      }
+  thead{
+    display:table-header-group;
+  }
 
-      th {
-        background: #1f4e78;
-        color: white;
-        text-align: left;
-      }
+  tbody{
+    display:table-row-group;
+  }
 
-      td::before {
-        display: none;
-      }
-    }
+  tr{
+    display:table-row;
+    border:0;
+    padding:0;
+  }
 
-    @media (max-width: 390px) {
-      body {
-        font-size: 21px;
-      }
+  th,
+  td{
+    display:table-cell;
+    padding:10px;
+    border-bottom:1px solid #e8edf4;
+    font-size:16px;
+  }
 
-      h1 {
-        font-size: 28px;
-      }
+  th{
+    background:#1f4e78;
+    color:white;
+    text-align:left;
+  }
 
-      h2 {
-        font-size: 26px;
-      }
+  td::before{
+    display:none;
+  }
 
-      button {
-        font-size: 19px;
-      }
+  #buyRows td:nth-child(2),
+  #historyRows td:nth-child(4){
+    display:table-cell;
+    font-size:16px;
+    font-weight:normal;
+    color:inherit;
+  }
+}
 
-      input,
-      select,
-      textarea {
-        font-size: 20px;
-      }
+@media (max-width:390px){
+  body{
+    font-size:23px;
+  }
 
-      td {
-        grid-template-columns: 100px minmax(0, 1fr);
-      }
-    }
+  h1{
+    font-size:30px;
+  }
 
-    @media (max-width: 340px) {
-      nav {
-        grid-template-columns: 1fr;
-      }
+  h2{
+    font-size:28px;
+  }
 
-      td {
-        grid-template-columns: 1fr;
-        gap: 3px;
-      }
+  button{
+    font-size:20px;
+  }
 
-      td::before {
-        margin-bottom: 2px;
-      }
-    }
-  </style>
+  input,
+  select,
+  textarea{
+    font-size:22px;
+  }
+
+  td{
+    grid-template-columns:105px minmax(0,1fr);
+  }
+}
+
+@media (max-width:340px){
+  nav{
+    grid-template-columns:1fr;
+  }
+
+  td{
+    grid-template-columns:1fr;
+    gap:4px;
+  }
+
+  td::before{
+    margin-bottom:2px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>The Oaks Vending Tracker</h1>
-    <p>Shared data in your Google Sheet</p>
-  </header>
+<header>
+<h1>Oaks Vending Tracker</h1>
+<p>Shared data in your Google Sheet</p>
+</header>
 
-  <nav>
-    <button class="tab active" data-page="restock">Restock</button>
-    <button class="tab" data-page="inventory">Count Stock</button>
-    <button class="tab" data-page="buying">Buying</button>
-    <button class="tab" data-page="history">History</button>
-  </nav>
+<nav>
+<button class="tab active" data-page="restock">Restock</button>
+<button class="tab" data-page="inventory">Count Stock</button>
+<button class="tab" data-page="buying">Buying</button>
+<button class="tab" data-page="history">History</button>
+</nav>
 
-  <div id="message" role="status"></div>
+<div id="message" role="status"></div>
 
-  <main>
+<main>
 
-    <section id="restock" class="page active">
-      <div class="card">
+<section id="restock" class="page active">
+<div class="card">
 
-        <h2>Record a Restock</h2>
+<h2>Record a Restock</h2>
 
-        <div class="row">
-          <div>
-            <label>Date</label>
-            <input type="date" id="date">
-          </div>
+<div class="row">
+<div>
+<label>Date</label>
+<input type="date" id="date">
+</div>
 
-          <div>
-            <label>Machine</label>
-            <select id="machine"></select>
-          </div>
-        </div>
+<div>
+<label>Machine</label>
+<select id="machine"></select>
+</div>
+</div>
 
-        <div class="row">
-          <div>
-            <label>Category</label>
-            <select id="category"></select>
-          </div>
+<div class="row">
+<div>
+<label>Category</label>
+<select id="category"></select>
+</div>
 
-          <div>
-            <label>Item</label>
-            <select id="item"></select>
-          </div>
-        </div>
+<div>
+<label>Item</label>
+<select id="item"></select>
+</div>
+</div>
 
-        <div class="row">
-          <div>
-            <label>Quantity replaced</label>
-            <input id="qty" type="number" min="1" step="1">
-          </div>
+<div class="row">
+<div>
+<label>Quantity replaced</label>
+<input id="qty" type="number" min="1" step="1">
+</div>
 
-          <div>
-            <label>Slot (optional)</label>
-            <input id="slot">
-          </div>
-        </div>
+<div>
+<label>Slot (optional)</label>
+<input id="slot">
+</div>
+</div>
 
-        <label>Note (optional)</label>
-        <textarea id="note" rows="2"></textarea>
+<label>Note (optional)</label>
+<textarea id="note" rows="2"></textarea>
 
-        <button class="primary wide" id="saveRestock">
-          Save to Google Sheet
-        </button>
+<button class="primary wide" id="saveRestock">
+Save to Google Sheet
+</button>
 
-        <p class="small">
-          Quantity replaced estimates movement.
-          Count all stock on hand, including backstock,
-          on the Count Stock tab for accurate purchasing.
-        </p>
+<p class="small">
+Quantity replaced estimates movement.
+Count all stock on hand, including backstock,
+on the Count Stock tab for accurate purchasing.
+</p>
 
-      </div>
-    </section>
+</div>
+</section>
 
-    <section id="inventory" class="page">
-      <div class="card">
 
-        <h2>Count Stock</h2>
+<section id="inventory" class="page">
+<div class="card">
 
-        <p class="small">
-          Count every unit you own for a product across all its slots and storage.
-          One product has one inventory row.
-        </p>
+<h2>Count Stock</h2>
 
-        <label>Machine</label>
-        <select id="countMachine"></select>
+<p class="small">
+Count every unit you own for a product across all its slots and storage.
+One product has one inventory row.
+</p>
 
-        <label>Product</label>
-        <select id="countItem"></select>
+<label>Machine</label>
+<select id="countMachine"></select>
 
-        <div class="row">
-          <div>
-            <label>On hand</label>
-            <input id="onHand" type="number" min="0" step="1">
-          </div>
+<label>Product</label>
+<select id="countItem"></select>
 
-          <div>
-            <label>Target units</label>
-            <input id="target" type="number" min="0" step="1">
-          </div>
-        </div>
+<div class="row">
 
-        <button class="primary wide" id="saveCount">
-          Save count to Google Sheet
-        </button>
+<div>
+<label>On hand</label>
+<input id="onHand" type="number" min="0" step="1">
+</div>
 
-      </div>
-    </section>
+<div>
+<label>Target units</label>
+<input id="target" type="number" min="0" step="1">
+</div>
 
-    <section id="buying" class="page">
-      <div class="card">
+</div>
 
-        <h2>Vending Buy List</h2>
+<button class="primary wide" id="saveCount">
+Save count to Google Sheet
+</button>
 
-        <p class="small">
-          From your current stock counts and targets.
-          Prices, suppliers, and buy dates come from the cost model.
-        </p>
+</div>
+</section>
 
-        <p>
-          <a
-            target="_blank"
-            rel="noopener"
-            href="https://docs.google.com/spreadsheets/d/18xul-Y88A1BQzYb8WE1DU80_13K0tFx9FqcadxhXhDs/edit">
-            Open full cost model, retail buying plan, and purchase log
-          </a>
-        </p>
 
-        <div class="scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Machine</th>
-                <th>Product</th>
-                <th>Have</th>
-                <th>Target</th>
-                <th>Need</th>
-                <th>Buy from</th>
-                <th>Cases</th>
-                <th>Est. cost</th>
-                <th>Buy by</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+<section id="buying" class="page">
+<div class="card">
 
-            <tbody id="buyRows"></tbody>
-          </table>
-        </div>
+<h2>Vending Buy List</h2>
 
-      </div>
-    </section>
+<p class="small" id="buySummary">
+Loading…
+</p>
 
-    <section id="history" class="page">
-      <div class="card">
+<button class="toggle" id="buyToggle">
+Show everything
+</button>
 
-        <h2>Restock History</h2>
+<div class="scroll">
 
-        <p class="small">
-          Entries are saved in the Google Sheet.
-          Export a CSV before retiring the old GitHub tracker,
-          then import it here once.
-        </p>
+<table>
 
-        <button id="exportCsv">Export CSV</button>
-        <button id="importCsv">Import old or new CSV</button>
+<thead>
+<tr>
+<th>Machine</th>
+<th>Product</th>
+<th>Have</th>
+<th>Target</th>
+<th>Need</th>
+<th>Buy from</th>
+<th>Cases</th>
+<th>Est. cost</th>
+<th>Buy by</th>
+<th>Status</th>
+</tr>
+</thead>
 
-        <input
-          type="file"
-          id="file"
-          accept=".csv,text/csv"
-          hidden
-        >
+<tbody id="buyRows"></tbody>
 
-        <div class="scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Machine</th>
-                <th>Category</th>
-                <th>Item</th>
-                <th>Replaced</th>
-                <th>Slot</th>
-                <th>Note</th>
-                <th></th>
-              </tr>
-            </thead>
+</table>
 
-            <tbody id="historyRows"></tbody>
-          </table>
-        </div>
+</div>
 
-      </div>
-    </section>
+<p>
+<a
+target="_blank"
+rel="noopener"
+href="https://docs.google.com/spreadsheets/d/18xul-Y88A1BQzYb8WE1DU80_13K0tFx9FqcadxhXhDs/edit">
+Open full cost model, retail buying plan, and purchase log
+</a>
+</p>
 
-  </main>
+</div>
+</section>
 
-  <script>
-    const $ = id => document.getElementById(id);
 
-    const names = {
-      snacks: 'Snack & Drink Machine',
-      laundry: 'Laundry Vending Machine'
-    };
+<section id="history" class="page">
+<div class="card">
 
-    let state = {
-      inventory: [],
-      history: []
-    };
+<h2>Restock History</h2>
 
-    let pending = false;
-    let messageTimer;
-    let entryId = newId();
+<p class="small" id="historySummary"></p>
 
-    function newId() {
-      return globalThis.crypto?.randomUUID?.()
-        || String(Date.now()) + '-' + Math.random().toString(36).slice(2);
-    }
+<div class="scroll">
 
-    const esc = x =>
-      String(x ?? '').replace(
-        /[&<>"']/g,
-        c => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#39;'
-        }[c])
-      );
+<table>
 
-    const options = (id, list, old) => {
-      $(id).innerHTML = list
-        .map(([v, t]) =>
+<thead>
+<tr>
+<th>Date</th>
+<th>Machine</th>
+<th>Category</th>
+<th>Item</th>
+<th>Replaced</th>
+<th>Slot</th>
+<th>Note</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="historyRows"></tbody>
+
+</table>
+
+</div>
+
+<button
+class="toggle wide"
+id="loadMore"
+style="display:none">
+Show 25 more
+</button>
+
+<p class="small">
+Entries are saved in the Google Sheet.
+</p>
+
+<button id="exportCsv">
+Export CSV
+</button>
+
+<button id="importCsv">
+Import old or new CSV
+</button>
+
+<input
+type="file"
+id="file"
+accept=".csv,text/csv"
+hidden>
+
+</div>
+</section>
+
+</main>
+
+
+<script>
+
+const $ = id =>
+  document.getElementById(id);
+
+
+const names = {
+  snacks:'Snack & Drink Machine',
+  laundry:'Laundry Vending Machine'
+};
+
+
+let state = {
+  inventory:[],
+  history:[]
+};
+
+
+let pending = false;
+let messageTimer;
+let entryId = newId();
+
+let buyShowAll = false;
+
+let historyShown = 25;
+
+const PAGE = 25;
+
+
+function newId(){
+
+  return globalThis.crypto?.randomUUID?.()
+    ||
+    String(Date.now())
+    + '-'
+    + Math.random().toString(36).slice(2);
+
+}
+
+
+const esc = x =>
+  String(x ?? '').replace(
+    /[&<>"']/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[c])
+  );
+
+
+function needNum(v){
+
+  const n =
+    Number(
+      String(v ?? '')
+        .replace(/[^0-9.-]/g,'')
+    );
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+const options = (id,list,old) => {
+
+  $(id).innerHTML =
+    list
+      .map(
+        ([v,t]) =>
           `<option value="${esc(v)}">${esc(t)}</option>`
-        )
-        .join('');
+      )
+      .join('');
 
-      if (list.some(([v]) => v === old)) {
-        $(id).value = old;
-      }
-    };
+  if(
+    list.some(
+      ([v]) => v === old
+    )
+  ){
+    $(id).value = old;
+  }
 
-    function call(method, arg, onDone) {
-      if (pending) return;
+};
 
-      pending = true;
 
-      message(
-        method === 'deleteRestock'
-          ? 'Deleting…'
-          : 'Saving…'
-      );
+function call(method,arg,onDone){
 
-      const runner = google.script.run
-        .withSuccessHandler(result => {
-          pending = false;
+  if(pending) return;
 
-          state = result.state || result;
+  pending = true;
 
-          render();
+  message(
+    method === 'deleteRestock'
+      ? 'Deleting…'
+      : 'Saving…'
+  );
 
-          message(
-            result.added !== undefined
-              ? `Imported ${result.added} entries.`
-              : result.deleted === false
-              ? 'Entry was already absent. History is up to date.'
-              : method === 'deleteRestock'
-              ? 'Deleted from Google Sheet.'
-              : 'Saved to Google Sheet.',
-            false,
-            true
-          );
 
-          if (onDone) onDone();
-        })
-        .withFailureHandler(e => {
-          pending = false;
+  const runner =
+    google.script.run
 
-          message(
-            `Not saved — ${e.message || String(e)}. Check the Sheet before retrying.`,
-            true
-          );
-        });
+      .withSuccessHandler(result => {
 
-      if (arg === undefined) {
-        runner[method]();
-      } else {
-        runner[method](arg);
-      }
-    }
+        pending = false;
 
-    function message(s, error = false, autoHide = false) {
-      clearTimeout(messageTimer);
+        state =
+          result.state || result;
 
-      $('message').style.display = 'block';
+        render();
 
-      $('message').style.background =
-        error
-          ? '#fce4e4'
-          : '#e5f5e4';
+        message(
 
-      $('message').textContent = s;
+          result.added !== undefined
 
-      if (autoHide) {
-        messageTimer = setTimeout(
-          () => $('message').style.display = 'none',
-          4500
+            ? `Imported ${result.added} entries.`
+              +
+              (
+                result.skipped
+                  ? ` Skipped ${result.skipped} duplicate, invalid, or unavailable rows.`
+                  : ''
+              )
+
+            : result.deleted === false
+
+            ? 'Entry was already absent. History is up to date.'
+
+            : method === 'deleteRestock'
+
+            ? 'Deleted from Google Sheet.'
+
+            : 'Saved to Google Sheet.',
+
+          false,
+          true
+
         );
-      }
-    }
 
-    function restockOptions() {
-      const machine = $('machine').value;
 
-      const cats = [
-        ...new Set(
-          state.inventory
-            .filter(x => x.machine === machine)
-            .map(x => x.category)
-        )
-      ];
+        if(onDone){
+          onDone();
+        }
 
-      options(
-        'category',
-        cats.map(x => [x, x]),
-        $('category').value
+      })
+
+      .withFailureHandler(e => {
+
+        pending = false;
+
+        message(
+          `Not saved — ${e.message || String(e)}. Check the Sheet before retrying.`,
+          true
+        );
+
+      });
+
+
+  if(arg === undefined){
+
+    runner[method]();
+
+  }else{
+
+    runner[method](arg);
+
+  }
+
+}
+
+
+function message(
+  s,
+  error = false,
+  autoHide = false
+){
+
+  clearTimeout(messageTimer);
+
+  $('message').style.display =
+    'block';
+
+  $('message').style.background =
+    error
+      ? '#fce4e4'
+      : '#e5f5e4';
+
+  $('message').textContent =
+    s;
+
+
+  if(autoHide){
+
+    messageTimer =
+      setTimeout(
+        () =>
+          $('message').style.display =
+            'none',
+        4500
       );
 
-      options(
-        'item',
+  }
+
+}
+
+
+function restockOptions(){
+
+  const machine =
+    $('machine').value;
+
+
+  const cats =
+    [
+      ...new Set(
+
         state.inventory
           .filter(
             x =>
-              x.machine === machine &&
-              x.category === $('category').value
+              x.machine === machine
           )
-          .map(x => [x.item, x.item]),
-        $('item').value
-      );
-    }
-
-    function countOptions() {
-      options(
-        'countItem',
-        state.inventory
-          .filter(
-            x => x.machine === $('countMachine').value
+          .map(
+            x => x.category
           )
-          .map(x => [x.item, x.item]),
-        $('countItem').value
-      );
 
-      const c = state.inventory.find(
+      )
+    ];
+
+
+  options(
+    'category',
+    cats.map(
+      x => [x,x]
+    ),
+    $('category').value
+  );
+
+
+  options(
+    'item',
+
+    state.inventory
+      .filter(
         x =>
-          x.machine === $('countMachine').value &&
-          x.item === $('countItem').value
-      );
+          x.machine === machine
+          &&
+          x.category ===
+            $('category').value
+      )
+      .map(
+        x => [x.item,x.item]
+      ),
 
-      $('onHand').value = c?.onHand ?? '';
-      $('target').value = c?.target ?? '';
-    }
+    $('item').value
+  );
 
-    function render() {
-      for (const id of ['machine', 'countMachine']) {
-        options(
-          id,
-          Object.entries(names),
-          $(id).value
-        );
-      }
+}
 
-      restockOptions();
-      countOptions();
 
-      $('buyRows').innerHTML =
-        state.inventory
-          .map(x => `
+function countOptions(){
+
+  options(
+    'countItem',
+
+    state.inventory
+      .filter(
+        x =>
+          x.machine ===
+            $('countMachine').value
+      )
+      .map(
+        x => [x.item,x.item]
+      ),
+
+    $('countItem').value
+  );
+
+
+  const c =
+    state.inventory.find(
+      x =>
+        x.machine ===
+          $('countMachine').value
+        &&
+        x.item ===
+          $('countItem').value
+    );
+
+
+  $('onHand').value =
+    c?.onHand ?? '';
+
+  $('target').value =
+    c?.target ?? '';
+
+}
+
+
+function renderBuy(){
+
+  const needed =
+    state.inventory.filter(
+      x =>
+        needNum(x.need) > 0
+    );
+
+
+  const shown =
+    buyShowAll
+      ? state.inventory
+      : needed;
+
+
+  $('buySummary').textContent =
+
+    buyShowAll
+
+      ? `${state.inventory.length} vending products shown.`
+
+      : needed.length
+
+      ? `${needed.length} product${needed.length === 1 ? '' : 's'} currently need stock.`
+
+      : 'No items currently show a reorder need based on saved counts and targets.';
+
+
+  $('buyToggle').textContent =
+
+    buyShowAll
+      ? 'Show only items to buy'
+      : 'Show everything';
+
+
+  if(!shown.length){
+
+    $('buyRows').innerHTML =
+      `<tr>
+        <td class="empty" data-label="">
+          No items to show.
+        </td>
+      </tr>`;
+
+    return;
+
+  }
+
+
+  $('buyRows').innerHTML =
+
+    shown
+      .map(
+        x => `
+
+          <tr>
+
+            <td data-label="Machine">
+              ${esc(names[x.machine] || x.machine)}
+            </td>
+
+            <td data-label="Product">
+              ${esc(x.item)}
+              ${
+                x.slots
+                  ? ' (' + esc(x.slots) + ')'
+                  : ''
+              }
+            </td>
+
+            <td data-label="Have">
+              ${esc(x.onHand)}
+            </td>
+
+            <td data-label="Target">
+              ${esc(x.target)}
+            </td>
+
+            <td data-label="Need">
+              ${esc(x.need)}
+            </td>
+
+            <td data-label="Buy from">
+              ${esc(x.vendor)}
+            </td>
+
+            <td data-label="Cases">
+              ${esc(x.cases)}
+            </td>
+
+            <td data-label="Est. cost">
+              ${esc(x.estimate)}
+            </td>
+
+            <td data-label="Buy by">
+              ${esc(x.buyBy)}
+            </td>
+
+            <td data-label="Status">
+              ${esc(x.status)}
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join('');
+
+}
+
+
+function renderHistory(){
+
+  const reversed =
+    state.history
+      .slice()
+      .reverse();
+
+
+  const shown =
+    reversed.slice(
+      0,
+      historyShown
+    );
+
+
+  $('historySummary').textContent =
+
+    reversed.length
+
+      ? `Showing ${shown.length} of ${reversed.length} saved restock entr${reversed.length === 1 ? 'y' : 'ies'}.`
+
+      : 'No restock history has been saved yet.';
+
+
+  if(!shown.length){
+
+    $('historyRows').innerHTML =
+      `<tr>
+        <td class="empty" data-label="">
+          No restock entries yet.
+        </td>
+      </tr>`;
+
+  }else{
+
+    $('historyRows').innerHTML =
+
+      shown
+        .map(
+          x => `
+
             <tr>
-              <td data-label="Machine">
-                ${esc(names[x.machine])}
-              </td>
 
-              <td data-label="Product">
-                ${esc(x.item)}
-                ${x.slots ? ' (' + esc(x.slots) + ')' : ''}
-              </td>
-
-              <td data-label="Have">
-                ${esc(x.onHand)}
-              </td>
-
-              <td data-label="Target">
-                ${esc(x.target)}
-              </td>
-
-              <td data-label="Need">
-                ${esc(x.need)}
-              </td>
-
-              <td data-label="Buy from">
-                ${esc(x.vendor)}
-              </td>
-
-              <td data-label="Cases">
-                ${esc(x.cases)}
-              </td>
-
-              <td data-label="Est. cost">
-                ${esc(x.estimate)}
-              </td>
-
-              <td data-label="Buy by">
-                ${esc(x.buyBy)}
-              </td>
-
-              <td data-label="Status">
-                ${esc(x.status)}
-              </td>
-            </tr>
-          `)
-          .join('');
-
-      $('historyRows').innerHTML =
-        state.history
-          .slice()
-          .reverse()
-          .map(x => `
-            <tr>
               <td data-label="Date">
                 ${esc(x.date)}
               </td>
 
               <td data-label="Machine">
-                ${esc(names[x.machine])}
+                ${esc(names[x.machine] || x.machine)}
               </td>
 
               <td data-label="Category">
@@ -831,365 +1110,734 @@
                   Delete
                 </button>
               </td>
+
             </tr>
-          `)
-          .join('');
-    }
 
-    $('machine').onchange = restockOptions;
-    $('category').onchange = restockOptions;
-    $('countMachine').onchange = countOptions;
-    $('countItem').onchange = countOptions;
-
-    $('saveRestock').onclick = () => {
-      const form = {
-        id: entryId,
-        date: $('date').value,
-        machine: $('machine').value,
-        category: $('category').value,
-        item: $('item').value,
-        qty: $('qty').value,
-        slot: $('slot').value,
-        note: $('note').value
-      };
-
-      if (
-        !form.date ||
-        !form.item ||
-        !Number.isInteger(Number(form.qty)) ||
-        Number(form.qty) < 1
-      ) {
-        message(
-          'Choose an item and enter a whole-number quantity.',
-          true
-        );
-
-        return;
-      }
-
-      call(
-        'saveRestock',
-        form,
-        () => {
-          entryId = newId();
-          $('qty').value = '';
-          $('note').value = '';
-        }
-      );
-    };
-
-    $('saveCount').onclick = () => {
-      const form = {
-        machine: $('countMachine').value,
-        item: $('countItem').value,
-        onHand: $('onHand').value,
-        target: $('target').value
-      };
-
-      if (
-        !Number.isInteger(Number(form.onHand)) ||
-        form.onHand === '' ||
-        !Number.isInteger(Number(form.target)) ||
-        form.target === ''
-      ) {
-        message(
-          'Enter both counts as whole numbers.',
-          true
-        );
-
-        return;
-      }
-
-      call(
-        'saveInventory',
-        form
-      );
-    };
-
-    $('historyRows').onclick = e => {
-      const id =
-        e.target
-          .closest('[data-delete]')
-          ?.dataset.delete;
-
-      if (
-        id &&
-        confirm('Delete this restock entry?')
-      ) {
-        call(
-          'deleteRestock',
-          id
-        );
-      }
-    };
-
-    document
-      .querySelectorAll('.tab')
-      .forEach(b => {
-        b.onclick = () => {
-          document
-            .querySelectorAll('.tab,.page')
-            .forEach(
-              x => x.classList.remove('active')
-            );
-
-          b.classList.add('active');
-
-          $(b.dataset.page)
-            .classList.add('active');
-        };
-      });
-
-    function csvCell(x) {
-      return `"${String(x ?? '').replaceAll('"', '""')}"`;
-    }
-
-    $('exportCsv').onclick = () => {
-      const rows = [
-        [
-          'Date',
-          'Machine',
-          'Category',
-          'Item',
-          'Quantity',
-          'Slot',
-          'Note'
-        ],
-
-        ...state.history.map(
-          x => [
-            x.date,
-            x.machine,
-            x.category,
-            x.item,
-            x.qty,
-            x.slot,
-            x.note
-          ]
+          `
         )
-      ];
+        .join('');
 
-      const url =
-        URL.createObjectURL(
-          new Blob(
-            [
-              rows
-                .map(
-                  r =>
-                    r
-                      .map(csvCell)
-                      .join(',')
-                )
-                .join('\r\n')
-            ],
-            {
-              type: 'text/csv'
-            }
+  }
+
+
+  $('loadMore').style.display =
+
+    historyShown < reversed.length
+      ? 'block'
+      : 'none';
+
+}
+
+
+function render(){
+
+  for(
+    const id of [
+      'machine',
+      'countMachine'
+    ]
+  ){
+
+    options(
+      id,
+      Object.entries(names),
+      $(id).value
+    );
+
+  }
+
+
+  restockOptions();
+
+  countOptions();
+
+  renderBuy();
+
+  renderHistory();
+
+}
+
+
+$('machine').onchange =
+  restockOptions;
+
+
+$('category').onchange =
+  restockOptions;
+
+
+$('countMachine').onchange =
+  countOptions;
+
+
+$('countItem').onchange =
+  countOptions;
+
+
+$('buyToggle').onclick = () => {
+
+  buyShowAll =
+    !buyShowAll;
+
+  renderBuy();
+
+};
+
+
+$('loadMore').onclick = () => {
+
+  historyShown += PAGE;
+
+  renderHistory();
+
+};
+
+
+$('saveRestock').onclick = () => {
+
+  const form = {
+
+    id:
+      entryId,
+
+    date:
+      $('date').value,
+
+    machine:
+      $('machine').value,
+
+    category:
+      $('category').value,
+
+    item:
+      $('item').value,
+
+    qty:
+      $('qty').value,
+
+    slot:
+      $('slot').value,
+
+    note:
+      $('note').value
+
+  };
+
+
+  if(
+    !form.date
+    ||
+    !form.item
+    ||
+    !Number.isInteger(
+      Number(form.qty)
+    )
+    ||
+    Number(form.qty) < 1
+  ){
+
+    message(
+      'Choose an item and enter a whole-number quantity.',
+      true
+    );
+
+    return;
+
+  }
+
+
+  call(
+    'saveRestock',
+    form,
+    () => {
+
+      entryId =
+        newId();
+
+      $('qty').value =
+        '';
+
+      $('slot').value =
+        '';
+
+      $('note').value =
+        '';
+
+    }
+  );
+
+};
+
+
+$('saveCount').onclick = () => {
+
+  const form = {
+
+    machine:
+      $('countMachine').value,
+
+    item:
+      $('countItem').value,
+
+    onHand:
+      $('onHand').value,
+
+    target:
+      $('target').value
+
+  };
+
+
+  if(
+    !Number.isInteger(
+      Number(form.onHand)
+    )
+    ||
+    form.onHand === ''
+    ||
+    Number(form.onHand) < 0
+    ||
+    !Number.isInteger(
+      Number(form.target)
+    )
+    ||
+    form.target === ''
+    ||
+    Number(form.target) < 0
+  ){
+
+    message(
+      'Enter both counts as whole numbers.',
+      true
+    );
+
+    return;
+
+  }
+
+
+  call(
+    'saveInventory',
+    form
+  );
+
+};
+
+
+$('historyRows').onclick = e => {
+
+  const deleteButton =
+    e.target.closest(
+      '[data-delete]'
+    );
+
+
+  const id =
+    deleteButton
+      ?.dataset.delete;
+
+
+  if(
+    id
+    &&
+    confirm(
+      'Delete this restock entry?'
+    )
+  ){
+
+    call(
+      'deleteRestock',
+      id
+    );
+
+  }
+
+};
+
+
+document
+  .querySelectorAll('.tab')
+  .forEach(
+    b => {
+
+      b.onclick = () => {
+
+        document
+          .querySelectorAll(
+            '.tab,.page'
+          )
+          .forEach(
+            x =>
+              x.classList.remove(
+                'active'
+              )
+          );
+
+
+        b.classList.add(
+          'active'
+        );
+
+
+        $(
+          b.dataset.page
+        )
+        .classList.add(
+          'active'
+        );
+
+
+        window.scrollTo(0, 0);
+
+      };
+
+    }
+  );
+
+
+function csvCell(x){
+
+  return `"${String(x ?? '').replaceAll('"','""')}"`;
+
+}
+
+
+$('exportCsv').onclick = () => {
+
+  const rows = [
+
+    [
+      'Date',
+      'Machine',
+      'Category',
+      'Item',
+      'Quantity',
+      'Slot',
+      'Note'
+    ],
+
+    ...state.history.map(
+      x => [
+        x.date,
+        x.machine,
+        x.category,
+        x.item,
+        x.qty,
+        x.slot,
+        x.note
+      ]
+    )
+
+  ];
+
+
+  const blob =
+    new Blob(
+
+      [
+        rows
+          .map(
+            r =>
+              r
+                .map(csvCell)
+                .join(',')
+          )
+          .join('\r\n')
+      ],
+
+      {
+        type:'text/csv'
+      }
+
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement('a');
+
+
+  a.href =
+    url;
+
+
+  a.download =
+    'oaks_vending_backup.csv';
+
+
+  a.click();
+
+
+  setTimeout(
+    () =>
+      URL.revokeObjectURL(
+        url
+      ),
+    3000
+  );
+
+};
+
+
+function parseCsv(t){
+
+  const rows =
+    [];
+
+  let row =
+    [];
+
+  let field =
+    '';
+
+  let quoted =
+    false;
+
+
+  for(
+    let i = 0;
+    i < t.length;
+    i++
+  ){
+
+    const c =
+      t[i];
+
+
+    if(quoted){
+
+      if(
+        c === '"'
+        &&
+        t[i + 1] === '"'
+      ){
+
+        field += '"';
+
+        i++;
+
+      }else if(
+        c === '"'
+      ){
+
+        quoted =
+          false;
+
+      }else{
+
+        field +=
+          c;
+
+      }
+
+    }else if(
+      c === '"'
+      &&
+      field === ''
+    ){
+
+      quoted =
+        true;
+
+    }else if(
+      c === ','
+    ){
+
+      row.push(
+        field
+      );
+
+      field =
+        '';
+
+    }else if(
+      c === '\r'
+      ||
+      c === '\n'
+    ){
+
+      if(
+        c === '\r'
+        &&
+        t[i + 1] === '\n'
+      ){
+
+        i++;
+
+      }
+
+
+      row.push(
+        field
+      );
+
+
+      if(
+        row.some(
+          x =>
+            String(x).length
+        )
+      ){
+
+        rows.push(
+          row
+        );
+
+      }
+
+
+      row =
+        [];
+
+      field =
+        '';
+
+    }else{
+
+      field +=
+        c;
+
+    }
+
+  }
+
+
+  if(
+    field
+    ||
+    row.length
+  ){
+
+    row.push(
+      field
+    );
+
+    if(
+      row.some(
+        x =>
+          String(x).length
+      )
+    ){
+      rows.push(
+        row
+      );
+    }
+
+  }
+
+
+  return rows;
+
+}
+
+
+$('importCsv').onclick =
+  () =>
+    $('file').click();
+
+
+$('file').onchange =
+  async e => {
+
+    const file =
+      e.target.files[0];
+
+
+    if(!file){
+      return;
+    }
+
+
+    try{
+
+      const [
+        head,
+        ...data
+      ] =
+        parseCsv(
+          (
+            await file.text()
+          )
+          .replace(
+            /^\uFEFF/,
+            ''
           )
         );
 
-      const a =
-        document.createElement('a');
 
-      a.href = url;
+      const old =
+        JSON.stringify(head)
+        ===
+        '["Date","Category","Item","Quantity","Slot","Note"]';
 
-      a.download =
-        'oaks_vending_backup.csv';
 
-      a.click();
+      const newer =
+        JSON.stringify(head)
+        ===
+        '["Date","Machine","Category","Item","Quantity","Slot","Note"]';
 
-      setTimeout(
-        () =>
-          URL.revokeObjectURL(url),
-        3000
-      );
-    };
 
-    function parseCsv(t) {
-      const rows = [];
+      if(
+        !old
+        &&
+        !newer
+      ){
 
-      let row = [];
-      let field = '';
-      let quoted = false;
+        throw Error(
+          'This is not an Oaks Vending CSV.'
+        );
 
-      for (
-        let i = 0;
-        i < t.length;
-        i++
-      ) {
-        const c = t[i];
+      }
 
-        if (quoted) {
-          if (
-            c === '"' &&
-            t[i + 1] === '"'
-          ) {
-            field += '"';
-            i++;
-          } else if (
-            c === '"'
-          ) {
-            quoted = false;
-          } else {
-            field += c;
-          }
-        } else if (
-          c === '"' &&
-          field === ''
-        ) {
-          quoted = true;
-        } else if (
-          c === ','
-        ) {
-          row.push(field);
-          field = '';
-        } else if (
-          c === '\r' ||
-          c === '\n'
-        ) {
-          if (
-            c === '\r' &&
-            t[i + 1] === '\n'
-          ) {
-            i++;
-          }
 
-          row.push(field);
-          rows.push(row);
+      const rows =
+        data
 
-          row = [];
-          field = '';
-        } else {
-          field += c;
+          .filter(
+            r =>
+              r.length >=
+              (
+                old
+                  ? 6
+                  : 7
+              )
+          )
+
+          .map(
+            r => {
+
+              const [
+                date,
+                machine,
+                category,
+                item,
+                qty,
+                slot,
+                note
+              ] =
+
+                old
+
+                  ? [
+                      r[0],
+                      'snacks',
+                      ...r.slice(1)
+                    ]
+
+                  : r;
+
+
+              return {
+
+                date,
+                machine,
+                category,
+                item,
+                qty,
+                slot,
+                note
+
+              };
+
+            }
+          );
+
+
+      call(
+        'importHistory',
+        rows,
+        () => {
+
+          historyShown =
+            PAGE;
+
+          renderHistory();
+
+          window.scrollTo(0, 0);
+
         }
-      }
+      );
 
-      if (
-        field ||
-        row.length
-      ) {
-        row.push(field);
-        rows.push(row);
-      }
 
-      return rows;
+    }catch(err){
+
+      message(
+        err.message,
+        true
+      );
+
+    }finally{
+
+      e.target.value =
+        '';
+
     }
 
-    $('importCsv').onclick =
-      () =>
-        $('file').click();
+  };
 
-    $('file').onchange =
-      async e => {
-        const file =
-          e.target.files[0];
 
-        if (!file) return;
+const d =
+  new Date();
 
-        try {
-          const [head, ...data] =
-            parseCsv(
-              (await file.text())
-                .replace(/^\uFEFF/, '')
-            );
 
-          const old =
-            JSON.stringify(head)
-            ===
-            '["Date","Category","Item","Quantity","Slot","Note"]';
+$('date').value = [
 
-          const newer =
-            JSON.stringify(head)
-            ===
-            '["Date","Machine","Category","Item","Quantity","Slot","Note"]';
+  d.getFullYear(),
 
-          if (
-            !old &&
-            !newer
-          ) {
-            throw Error(
-              'This is not an Oaks Vending CSV.'
-            );
-          }
+  String(
+    d.getMonth() + 1
+  )
+  .padStart(
+    2,
+    '0'
+  ),
 
-          const rows =
-            data
-              .filter(
-                r =>
-                  r.length >=
-                  (old ? 6 : 7)
-              )
-              .map(r => {
-                const [
-                  date,
-                  machine,
-                  category,
-                  item,
-                  qty,
-                  slot,
-                  note
-                ] =
-                  old
-                    ? [
-                        r[0],
-                        'snacks',
-                        ...r.slice(1)
-                      ]
-                    : r;
+  String(
+    d.getDate()
+  )
+  .padStart(
+    2,
+    '0'
+  )
 
-                return {
-                  date,
-                  machine,
-                  category,
-                  item,
-                  qty,
-                  slot,
-                  note
-                };
-              });
+].join('-');
 
-          call(
-            'importHistory',
-            rows
-          );
-        } catch (err) {
-          message(
-            err.message,
-            true
-          );
-        } finally {
-          e.target.value = '';
-        }
-      };
 
-    const d = new Date();
+message(
+  'Loading tracker…'
+);
 
-    $('date').value = [
-      d.getFullYear(),
-      String(
-        d.getMonth() + 1
-      ).padStart(2, '0'),
-      String(
-        d.getDate()
-      ).padStart(2, '0')
-    ].join('-');
 
-    google.script.run
-      .withSuccessHandler(data => {
-        state = data;
-        render();
-        $('message').style.display = 'none';
-      })
-      .withFailureHandler(
-        e =>
-          message(
-            e.message || String(e),
-            true
-          )
+google.script.run
+
+  .withSuccessHandler(
+    data => {
+
+      state =
+        data;
+
+      render();
+
+      $('message').style.display =
+        'none';
+
+    }
+  )
+
+  .withFailureHandler(
+    e =>
+      message(
+        e.message || String(e),
+        true
       )
-      .getState();
-  </script>
+  )
+
+  .getState();
+
+</script>
 
 </body>
-
 </html>
