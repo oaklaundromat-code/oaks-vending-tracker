@@ -1,437 +1,2151 @@
 <!doctype html>
+
 <html lang="en">
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Oaks Inventory Tracker</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1">
+
+<title>
+Oaks Inventory Tracker
+</title>
+
 <style>
-:root{font-family:Arial,sans-serif;color:#18212e;background:#f7f9fc;font-size:24px}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;line-height:1.42;font-size:24px}
-header{background:#17365d;color:white;padding:18px 16px}
-h1{font-size:32px;line-height:1.15;margin:0}
-header p{font-size:19px;margin:6px 0 0;opacity:.9}
-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:white;padding:10px;position:sticky;top:0;z-index:10;border-bottom:1px solid #d9e2f3}
-button{cursor:pointer;border:0;border-radius:14px;min-height:64px;padding:15px 12px;font-size:21px;font-weight:700;background:#eaf0f7;color:#17365d}
-button.active,.primary{background:#1f4e78;color:white}
-.danger{background:#b42323;color:white;min-height:56px;padding:12px 16px;font-size:19px}
-.toggle{min-height:56px;font-size:19px;padding:12px 16px;margin-bottom:14px}
-main{width:100%;max-width:760px;margin:auto;padding:12px}
-.page{display:none}.page.active{display:block}
-.card{width:100%;background:white;border:1px solid #d9e2f3;border-radius:16px;padding:18px 14px;margin-bottom:16px}
-h2{color:#17365d;font-size:29px;line-height:1.15;margin:0 0 16px}
-.small{font-size:19px;line-height:1.5;color:#596675}
-.row{display:grid;grid-template-columns:1fr;gap:0}
-label{display:block;font-size:22px;font-weight:700;margin:20px 0 8px}
-input,select,textarea{display:block;width:100%;min-height:68px;font-family:Arial,sans-serif;font-size:23px;border:2px solid #aebbc9;border-radius:14px;padding:15px;background:white;color:#18212e}
-select{min-height:70px}
-input[type="number"]{font-size:26px;font-weight:600}
-input[type="date"]{font-size:22px}
-textarea{min-height:115px}
-.wide{width:100%;min-height:70px;margin-top:22px;font-size:23px}
-#message{margin:0;padding:15px 16px;font-size:20px;line-height:1.4;display:none}
-a{color:#1f4e78;font-size:20px;overflow-wrap:anywhere}
-.scroll{overflow:visible}
-table,thead,tbody,tr,th,td{display:block}
-table{width:100%}
-thead{display:none}
-tbody{display:grid;gap:14px}
-tr{width:100%;border:2px solid #d9e2f3;border-radius:15px;background:white;padding:12px 14px}
-td{display:grid;grid-template-columns:115px minmax(0,1fr);gap:12px;width:100%;padding:11px 0;border:0;border-bottom:1px solid #e8edf4;font-size:20px;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
-td:last-child{border-bottom:0}
-td::before{content:attr(data-label);font-size:18px;font-weight:700;color:#596675}
-#buyRows td:nth-child(2){display:block;font-size:25px;font-weight:700;color:#17365d;padding-bottom:14px}
-#buyRows td:nth-child(2)::before{display:block;margin-bottom:4px}
-#buyRows td:nth-child(5),#buyRows td:nth-child(7),#buyRows td:nth-child(10){font-size:22px;font-weight:700}
-#historyRows td:nth-child(4){display:block;font-size:24px;font-weight:700;color:#17365d}
-.empty{padding:18px;font-size:20px;color:#596675;text-align:center}
-@media (min-width:700px){
- :root{font-size:18px}
- body{font-size:18px}
- nav{grid-template-columns:repeat(4,1fr)}
- .row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
- table{display:table;border-collapse:collapse}
- thead{display:table-header-group}
- tbody{display:table-row-group}
- tr{display:table-row;border:0;padding:0}
- th,td{display:table-cell;padding:10px;border-bottom:1px solid #e8edf4;font-size:16px}
- th{background:#1f4e78;color:white;text-align:left}
- td::before{display:none}
- #buyRows td:nth-child(2),#historyRows td:nth-child(4){display:table-cell;font-size:16px;font-weight:normal;color:inherit}
+
+:root{
+  font-family:Arial,sans-serif;
+  color:#18212e;
+  background:#f7f9fc;
+  font-size:22px;
 }
-@media (max-width:390px){
- body{font-size:23px}h1{font-size:30px}h2{font-size:28px}
- button{font-size:20px}
- input,select,textarea{font-size:22px}
- td{grid-template-columns:105px minmax(0,1fr)}
+
+*{
+  box-sizing:border-box;
 }
-@media (max-width:340px){
- nav{grid-template-columns:1fr}
- td{grid-template-columns:1fr;gap:4px}
- td::before{margin-bottom:2px}
+
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
 }
+
+body{
+  margin:0;
+  font-size:22px;
+  line-height:1.4;
+}
+
+header{
+  background:#17365d;
+  color:white;
+  padding:18px 16px;
+}
+
+header h1{
+  margin:0;
+  font-size:31px;
+  line-height:1.15;
+}
+
+header p{
+  margin:6px 0 0;
+  font-size:18px;
+  opacity:.9;
+}
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+  padding:10px;
+
+  background:white;
+
+  border-bottom:
+    1px solid #d9e2f3;
+}
+
+button{
+  cursor:pointer;
+
+  border:0;
+  border-radius:14px;
+
+  min-height:62px;
+
+  padding:13px 10px;
+
+  font-size:20px;
+  font-weight:700;
+
+  background:#eaf0f7;
+  color:#17365d;
+}
+
+button.active,
+button.primary{
+  background:#1f4e78;
+  color:white;
+}
+
+button.smallButton{
+  min-height:48px;
+  font-size:17px;
+  padding:8px 12px;
+}
+
+main{
+  width:100%;
+  max-width:900px;
+
+  margin:auto;
+  padding:12px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.card{
+  background:white;
+
+  border:
+    1px solid #d9e2f3;
+
+  border-radius:16px;
+
+  padding:16px 14px;
+
+  margin-bottom:16px;
+}
+
+h2{
+  color:#17365d;
+
+  font-size:28px;
+
+  margin:
+    0 0 14px;
+}
+
+h3{
+  color:#17365d;
+
+  font-size:23px;
+
+  margin:
+    20px 0 10px;
+}
+
+label{
+  display:block;
+
+  margin:
+    16px 0 7px;
+
+  font-size:20px;
+  font-weight:700;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+
+  min-height:64px;
+
+  padding:13px;
+
+  border:
+    2px solid #aebbc9;
+
+  border-radius:13px;
+
+  font-size:21px;
+
+  background:white;
+}
+
+textarea{
+  min-height:100px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
+
+.message{
+  display:none;
+
+  padding:
+    14px 16px;
+
+  font-size:19px;
+}
+
+.small{
+  color:#596675;
+  font-size:18px;
+}
+
+.metrics{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:10px;
+
+  margin:
+    12px 0 18px;
+}
+
+.metric{
+  background:#f7f9fc;
+
+  border:
+    1px solid #d9e2f3;
+
+  border-radius:12px;
+
+  padding:12px;
+}
+
+.metric strong{
+  display:block;
+
+  color:#17365d;
+
+  font-size:23px;
+}
+
+.metric span{
+  display:block;
+
+  color:#596675;
+
+  font-size:16px;
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td{
+  display:block;
+}
+
+table{
+  width:100%;
+}
+
+thead{
+  display:none;
+}
+
+tbody{
+  display:grid;
+  gap:12px;
+}
+
+tr{
+  background:white;
+
+  border:
+    2px solid #d9e2f3;
+
+  border-radius:14px;
+
+  padding:
+    10px 13px;
+}
+
+td{
+  display:grid;
+
+  grid-template-columns:
+    120px minmax(0,1fr);
+
+  gap:10px;
+
+  padding:
+    9px 0;
+
+  border-bottom:
+    1px solid #e8edf4;
+
+  font-size:18px;
+
+  overflow-wrap:anywhere;
+}
+
+td:last-child{
+  border-bottom:0;
+}
+
+td::before{
+  content:
+    attr(data-label);
+
+  color:#596675;
+
+  font-weight:700;
+}
+
+.itemName{
+  font-size:22px;
+  font-weight:700;
+  color:#17365d;
+}
+
+.flag{
+  font-weight:700;
+}
+
+.good{
+  color:#227447;
+}
+
+.watch{
+  color:#a15c00;
+}
+
+.bad{
+  color:#b42323;
+}
+
+.empty{
+  display:block;
+  color:#596675;
+}
+
+.hide{
+  display:none !important;
+}
+
+@media(min-width:760px){
+
+  :root,
+  body{
+    font-size:18px;
+  }
+
+  nav{
+    grid-template-columns:
+      repeat(5,1fr);
+  }
+
+  .row{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:12px;
+  }
+
+  .metrics{
+    grid-template-columns:
+      repeat(4,1fr);
+  }
+
+  table{
+    display:table;
+    border-collapse:collapse;
+  }
+
+  thead{
+    display:table-header-group;
+  }
+
+  tbody{
+    display:table-row-group;
+  }
+
+  tr{
+    display:table-row;
+    padding:0;
+    border:0;
+  }
+
+  th,
+  td{
+    display:table-cell;
+
+    padding:9px;
+
+    border-bottom:
+      1px solid #e8edf4;
+
+    font-size:15px;
+  }
+
+  th{
+    background:#1f4e78;
+    color:white;
+    text-align:left;
+  }
+
+  td::before{
+    display:none;
+  }
+
+  .itemName{
+    font-size:15px;
+  }
+
+}
+
 </style>
+
 </head>
+
+
 <body>
 
+
 <header>
-<h1>Oaks Inventory Tracker</h1>
-<p>Shared data in your Google Sheet</p>
+
+<h1>
+Oaks Inventory Tracker
+</h1>
+
+<p>
+Fluff & Fold • Snack Vending • Laundry Vending
+</p>
+
 </header>
 
+
 <nav>
-<button class="tab active" data-page="restock">Restock</button>
-<button class="tab" data-page="inventory">Count Stock</button>
-<button class="tab" data-page="buying">Buying</button>
-<button class="tab" data-page="history">History</button>
+
+<button
+  class="tab active"
+  data-page="fluff">
+
+Fluff & Fold
+
+</button>
+
+
+<button
+  class="tab"
+  data-page="snacks">
+
+Snack Vending
+
+</button>
+
+
+<button
+  class="tab"
+  data-page="laundry">
+
+Laundry Vending
+
+</button>
+
+
+<button
+  class="tab"
+  data-page="tracker">
+
+Tracker
+
+</button>
+
+
+<button
+  class="tab"
+  data-page="prices">
+
+Price Changes
+
+</button>
+
 </nav>
 
-<div id="message" role="status"></div>
+
+<div
+  id="message"
+  class="message"
+  role="status">
+</div>
+
 
 <main>
 
-<section id="restock" class="page active">
-<div class="card">
-<h2>Record a Restock</h2>
-<div class="row">
-<div><label>Date</label><input type="date" id="date"></div>
-<div><label>Inventory Group</label><select id="machine"></select></div>
-</div>
-<div class="row">
-<div><label>Category</label><select id="category"></select></div>
-<div><label>Item</label><select id="item"></select></div>
-</div>
-<div class="row">
-<div><label>Quantity replaced</label><input id="qty" type="number" min="1" step="1"></div>
-<div><label>Slot (optional)</label><input id="slot"></div>
-</div>
-<label>Note (optional)</label>
-<textarea id="note" rows="2"></textarea>
-<button class="primary wide" id="saveRestock">Save to Google Sheet</button>
-<p class="small">Quantity replaced estimates movement. Count all stock on hand, including backstock, on the Count Stock tab for accurate purchasing.</p>
-</div>
-</section>
 
-<section id="inventory" class="page">
-<div class="card">
-<h2>Count Stock</h2>
-<p class="small">Count every unit you own for a product across all its slots and storage. One product has one inventory row.</p>
-<label>Inventory Group</label><select id="countMachine"></select>
-<label>Product</label><select id="countItem"></select>
-<div class="row">
-<div><label>On hand</label><input id="onHand" type="number" min="0" step="1"></div>
-<div><label>Target units</label><input id="target" type="number" min="0" step="1"></div>
-</div>
-<button class="primary wide" id="saveCount">Save count to Google Sheet</button>
-</div>
-</section>
+<!-- =========================
+     FLUFF & FOLD
+========================== -->
 
-<section id="buying" class="page">
+<section
+  id="fluff"
+  class="page active">
+
 <div class="card">
-<h2>Buy List</h2>
-<p class="small" id="buySummary">Loading…</p>
-<button class="toggle" id="buyToggle">Show everything</button>
-<div class="scroll">
+
+<h2>
+Fluff & Fold
+</h2>
+
+<p class="small">
+
+Counter retail inventory.
+Cleantie movement, supplier cost,
+retail pricing and physical stock
+all stay separate from vending.
+
+</p>
+
+<div
+  id="fluffMetrics"
+  class="metrics">
+</div>
+
+<label>
+Product
+</label>
+
+<select id="fluffItem">
+</select>
+
+
+<div class="row">
+
+<div>
+
+<label>
+Physical on hand
+</label>
+
+<input
+  id="fluffOnHand"
+  type="number"
+  min="0"
+  step="1">
+
+</div>
+
+
+<div>
+
+<label>
+Reorder point
+</label>
+
+<input
+  id="fluffReorder"
+  type="number"
+  min="0"
+  step="1">
+
+</div>
+
+</div>
+
+
+<button
+  class="primary"
+  style="width:100%;margin-top:18px"
+  id="saveFluff">
+
+Save Fluff & Fold Count
+
+</button>
+
+
+<h3>
+Products
+</h3>
+
+
 <table>
-<thead><tr><th>Inventory Group</th><th>Product</th><th>Have</th><th>Target</th><th>Need</th><th>Buy from</th><th>Cases</th><th>Est. cost</th><th>Buy by</th><th>Status</th></tr></thead>
-<tbody id="buyRows"></tbody>
+
+<thead>
+
+<tr>
+
+<th>Product</th>
+<th>Cost</th>
+<th>Sell</th>
+<th>Margin</th>
+<th>Cleantie Units</th>
+<th>Weekly</th>
+<th>On Hand</th>
+<th>Need</th>
+<th>Buy From</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+
+<tbody
+  id="fluffRows">
+</tbody>
+
 </table>
+
 </div>
-<p><a target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/18xul-Y88A1BQzYb8WE1DU80_13K0tFx9FqcadxhXhDs/edit">Open full cost model, retail buying plan, and purchase log</a></p>
-</div>
+
 </section>
 
-<section id="history" class="page">
+
+
+<!-- =========================
+     SNACK VENDING
+========================== -->
+
+<section
+  id="snacks"
+  class="page">
+
 <div class="card">
-<h2>Restock History</h2>
-<p class="small" id="historySummary"></p>
-<div class="scroll">
+
+<h2>
+Snack Vending
+</h2>
+
+<div
+  id="snackMetrics"
+  class="metrics">
+</div>
+
+<h3>
+Count Stock
+</h3>
+
+<label>
+Product
+</label>
+
+<select id="snackItem">
+</select>
+
+<div class="row">
+
+<div>
+
+<label>
+On hand
+</label>
+
+<input
+  id="snackOnHand"
+  type="number"
+  min="0"
+  step="1">
+
+</div>
+
+<div>
+
+<label>
+Target
+</label>
+
+<input
+  id="snackTarget"
+  type="number"
+  min="0"
+  step="1">
+
+</div>
+
+</div>
+
+<button
+  class="primary"
+  style="width:100%;margin-top:18px"
+  id="saveSnack">
+
+Save Snack Count
+
+</button>
+
+
+<h3>
+Buy List
+</h3>
+
 <table>
-<thead><tr><th>Date</th><th>Inventory Group</th><th>Category</th><th>Item</th><th>Replaced</th><th>Slot</th><th>Note</th><th></th></tr></thead>
-<tbody id="historyRows"></tbody>
+
+<thead>
+
+<tr>
+
+<th>Product</th>
+<th>Have</th>
+<th>Target</th>
+<th>Need</th>
+<th>Cases</th>
+<th>Supplier</th>
+<th>Est. Cost</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="snackBuyRows">
+</tbody>
+
 </table>
+
+
+<h3>
+Machine Slots
+</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Slot</th>
+<th>Product</th>
+<th>Vend Price</th>
+<th>Cost</th>
+<th>Profit</th>
+<th>Margin</th>
+<th>Full Qty</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="snackSlots">
+</tbody>
+
+</table>
+
 </div>
-<button class="toggle wide" id="loadMore" style="display:none">Show 25 more</button>
-<p class="small">Entries are saved in the Google Sheet.</p>
-<button id="exportCsv">Export CSV</button>
-<button id="importCsv">Import old or new CSV</button>
-<input type="file" id="file" accept=".csv,text/csv" hidden>
-</div>
+
 </section>
+
+
+
+<!-- =========================
+     LAUNDRY VENDING
+========================== -->
+
+<section
+  id="laundry"
+  class="page">
+
+<div class="card">
+
+<h2>
+Laundry Vending
+</h2>
+
+<div
+  id="laundryMetrics"
+  class="metrics">
+</div>
+
+<h3>
+Count Stock
+</h3>
+
+<label>
+Product
+</label>
+
+<select id="laundryItem">
+</select>
+
+<div class="row">
+
+<div>
+
+<label>
+On hand
+</label>
+
+<input
+  id="laundryOnHand"
+  type="number"
+  min="0"
+  step="1">
+
+</div>
+
+<div>
+
+<label>
+Target
+</label>
+
+<input
+  id="laundryTarget"
+  type="number"
+  min="0"
+  step="1">
+
+</div>
+
+</div>
+
+<button
+  class="primary"
+  style="width:100%;margin-top:18px"
+  id="saveLaundry">
+
+Save Laundry Count
+
+</button>
+
+
+<h3>
+Buy List
+</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Product</th>
+<th>Have</th>
+<th>Target</th>
+<th>Need</th>
+<th>Cases</th>
+<th>Supplier</th>
+<th>Est. Cost</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="laundryBuyRows">
+</tbody>
+
+</table>
+
+
+<h3>
+Machine Slots
+</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Slot</th>
+<th>Product</th>
+<th>Vend Price</th>
+<th>Cost</th>
+<th>Profit</th>
+<th>Margin</th>
+<th>Full Qty</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="laundrySlots">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================
+     TRACKER
+========================== -->
+
+<section
+  id="tracker"
+  class="page">
+
+<div class="card">
+
+<h2>
+Movement Tracker
+</h2>
+
+<p class="small">
+
+Latest Cleantie movement and gross profit view.
+
+</p>
+
+<div
+  id="trackerMetrics"
+  class="metrics">
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Product</th>
+<th>Units</th>
+<th>Sales</th>
+<th>Gross Profit</th>
+<th>Margin</th>
+<th>Weekly Units</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="trackerRows">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================
+     PRICE CHANGES
+========================== -->
+
+<section
+  id="prices"
+  class="page">
+
+<div class="card">
+
+<h2>
+Price Change Log
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+<th>Product</th>
+<th>Old</th>
+<th>New</th>
+<th>Change</th>
+<th>Reason</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="priceRows">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
 
 </main>
 
+
+
 <script>
-const $ = id => document.getElementById(id);
-// Keys match the Sheet's machine column; Fluff & Fold first so it is the default selection
-const names = {flufffold:'Fluff & Fold', snacks:'Snack & Drink Machine', laundry:'Laundry Vending Machine'};
-let state = {inventory:[], history:[]};
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+
+let state = {
+  flufffold:[],
+
+  snacks:{
+    slots:[],
+    buying:[]
+  },
+
+  laundry:{
+    slots:[],
+    buying:[]
+  },
+
+  tracker:[],
+  priceChanges:[]
+};
+
+
 let pending = false;
+
 let messageTimer;
-let entryId = newId();
-let buyShowAll = false;
-let historyShown = 25;
-const PAGE = 25;
 
-function newId(){
-  return globalThis.crypto?.randomUUID?.() || String(Date.now()) + '-' + Math.random().toString(36).slice(2);
-}
-const esc = x => String(x ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// The Sheet returns display values, so strip currency and separators before comparing
-function needNum(v){
-  const n = Number(String(v ?? '').replace(/[^0-9.-]/g, ''));
-  return Number.isFinite(n) ? n : 0;
-}
-
-const options = (id, list, old) => {
-  $(id).innerHTML = list.map(([v,t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join('');
-  if (list.some(([v]) => v === old)) $(id).value = old;
-};
-
-function call(method, arg, onDone){
-  if (pending) return;
-  pending = true;
-  message(method === 'deleteRestock' ? 'Deleting…' : 'Saving…');
-  const runner = google.script.run
-    .withSuccessHandler(result => {
-      pending = false;
-      state = result.state || result;
-      render();
-      message(
-        result.added !== undefined
-          ? `Imported ${result.added} entries.` + (result.skipped ? ` Skipped ${result.skipped} duplicate, invalid, or unavailable rows.` : '')
-          : result.deleted === false
-          ? 'Entry was already absent. History is up to date.'
-          : method === 'deleteRestock'
-          ? 'Deleted from Google Sheet.'
-          : 'Saved to Google Sheet.',
-        false, true
+const esc =
+  value =>
+    String(value ?? '')
+      .replace(
+        /[&<>"']/g,
+        c => ({
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#39;'
+        }[c])
       );
-      if (onDone) onDone();
-    })
-    .withFailureHandler(e => {
-      pending = false;
-      message(`Not saved — ${e.message || String(e)}. Check the Sheet before retrying.`, true);
-    });
-  if (arg === undefined) runner[method](); else runner[method](arg);
+
+
+function number_(value) {
+
+  const n =
+    Number(
+      String(value ?? '')
+        .replace(
+          /[^0-9.-]/g,
+          ''
+        )
+    );
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
 }
 
-function message(s, error = false, autoHide = false){
-  clearTimeout(messageTimer);
-  $('message').style.display = 'block';
-  $('message').style.background = error ? '#fce4e4' : '#e5f5e4';
-  $('message').textContent = s;
-  if (autoHide) messageTimer = setTimeout(() => $('message').style.display = 'none', 4500);
+
+function money(value) {
+
+  if (
+    value === '' ||
+    value === null ||
+    value === undefined
+  ) {
+    return '—';
+  }
+
+  const n =
+    number_(value);
+
+  return '$' +
+    n.toFixed(2);
+
 }
 
-function restockOptions(){
-  const machine = $('machine').value;
-  const cats = [...new Set(state.inventory.filter(x => x.machine === machine).map(x => x.category))];
-  options('category', cats.map(x => [x,x]), $('category').value);
-  options('item', state.inventory.filter(x => x.machine === machine && x.category === $('category').value).map(x => [x.item,x.item]), $('item').value);
+
+function percent(value) {
+
+  if (
+    value === '' ||
+    value === null ||
+    value === undefined
+  ) {
+    return '—';
+  }
+
+  const text =
+    String(value);
+
+  if (
+    text.includes('%')
+  ) {
+    return text;
+  }
+
+  let n =
+    number_(value);
+
+  if (Math.abs(n) <= 1) {
+    n *= 100;
+  }
+
+  return n.toFixed(1) + '%';
+
 }
 
-function countOptions(){
-  options('countItem', state.inventory.filter(x => x.machine === $('countMachine').value).map(x => [x.item,x.item]), $('countItem').value);
-  const c = state.inventory.find(x => x.machine === $('countMachine').value && x.item === $('countItem').value);
-  $('onHand').value = c?.onHand ?? '';
-  $('target').value = c?.target ?? '';
+
+function optionList(
+  id,
+  items,
+  old
+) {
+
+  $(id).innerHTML =
+    items
+      .map(
+        x =>
+          `<option value="${esc(x)}">${esc(x)}</option>`
+      )
+      .join('');
+
+  if (
+    items.includes(old)
+  ) {
+    $(id).value =
+      old;
+  }
+
 }
 
-function renderBuy(){
-  const needed = state.inventory.filter(x => needNum(x.need) > 0);
-  const shown = buyShowAll ? state.inventory : needed;
-  $('buySummary').textContent = buyShowAll
-    ? `${state.inventory.length} products shown.`
-    : needed.length
-    ? `${needed.length} product${needed.length === 1 ? '' : 's'} to order.`
-    : 'No items currently show a reorder need based on saved counts and targets.';
-  $('buyToggle').textContent = buyShowAll ? 'Show only items to buy' : 'Show everything';
-  if (!shown.length){
-    $('buyRows').innerHTML = '<tr><td class="empty" data-label="">No items to show.</td></tr>';
+
+function message(
+  text,
+  error = false,
+  autoHide = false
+) {
+
+  clearTimeout(
+    messageTimer
+  );
+
+  $('message').style.display =
+    'block';
+
+  $('message').style.background =
+    error
+      ? '#fce4e4'
+      : '#e5f5e4';
+
+  $('message').textContent =
+    text;
+
+  if (autoHide) {
+    messageTimer =
+      setTimeout(
+        () =>
+          $('message').style.display =
+            'none',
+        4500
+      );
+  }
+
+}
+
+
+function call(
+  method,
+  arg,
+  done
+) {
+
+  if (pending) {
     return;
   }
-  $('buyRows').innerHTML = shown.map(x => `<tr>
-<td data-label="Group">${esc(names[x.machine] || x.machine)}</td>
-<td data-label="Product">${esc(x.item)}${x.slots ? ' (' + esc(x.slots) + ')' : ''}</td>
-<td data-label="Have">${esc(x.onHand)}</td>
-<td data-label="Target">${esc(x.target)}</td>
-<td data-label="Need">${esc(x.need)}</td>
-<td data-label="Buy from">${esc(x.vendor)}</td>
-<td data-label="Cases">${esc(x.cases)}</td>
-<td data-label="Est. cost">${esc(x.estimate)}</td>
-<td data-label="Buy by">${esc(x.buyBy)}</td>
-<td data-label="Status">${esc(x.status)}</td>
-</tr>`).join('');
-}
 
-function renderHistory(){
-  const reversed = state.history.slice().reverse();
-  const shown = reversed.slice(0, historyShown);
-  $('historySummary').textContent = reversed.length
-    ? `Showing ${shown.length} of ${reversed.length} saved restock entr${reversed.length === 1 ? 'y' : 'ies'}.`
-    : 'No restock history has been saved yet.';
-  if (!shown.length){
-    $('historyRows').innerHTML = '<tr><td class="empty" data-label="">No restock entries yet.</td></tr>';
+  pending = true;
+
+  message(
+    'Saving…'
+  );
+
+  const runner =
+    google.script.run
+
+      .withSuccessHandler(
+        result => {
+
+          pending =
+            false;
+
+          state =
+            result;
+
+          render();
+
+          message(
+            'Saved to Google Sheet.',
+            false,
+            true
+          );
+
+          if (done) {
+            done();
+          }
+
+        }
+      )
+
+      .withFailureHandler(
+        e => {
+
+          pending =
+            false;
+
+          message(
+            e.message ||
+              String(e),
+            true
+          );
+
+        }
+      );
+
+
+  if (arg === undefined) {
+    runner[method]();
   } else {
-    $('historyRows').innerHTML = shown.map(x => `<tr>
-<td data-label="Date">${esc(x.date)}</td>
-<td data-label="Group">${esc(names[x.machine] || x.machine)}</td>
-<td data-label="Category">${esc(x.category)}</td>
-<td data-label="Item">${esc(x.item)}</td>
-<td data-label="Replaced">${esc(x.qty)}</td>
-<td data-label="Slot">${esc(x.slot)}</td>
-<td data-label="Note">${esc(x.note)}</td>
-<td data-label=""><button class="danger" data-delete="${esc(x.id)}">Delete</button></td>
-</tr>`).join('');
+    runner[method](arg);
   }
-  $('loadMore').style.display = historyShown < reversed.length ? 'block' : 'none';
+
 }
 
-function render(){
-  for (const id of ['machine','countMachine']) options(id, Object.entries(names), $(id).value);
-  restockOptions();
-  countOptions();
-  renderBuy();
-  renderHistory();
+
+/* ========================================
+   TABS
+======================================== */
+
+document
+  .querySelectorAll('.tab')
+  .forEach(
+    button => {
+
+      button.onclick =
+        () => {
+
+          document
+            .querySelectorAll(
+              '.tab,.page'
+            )
+            .forEach(
+              el =>
+                el.classList.remove(
+                  'active'
+                )
+            );
+
+          button
+            .classList.add(
+              'active'
+            );
+
+          $(
+            button.dataset.page
+          )
+            .classList.add(
+              'active'
+            );
+
+          window.scrollTo(
+            0,
+            0
+          );
+
+        };
+
+    }
+  );
+
+
+/* ========================================
+   FLUFF & FOLD
+======================================== */
+
+function updateFluffForm() {
+
+  const item =
+    $('fluffItem').value;
+
+  const found =
+    state.flufffold.find(
+      x =>
+        x.item === item
+    );
+
+  $('fluffOnHand').value =
+    found?.onHand ?? '';
+
+  $('fluffReorder').value =
+    found?.reorderPoint ?? '';
+
 }
 
-$('machine').onchange = restockOptions;
-$('category').onchange = restockOptions;
-$('countMachine').onchange = countOptions;
-$('countItem').onchange = countOptions;
-$('buyToggle').onclick = () => { buyShowAll = !buyShowAll; renderBuy(); };
-$('loadMore').onclick = () => { historyShown += PAGE; renderHistory(); };
 
-$('saveRestock').onclick = () => {
-  const form = {
-    id: entryId,
-    date: $('date').value,
-    machine: $('machine').value,
-    category: $('category').value,
-    item: $('item').value,
-    qty: $('qty').value,
-    slot: $('slot').value,
-    note: $('note').value
+function renderFluff() {
+
+  optionList(
+    'fluffItem',
+
+    state.flufffold.map(
+      x =>
+        x.item
+    ),
+
+    $('fluffItem').value
+  );
+
+
+  updateFluffForm();
+
+
+  const revenue =
+    state.tracker.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.sales),
+      0
+    );
+
+
+  const gp =
+    state.tracker.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.grossProfit),
+      0
+    );
+
+
+  const units =
+    state.tracker.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.units),
+      0
+    );
+
+
+  $('fluffMetrics').innerHTML = `
+
+    <div class="metric">
+      <strong>
+        ${state.flufffold.length}
+      </strong>
+      <span>
+        Products
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${Math.round(units)}
+      </strong>
+      <span>
+        Latest Cleantie units
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${money(revenue)}
+      </strong>
+      <span>
+        Latest sales
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${money(gp)}
+      </strong>
+      <span>
+        Gross profit
+      </span>
+    </div>
+
+  `;
+
+
+  $('fluffRows').innerHTML =
+    state.flufffold.length
+
+      ?
+        state.flufffold
+
+          .map(
+            x => `
+
+              <tr>
+
+                <td
+                  class="itemName"
+                  data-label="Product">
+                  ${esc(x.item)}
+                </td>
+
+                <td data-label="Cost">
+                  ${esc(x.unitCost || '—')}
+                </td>
+
+                <td data-label="Sell">
+                  ${esc(x.sellPrice || '—')}
+                </td>
+
+                <td data-label="Margin">
+                  ${esc(x.margin || '—')}
+                </td>
+
+                <td data-label="Cleantie Units">
+                  ${esc(x.cleantieUnits || '—')}
+                </td>
+
+                <td data-label="Weekly">
+                  ${esc(x.weeklySales || '—')}
+                </td>
+
+                <td data-label="On Hand">
+                  ${esc(x.onHand || 'NEED COUNT')}
+                </td>
+
+                <td data-label="Need">
+                  ${esc(x.needUnits || '—')}
+                </td>
+
+                <td data-label="Buy From">
+                  ${esc(x.vendor || 'UNKNOWN')}
+                </td>
+
+                <td
+                  class="flag"
+                  data-label="Action">
+                  ${esc(x.action || '—')}
+                </td>
+
+              </tr>
+
+            `
+          )
+
+          .join('')
+
+      :
+        `<tr>
+          <td
+            class="empty"
+            data-label="">
+            No Fluff & Fold products found.
+          </td>
+        </tr>`;
+
+}
+
+
+$('fluffItem').onchange =
+  updateFluffForm;
+
+
+$('saveFluff').onclick =
+  () => {
+
+    const form = {
+      item:
+        $('fluffItem').value,
+
+      onHand:
+        $('fluffOnHand').value,
+
+      reorderPoint:
+        $('fluffReorder').value
+    };
+
+
+    if (
+      !form.item ||
+      !Number.isInteger(
+        Number(
+          form.onHand
+        )
+      ) ||
+      Number(
+        form.onHand
+      ) < 0 ||
+      !Number.isInteger(
+        Number(
+          form.reorderPoint
+        )
+      ) ||
+      Number(
+        form.reorderPoint
+      ) < 0
+    ) {
+
+      message(
+        'Enter valid whole-number stock values.',
+        true
+      );
+
+      return;
+    }
+
+
+    call(
+      'saveFluffCount',
+      form
+    );
+
   };
-  if (!form.date || !form.item || !Number.isInteger(Number(form.qty)) || Number(form.qty) < 1){
-    message('Choose an item and enter a whole-number quantity.', true);
+
+
+/* ========================================
+   VENDING
+======================================== */
+
+function updateVendingForm(
+  group
+) {
+
+  const prefix =
+    group === 'snacks'
+      ? 'snack'
+      : 'laundry';
+
+
+  const item =
+    $(
+      prefix + 'Item'
+    ).value;
+
+
+  const found =
+    state[group]
+      .buying
+      .find(
+        x =>
+          x.item === item
+      );
+
+
+  $(
+    prefix + 'OnHand'
+  ).value =
+    found?.onHand ?? '';
+
+
+  $(
+    prefix + 'Target'
+  ).value =
+    found?.target ?? '';
+
+}
+
+
+function renderVending(
+  group
+) {
+
+  const prefix =
+    group === 'snacks'
+      ? 'snack'
+      : 'laundry';
+
+
+  const obj =
+    state[group];
+
+
+  optionList(
+    prefix + 'Item',
+
+    obj.buying.map(
+      x =>
+        x.item
+    ),
+
+    $(
+      prefix + 'Item'
+    ).value
+  );
+
+
+  updateVendingForm(
+    group
+  );
+
+
+  const need =
+    obj.buying.filter(
+      x =>
+        number_(x.needUnits) > 0
+    );
+
+
+  const totalCost =
+    need.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.estimatedCost),
+      0
+    );
+
+
+  $(
+    prefix + 'Metrics'
+  ).innerHTML = `
+
+    <div class="metric">
+      <strong>
+        ${obj.slots.length}
+      </strong>
+      <span>
+        Slots
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${obj.buying.length}
+      </strong>
+      <span>
+        Products
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${need.length}
+      </strong>
+      <span>
+        Need reorder
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${money(totalCost)}
+      </strong>
+      <span>
+        Estimated buy
+      </span>
+    </div>
+
+  `;
+
+
+  $(
+    prefix + 'BuyRows'
+  ).innerHTML =
+
+    obj.buying.length
+
+      ?
+        obj.buying
+
+          .map(
+            x => `
+
+              <tr>
+
+                <td
+                  class="itemName"
+                  data-label="Product">
+
+                  ${esc(x.item)}
+
+                </td>
+
+                <td data-label="Have">
+                  ${esc(x.onHand || 'NEED COUNT')}
+                </td>
+
+                <td data-label="Target">
+                  ${esc(x.target || '—')}
+                </td>
+
+                <td data-label="Need">
+                  ${esc(x.needUnits || '—')}
+                </td>
+
+                <td data-label="Cases">
+                  ${esc(x.casesToBuy || '—')}
+                </td>
+
+                <td data-label="Supplier">
+                  ${esc(x.vendor || 'UNKNOWN')}
+                </td>
+
+                <td data-label="Est. Cost">
+                  ${esc(x.estimatedCost || '—')}
+                </td>
+
+                <td
+                  class="flag"
+                  data-label="Status">
+                  ${esc(x.status || '—')}
+                </td>
+
+              </tr>
+
+            `
+          )
+
+          .join('')
+
+      :
+        `<tr>
+          <td
+            class="empty"
+            data-label="">
+            No buying-plan products found.
+          </td>
+        </tr>`;
+
+
+  $(
+    prefix + 'Slots'
+  ).innerHTML =
+
+    obj.slots.length
+
+      ?
+        obj.slots
+
+          .map(
+            x => `
+
+              <tr>
+
+                <td data-label="Slot">
+                  ${esc(x.slot)}
+                </td>
+
+                <td
+                  class="itemName"
+                  data-label="Product">
+                  ${esc(x.item)}
+                </td>
+
+                <td data-label="Vend">
+                  ${esc(x.vendPrice || '—')}
+                </td>
+
+                <td data-label="Cost">
+                  ${esc(x.unitCost || '—')}
+                </td>
+
+                <td data-label="Profit">
+                  ${esc(x.profit || '—')}
+                </td>
+
+                <td data-label="Margin">
+                  ${esc(x.margin || '—')}
+                </td>
+
+                <td data-label="Full Qty">
+                  ${esc(x.fullQty || '—')}
+                </td>
+
+              </tr>
+
+            `
+          )
+
+          .join('')
+
+      :
+        `<tr>
+          <td
+            class="empty"
+            data-label="">
+            No slot data found.
+          </td>
+        </tr>`;
+
+}
+
+
+$('snackItem').onchange =
+  () =>
+    updateVendingForm(
+      'snacks'
+    );
+
+
+$('laundryItem').onchange =
+  () =>
+    updateVendingForm(
+      'laundry'
+    );
+
+
+$('saveSnack').onclick =
+  () =>
+    saveVending(
+      'snacks'
+    );
+
+
+$('saveLaundry').onclick =
+  () =>
+    saveVending(
+      'laundry'
+    );
+
+
+function saveVending(
+  group
+) {
+
+  const prefix =
+    group === 'snacks'
+      ? 'snack'
+      : 'laundry';
+
+
+  const form = {
+    group,
+
+    item:
+      $(
+        prefix + 'Item'
+      ).value,
+
+    onHand:
+      $(
+        prefix + 'OnHand'
+      ).value,
+
+    target:
+      $(
+        prefix + 'Target'
+      ).value
+  };
+
+
+  if (
+    !form.item ||
+    !Number.isInteger(
+      Number(
+        form.onHand
+      )
+    ) ||
+    Number(
+      form.onHand
+    ) < 0 ||
+    !Number.isInteger(
+      Number(
+        form.target
+      )
+    ) ||
+    Number(
+      form.target
+    ) < 0
+  ) {
+
+    message(
+      'Enter valid whole-number stock values.',
+      true
+    );
+
     return;
   }
-  call('saveRestock', form, () => {
-    entryId = newId();
-    $('qty').value = '';
-    $('slot').value = '';
-    $('note').value = '';
-  });
-};
 
-$('saveCount').onclick = () => {
-  const form = {
-    machine: $('countMachine').value,
-    item: $('countItem').value,
-    onHand: $('onHand').value,
-    target: $('target').value
-  };
-  if (!Number.isInteger(Number(form.onHand)) || form.onHand === '' || Number(form.onHand) < 0 ||
-      !Number.isInteger(Number(form.target)) || form.target === '' || Number(form.target) < 0){
-    message('Enter both counts as whole numbers.', true);
-    return;
-  }
-  call('saveInventory', form);
-};
 
-$('historyRows').onclick = e => {
-  const id = e.target.closest('[data-delete]')?.dataset.delete;
-  if (id && confirm('Delete this restock entry?')) call('deleteRestock', id);
-};
+  call(
+    'saveVendingCount',
+    form
+  );
 
-document.querySelectorAll('.tab').forEach(b => {
-  b.onclick = () => {
-    document.querySelectorAll('.tab,.page').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    $(b.dataset.page).classList.add('active');
-    window.scrollTo(0, 0);
-  };
-});
-
-function csvCell(x){ return `"${String(x ?? '').replaceAll('"','""')}"`; }
-
-$('exportCsv').onclick = () => {
-  const rows = [
-    ['Date','Machine','Category','Item','Quantity','Slot','Note'],
-    ...state.history.map(x => [x.date,x.machine,x.category,x.item,x.qty,x.slot,x.note])
-  ];
-  const url = URL.createObjectURL(new Blob([rows.map(r => r.map(csvCell).join(',')).join('\r\n')], {type:'text/csv'}));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'oaks_inventory_backup.csv';
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 3000);
-};
-
-function parseCsv(t){
-  const rows = [];
-  let row = [], field = '', quoted = false;
-  for (let i = 0; i < t.length; i++){
-    const c = t[i];
-    if (quoted){
-      if (c === '"' && t[i+1] === '"'){ field += '"'; i++; }
-      else if (c === '"') quoted = false;
-      else field += c;
-    } else if (c === '"' && field === '') quoted = true;
-    else if (c === ',') { row.push(field); field = ''; }
-    else if (c === '\r' || c === '\n'){
-      if (c === '\r' && t[i+1] === '\n') i++;
-      row.push(field);
-      if (row.some(x => String(x).length)) rows.push(row);
-      row = []; field = '';
-    } else field += c;
-  }
-  if (field || row.length){
-    row.push(field);
-    if (row.some(x => String(x).length)) rows.push(row);
-  }
-  return rows;
 }
 
-$('importCsv').onclick = () => $('file').click();
 
-$('file').onchange = async e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  try {
-    const [head, ...data] = parseCsv((await file.text()).replace(/^\uFEFF/, ''));
-    const old = JSON.stringify(head) === '["Date","Category","Item","Quantity","Slot","Note"]';
-    const newer = JSON.stringify(head) === '["Date","Machine","Category","Item","Quantity","Slot","Note"]';
-    if (!old && !newer) throw Error('This is not an Oaks Vending CSV.');
-    const rows = data.filter(r => r.length >= (old ? 6 : 7)).map(r => {
-      const [date,machine,category,item,qty,slot,note] = old ? [r[0],'snacks',...r.slice(1)] : r;
-      return {date,machine,category,item,qty,slot,note};
-    });
-    call('importHistory', rows, () => {
-      historyShown = PAGE;
-      renderHistory();
-      window.scrollTo(0, 0);
-    });
-  } catch (err){
-    message(err.message, true);
-  } finally {
-    e.target.value = '';
-  }
-};
+/* ========================================
+   TRACKER
+======================================== */
 
-const d = new Date();
-$('date').value = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+function renderTracker() {
 
-message('Loading tracker…');
+  const units =
+    state.tracker.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.units),
+      0
+    );
+
+
+  const revenue =
+    state.tracker.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.sales),
+      0
+    );
+
+
+  const gp =
+    state.tracker.reduce(
+      (sum,x) =>
+        sum +
+        number_(x.grossProfit),
+      0
+    );
+
+
+  const margin =
+    revenue
+      ? gp / revenue
+      : 0;
+
+
+  $('trackerMetrics').innerHTML = `
+
+    <div class="metric">
+      <strong>
+        ${Math.round(units)}
+      </strong>
+      <span>
+        Units sold
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${money(revenue)}
+      </strong>
+      <span>
+        Revenue
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${money(gp)}
+      </strong>
+      <span>
+        Gross profit
+      </span>
+    </div>
+
+    <div class="metric">
+      <strong>
+        ${(margin * 100).toFixed(1)}%
+      </strong>
+      <span>
+        Overall margin
+      </span>
+    </div>
+
+  `;
+
+
+  $('trackerRows').innerHTML =
+
+    state.tracker.length
+
+      ?
+        state.tracker
+
+          .map(
+            x => `
+
+              <tr>
+
+                <td
+                  class="itemName"
+                  data-label="Product">
+                  ${esc(x.item)}
+                </td>
+
+                <td data-label="Units">
+                  ${esc(x.units)}
+                </td>
+
+                <td data-label="Sales">
+                  ${esc(x.sales)}
+                </td>
+
+                <td data-label="Gross Profit">
+                  ${esc(x.grossProfit)}
+                </td>
+
+                <td data-label="Margin">
+                  ${esc(x.margin)}
+                </td>
+
+                <td data-label="Weekly">
+                  ${esc(x.weeklyUnits)}
+                </td>
+
+                <td
+                  class="flag"
+                  data-label="Action">
+                  ${esc(x.action || '—')}
+                </td>
+
+              </tr>
+
+            `
+          )
+
+          .join('')
+
+      :
+        `<tr>
+          <td
+            class="empty"
+            data-label="">
+            No movement data found.
+          </td>
+        </tr>`;
+
+}
+
+
+/* ========================================
+   PRICE CHANGES
+======================================== */
+
+function renderPrices() {
+
+  $('priceRows').innerHTML =
+
+    state.priceChanges.length
+
+      ?
+        state.priceChanges
+
+          .slice()
+          .reverse()
+
+          .map(
+            x => `
+
+              <tr>
+
+                <td data-label="Date">
+                  ${esc(x.date || '—')}
+                </td>
+
+                <td
+                  class="itemName"
+                  data-label="Product">
+                  ${esc(x.item)}
+                </td>
+
+                <td data-label="Old">
+                  ${esc(x.oldPrice)}
+                </td>
+
+                <td data-label="New">
+                  ${esc(x.newPrice)}
+                </td>
+
+                <td data-label="Change">
+                  ${esc(x.change)}
+                </td>
+
+                <td data-label="Reason">
+                  ${esc(x.reason)}
+                </td>
+
+                <td
+                  class="flag"
+                  data-label="Status">
+                  ${esc(x.status)}
+                </td>
+
+              </tr>
+
+            `
+          )
+
+          .join('')
+
+      :
+        `<tr>
+          <td
+            class="empty"
+            data-label="">
+            No price changes found.
+          </td>
+        </tr>`;
+
+}
+
+
+/* ========================================
+   FULL RENDER
+======================================== */
+
+function render() {
+
+  renderFluff();
+
+  renderVending(
+    'snacks'
+  );
+
+  renderVending(
+    'laundry'
+  );
+
+  renderTracker();
+
+  renderPrices();
+
+}
+
+
+/* ========================================
+   INITIAL LOAD
+======================================== */
+
+message(
+  'Loading tracker…'
+);
+
 
 google.script.run
-  .withSuccessHandler(data => { state = data; render(); $('message').style.display = 'none'; })
-  .withFailureHandler(e => message(e.message || String(e), true))
+
+  .withSuccessHandler(
+    data => {
+
+      state =
+        data;
+
+      render();
+
+      $('message').style.display =
+        'none';
+
+    }
+  )
+
+  .withFailureHandler(
+    e => {
+
+      message(
+        e.message ||
+          String(e),
+        true
+      );
+
+    }
+  )
+
   .getState();
+
+
 </script>
 
 </body>
+
 </html>
