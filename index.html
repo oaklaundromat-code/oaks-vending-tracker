@@ -2,403 +2,80 @@
 <html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Oaks Vending Tracker</title>
-
+<title>Oaks Inventory Tracker</title>
 <style>
-:root{
-  font-family:Arial,sans-serif;
-  color:#18212e;
-  background:#f7f9fc;
-  font-size:24px;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  -webkit-text-size-adjust:100%;
-  text-size-adjust:100%;
-}
-
-body{
-  margin:0;
-  line-height:1.42;
-  font-size:24px;
-}
-
-header{
-  background:#17365d;
-  color:white;
-  padding:18px 16px;
-}
-
-h1{
-  font-size:32px;
-  line-height:1.15;
-  margin:0;
-}
-
-header p{
-  font-size:19px;
-  margin:6px 0 0;
-  opacity:.9;
-}
-
-nav{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  background:white;
-  padding:10px;
-  position:sticky;
-  top:0;
-  z-index:10;
-  border-bottom:1px solid #d9e2f3;
-}
-
-button{
-  cursor:pointer;
-  border:0;
-  border-radius:14px;
-  min-height:64px;
-  padding:15px 12px;
-  font-size:21px;
-  font-weight:700;
-  background:#eaf0f7;
-  color:#17365d;
-}
-
-button.active,
-.primary{
-  background:#1f4e78;
-  color:white;
-}
-
-.danger{
-  background:#b42323;
-  color:white;
-  min-height:56px;
-  padding:12px 16px;
-  font-size:19px;
-}
-
-.toggle{
-  min-height:56px;
-  font-size:19px;
-  padding:12px 16px;
-  margin-bottom:14px;
-}
-
-main{
-  width:100%;
-  max-width:760px;
-  margin:auto;
-  padding:12px;
-}
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-.card{
-  width:100%;
-  background:white;
-  border:1px solid #d9e2f3;
-  border-radius:16px;
-  padding:18px 14px;
-  margin-bottom:16px;
-}
-
-h2{
-  color:#17365d;
-  font-size:29px;
-  line-height:1.15;
-  margin:0 0 16px;
-}
-
-.small{
-  font-size:19px;
-  line-height:1.5;
-  color:#596675;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:0;
-}
-
-label{
-  display:block;
-  font-size:22px;
-  font-weight:700;
-  margin:20px 0 8px;
-}
-
-input,
-select,
-textarea{
-  display:block;
-  width:100%;
-  min-height:68px;
-  font-family:Arial,sans-serif;
-  font-size:23px;
-  border:2px solid #aebbc9;
-  border-radius:14px;
-  padding:15px;
-  background:white;
-  color:#18212e;
-}
-
-select{
-  min-height:70px;
-}
-
-input[type="number"]{
-  font-size:26px;
-  font-weight:600;
-}
-
-input[type="date"]{
-  font-size:22px;
-}
-
-textarea{
-  min-height:115px;
-}
-
-.wide{
-  width:100%;
-  min-height:70px;
-  margin-top:22px;
-  font-size:23px;
-}
-
-#message{
-  margin:0;
-  padding:15px 16px;
-  font-size:20px;
-  line-height:1.4;
-  display:none;
-}
-
-a{
-  color:#1f4e78;
-  font-size:20px;
-  overflow-wrap:anywhere;
-}
-
-.scroll{
-  overflow:visible;
-}
-
-table,
-thead,
-tbody,
-tr,
-th,
-td{
-  display:block;
-}
-
-table{
-  width:100%;
-}
-
-thead{
-  display:none;
-}
-
-tbody{
-  display:grid;
-  gap:14px;
-}
-
-tr{
-  width:100%;
-  border:2px solid #d9e2f3;
-  border-radius:15px;
-  background:white;
-  padding:12px 14px;
-}
-
-td{
-  display:grid;
-  grid-template-columns:115px minmax(0,1fr);
-  gap:12px;
-  width:100%;
-  padding:11px 0;
-  border:0;
-  border-bottom:1px solid #e8edf4;
-  font-size:20px;
-  line-height:1.4;
-  white-space:normal;
-  overflow-wrap:anywhere;
-}
-
-td:last-child{
-  border-bottom:0;
-}
-
-td::before{
-  content:attr(data-label);
-  font-size:18px;
-  font-weight:700;
-  color:#596675;
-}
-
-#buyRows td:nth-child(2){
-  display:block;
-  font-size:25px;
-  font-weight:700;
-  color:#17365d;
-  padding-bottom:14px;
-}
-
-#buyRows td:nth-child(2)::before{
-  display:block;
-  margin-bottom:4px;
-}
-
-#buyRows td:nth-child(5),
-#buyRows td:nth-child(7),
-#buyRows td:nth-child(10){
-  font-size:22px;
-  font-weight:700;
-}
-
-#historyRows td:nth-child(4){
-  display:block;
-  font-size:24px;
-  font-weight:700;
-  color:#17365d;
-}
-
-.empty{
-  padding:18px;
-  font-size:20px;
-  color:#596675;
-  text-align:center;
-}
-
+:root{font-family:Arial,sans-serif;color:#18212e;background:#f7f9fc;font-size:24px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;line-height:1.42;font-size:24px}
+header{background:#17365d;color:white;padding:18px 16px}
+h1{font-size:32px;line-height:1.15;margin:0}
+header p{font-size:19px;margin:6px 0 0;opacity:.9}
+nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:white;padding:10px;position:sticky;top:0;z-index:10;border-bottom:1px solid #d9e2f3}
+button{cursor:pointer;border:0;border-radius:14px;min-height:64px;padding:15px 12px;font-size:21px;font-weight:700;background:#eaf0f7;color:#17365d}
+button.active,.primary{background:#1f4e78;color:white}
+.danger{background:#b42323;color:white;min-height:56px;padding:12px 16px;font-size:19px}
+.toggle{min-height:56px;font-size:19px;padding:12px 16px;margin-bottom:14px}
+main{width:100%;max-width:760px;margin:auto;padding:12px}
+.page{display:none}.page.active{display:block}
+.card{width:100%;background:white;border:1px solid #d9e2f3;border-radius:16px;padding:18px 14px;margin-bottom:16px}
+h2{color:#17365d;font-size:29px;line-height:1.15;margin:0 0 16px}
+.small{font-size:19px;line-height:1.5;color:#596675}
+.row{display:grid;grid-template-columns:1fr;gap:0}
+label{display:block;font-size:22px;font-weight:700;margin:20px 0 8px}
+input,select,textarea{display:block;width:100%;min-height:68px;font-family:Arial,sans-serif;font-size:23px;border:2px solid #aebbc9;border-radius:14px;padding:15px;background:white;color:#18212e}
+select{min-height:70px}
+input[type="number"]{font-size:26px;font-weight:600}
+input[type="date"]{font-size:22px}
+textarea{min-height:115px}
+.wide{width:100%;min-height:70px;margin-top:22px;font-size:23px}
+#message{margin:0;padding:15px 16px;font-size:20px;line-height:1.4;display:none}
+a{color:#1f4e78;font-size:20px;overflow-wrap:anywhere}
+.scroll{overflow:visible}
+table,thead,tbody,tr,th,td{display:block}
+table{width:100%}
+thead{display:none}
+tbody{display:grid;gap:14px}
+tr{width:100%;border:2px solid #d9e2f3;border-radius:15px;background:white;padding:12px 14px}
+td{display:grid;grid-template-columns:115px minmax(0,1fr);gap:12px;width:100%;padding:11px 0;border:0;border-bottom:1px solid #e8edf4;font-size:20px;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
+td:last-child{border-bottom:0}
+td::before{content:attr(data-label);font-size:18px;font-weight:700;color:#596675}
+#buyRows td:nth-child(2){display:block;font-size:25px;font-weight:700;color:#17365d;padding-bottom:14px}
+#buyRows td:nth-child(2)::before{display:block;margin-bottom:4px}
+#buyRows td:nth-child(5),#buyRows td:nth-child(7),#buyRows td:nth-child(10){font-size:22px;font-weight:700}
+#historyRows td:nth-child(4){display:block;font-size:24px;font-weight:700;color:#17365d}
+.empty{padding:18px;font-size:20px;color:#596675;text-align:center}
 @media (min-width:700px){
-  :root{
-    font-size:18px;
-  }
-
-  body{
-    font-size:18px;
-  }
-
-  nav{
-    grid-template-columns:repeat(4,1fr);
-  }
-
-  .row{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
-  }
-
-  table{
-    display:table;
-    border-collapse:collapse;
-  }
-
-  thead{
-    display:table-header-group;
-  }
-
-  tbody{
-    display:table-row-group;
-  }
-
-  tr{
-    display:table-row;
-    border:0;
-    padding:0;
-  }
-
-  th,
-  td{
-    display:table-cell;
-    padding:10px;
-    border-bottom:1px solid #e8edf4;
-    font-size:16px;
-  }
-
-  th{
-    background:#1f4e78;
-    color:white;
-    text-align:left;
-  }
-
-  td::before{
-    display:none;
-  }
-
-  #buyRows td:nth-child(2),
-  #historyRows td:nth-child(4){
-    display:table-cell;
-    font-size:16px;
-    font-weight:normal;
-    color:inherit;
-  }
+ :root{font-size:18px}
+ body{font-size:18px}
+ nav{grid-template-columns:repeat(4,1fr)}
+ .row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ table{display:table;border-collapse:collapse}
+ thead{display:table-header-group}
+ tbody{display:table-row-group}
+ tr{display:table-row;border:0;padding:0}
+ th,td{display:table-cell;padding:10px;border-bottom:1px solid #e8edf4;font-size:16px}
+ th{background:#1f4e78;color:white;text-align:left}
+ td::before{display:none}
+ #buyRows td:nth-child(2),#historyRows td:nth-child(4){display:table-cell;font-size:16px;font-weight:normal;color:inherit}
 }
-
 @media (max-width:390px){
-  body{
-    font-size:23px;
-  }
-
-  h1{
-    font-size:30px;
-  }
-
-  h2{
-    font-size:28px;
-  }
-
-  button{
-    font-size:20px;
-  }
-
-  input,
-  select,
-  textarea{
-    font-size:22px;
-  }
-
-  td{
-    grid-template-columns:105px minmax(0,1fr);
-  }
+ body{font-size:23px}h1{font-size:30px}h2{font-size:28px}
+ button{font-size:20px}
+ input,select,textarea{font-size:22px}
+ td{grid-template-columns:105px minmax(0,1fr)}
 }
-
 @media (max-width:340px){
-  nav{
-    grid-template-columns:1fr;
-  }
-
-  td{
-    grid-template-columns:1fr;
-    gap:4px;
-  }
-
-  td::before{
-    margin-bottom:2px;
-  }
+ nav{grid-template-columns:1fr}
+ td{grid-template-columns:1fr;gap:4px}
+ td::before{margin-bottom:2px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>Oaks Vending Tracker</h1>
+<h1>Oaks Inventory Tracker</h1>
 <p>Shared data in your Google Sheet</p>
 </header>
 
@@ -415,1428 +92,345 @@ td::before{
 
 <section id="restock" class="page active">
 <div class="card">
-
 <h2>Record a Restock</h2>
-
 <div class="row">
-<div>
-<label>Date</label>
-<input type="date" id="date">
+<div><label>Date</label><input type="date" id="date"></div>
+<div><label>Inventory Group</label><select id="machine"></select></div>
 </div>
-
-<div>
-<label>Machine</label>
-<select id="machine"></select>
-</div>
-</div>
-
 <div class="row">
-<div>
-<label>Category</label>
-<select id="category"></select>
+<div><label>Category</label><select id="category"></select></div>
+<div><label>Item</label><select id="item"></select></div>
 </div>
-
-<div>
-<label>Item</label>
-<select id="item"></select>
-</div>
-</div>
-
 <div class="row">
-<div>
-<label>Quantity replaced</label>
-<input id="qty" type="number" min="1" step="1">
+<div><label>Quantity replaced</label><input id="qty" type="number" min="1" step="1"></div>
+<div><label>Slot (optional)</label><input id="slot"></div>
 </div>
-
-<div>
-<label>Slot (optional)</label>
-<input id="slot">
-</div>
-</div>
-
 <label>Note (optional)</label>
 <textarea id="note" rows="2"></textarea>
-
-<button class="primary wide" id="saveRestock">
-Save to Google Sheet
-</button>
-
-<p class="small">
-Quantity replaced estimates movement.
-Count all stock on hand, including backstock,
-on the Count Stock tab for accurate purchasing.
-</p>
-
+<button class="primary wide" id="saveRestock">Save to Google Sheet</button>
+<p class="small">Quantity replaced estimates movement. Count all stock on hand, including backstock, on the Count Stock tab for accurate purchasing.</p>
 </div>
 </section>
-
 
 <section id="inventory" class="page">
 <div class="card">
-
 <h2>Count Stock</h2>
-
-<p class="small">
-Count every unit you own for a product across all its slots and storage.
-One product has one inventory row.
-</p>
-
-<label>Machine</label>
-<select id="countMachine"></select>
-
-<label>Product</label>
-<select id="countItem"></select>
-
+<p class="small">Count every unit you own for a product across all its slots and storage. One product has one inventory row.</p>
+<label>Inventory Group</label><select id="countMachine"></select>
+<label>Product</label><select id="countItem"></select>
 <div class="row">
-
-<div>
-<label>On hand</label>
-<input id="onHand" type="number" min="0" step="1">
+<div><label>On hand</label><input id="onHand" type="number" min="0" step="1"></div>
+<div><label>Target units</label><input id="target" type="number" min="0" step="1"></div>
 </div>
-
-<div>
-<label>Target units</label>
-<input id="target" type="number" min="0" step="1">
-</div>
-
-</div>
-
-<button class="primary wide" id="saveCount">
-Save count to Google Sheet
-</button>
-
+<button class="primary wide" id="saveCount">Save count to Google Sheet</button>
 </div>
 </section>
-
 
 <section id="buying" class="page">
 <div class="card">
-
-<h2>Vending Buy List</h2>
-
-<p class="small" id="buySummary">
-Loading…
-</p>
-
-<button class="toggle" id="buyToggle">
-Show everything
-</button>
-
+<h2>Buy List</h2>
+<p class="small" id="buySummary">Loading…</p>
+<button class="toggle" id="buyToggle">Show everything</button>
 <div class="scroll">
-
 <table>
-
-<thead>
-<tr>
-<th>Machine</th>
-<th>Product</th>
-<th>Have</th>
-<th>Target</th>
-<th>Need</th>
-<th>Buy from</th>
-<th>Cases</th>
-<th>Est. cost</th>
-<th>Buy by</th>
-<th>Status</th>
-</tr>
-</thead>
-
+<thead><tr><th>Inventory Group</th><th>Product</th><th>Have</th><th>Target</th><th>Need</th><th>Buy from</th><th>Cases</th><th>Est. cost</th><th>Buy by</th><th>Status</th></tr></thead>
 <tbody id="buyRows"></tbody>
-
 </table>
-
 </div>
-
-<p>
-<a
-target="_blank"
-rel="noopener"
-href="https://docs.google.com/spreadsheets/d/18xul-Y88A1BQzYb8WE1DU80_13K0tFx9FqcadxhXhDs/edit">
-Open full cost model, retail buying plan, and purchase log
-</a>
-</p>
-
+<p><a target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/18xul-Y88A1BQzYb8WE1DU80_13K0tFx9FqcadxhXhDs/edit">Open full cost model, retail buying plan, and purchase log</a></p>
 </div>
 </section>
 
-
 <section id="history" class="page">
 <div class="card">
-
 <h2>Restock History</h2>
-
 <p class="small" id="historySummary"></p>
-
 <div class="scroll">
-
 <table>
-
-<thead>
-<tr>
-<th>Date</th>
-<th>Machine</th>
-<th>Category</th>
-<th>Item</th>
-<th>Replaced</th>
-<th>Slot</th>
-<th>Note</th>
-<th></th>
-</tr>
-</thead>
-
+<thead><tr><th>Date</th><th>Inventory Group</th><th>Category</th><th>Item</th><th>Replaced</th><th>Slot</th><th>Note</th><th></th></tr></thead>
 <tbody id="historyRows"></tbody>
-
 </table>
-
 </div>
-
-<button
-class="toggle wide"
-id="loadMore"
-style="display:none">
-Show 25 more
-</button>
-
-<p class="small">
-Entries are saved in the Google Sheet.
-</p>
-
-<button id="exportCsv">
-Export CSV
-</button>
-
-<button id="importCsv">
-Import old or new CSV
-</button>
-
-<input
-type="file"
-id="file"
-accept=".csv,text/csv"
-hidden>
-
+<button class="toggle wide" id="loadMore" style="display:none">Show 25 more</button>
+<p class="small">Entries are saved in the Google Sheet.</p>
+<button id="exportCsv">Export CSV</button>
+<button id="importCsv">Import old or new CSV</button>
+<input type="file" id="file" accept=".csv,text/csv" hidden>
 </div>
 </section>
 
 </main>
 
-
 <script>
-
-const $ = id =>
-  document.getElementById(id);
-
-
-const names = {
-  snacks:'Snack & Drink Machine',
-  laundry:'Laundry Vending Machine'
-};
-
-
-let state = {
-  inventory:[],
-  history:[]
-};
-
-
+const $ = id => document.getElementById(id);
+// Keys match the Sheet's machine column; Fluff & Fold first so it is the default selection
+const names = {flufffold:'Fluff & Fold', snacks:'Snack & Drink Machine', laundry:'Laundry Vending Machine'};
+let state = {inventory:[], history:[]};
 let pending = false;
 let messageTimer;
 let entryId = newId();
-
 let buyShowAll = false;
-
 let historyShown = 25;
-
 const PAGE = 25;
 
-
 function newId(){
-
-  return globalThis.crypto?.randomUUID?.()
-    ||
-    String(Date.now())
-    + '-'
-    + Math.random().toString(36).slice(2);
-
+  return globalThis.crypto?.randomUUID?.() || String(Date.now()) + '-' + Math.random().toString(36).slice(2);
 }
+const esc = x => String(x ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-
-const esc = x =>
-  String(x ?? '').replace(
-    /[&<>"']/g,
-    c => ({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#39;'
-    }[c])
-  );
-
-
+// The Sheet returns display values, so strip currency and separators before comparing
 function needNum(v){
-
-  const n =
-    Number(
-      String(v ?? '')
-        .replace(/[^0-9.-]/g,'')
-    );
-
-  return Number.isFinite(n)
-    ? n
-    : 0;
-
+  const n = Number(String(v ?? '').replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(n) ? n : 0;
 }
 
-
-const options = (id,list,old) => {
-
-  $(id).innerHTML =
-    list
-      .map(
-        ([v,t]) =>
-          `<option value="${esc(v)}">${esc(t)}</option>`
-      )
-      .join('');
-
-  if(
-    list.some(
-      ([v]) => v === old
-    )
-  ){
-    $(id).value = old;
-  }
-
+const options = (id, list, old) => {
+  $(id).innerHTML = list.map(([v,t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join('');
+  if (list.some(([v]) => v === old)) $(id).value = old;
 };
 
-
-function call(method,arg,onDone){
-
-  if(pending) return;
-
+function call(method, arg, onDone){
+  if (pending) return;
   pending = true;
-
-  message(
-    method === 'deleteRestock'
-      ? 'Deleting…'
-      : 'Saving…'
-  );
-
-
-  const runner =
-    google.script.run
-
-      .withSuccessHandler(result => {
-
-        pending = false;
-
-        state =
-          result.state || result;
-
-        render();
-
-        message(
-
-          result.added !== undefined
-
-            ? `Imported ${result.added} entries.`
-              +
-              (
-                result.skipped
-                  ? ` Skipped ${result.skipped} duplicate, invalid, or unavailable rows.`
-                  : ''
-              )
-
-            : result.deleted === false
-
-            ? 'Entry was already absent. History is up to date.'
-
-            : method === 'deleteRestock'
-
-            ? 'Deleted from Google Sheet.'
-
-            : 'Saved to Google Sheet.',
-
-          false,
-          true
-
-        );
-
-
-        if(onDone){
-          onDone();
-        }
-
-      })
-
-      .withFailureHandler(e => {
-
-        pending = false;
-
-        message(
-          `Not saved — ${e.message || String(e)}. Check the Sheet before retrying.`,
-          true
-        );
-
-      });
-
-
-  if(arg === undefined){
-
-    runner[method]();
-
-  }else{
-
-    runner[method](arg);
-
-  }
-
-}
-
-
-function message(
-  s,
-  error = false,
-  autoHide = false
-){
-
-  clearTimeout(messageTimer);
-
-  $('message').style.display =
-    'block';
-
-  $('message').style.background =
-    error
-      ? '#fce4e4'
-      : '#e5f5e4';
-
-  $('message').textContent =
-    s;
-
-
-  if(autoHide){
-
-    messageTimer =
-      setTimeout(
-        () =>
-          $('message').style.display =
-            'none',
-        4500
+  message(method === 'deleteRestock' ? 'Deleting…' : 'Saving…');
+  const runner = google.script.run
+    .withSuccessHandler(result => {
+      pending = false;
+      state = result.state || result;
+      render();
+      message(
+        result.added !== undefined
+          ? `Imported ${result.added} entries.` + (result.skipped ? ` Skipped ${result.skipped} duplicate, invalid, or unavailable rows.` : '')
+          : result.deleted === false
+          ? 'Entry was already absent. History is up to date.'
+          : method === 'deleteRestock'
+          ? 'Deleted from Google Sheet.'
+          : 'Saved to Google Sheet.',
+        false, true
       );
-
-  }
-
+      if (onDone) onDone();
+    })
+    .withFailureHandler(e => {
+      pending = false;
+      message(`Not saved — ${e.message || String(e)}. Check the Sheet before retrying.`, true);
+    });
+  if (arg === undefined) runner[method](); else runner[method](arg);
 }
 
+function message(s, error = false, autoHide = false){
+  clearTimeout(messageTimer);
+  $('message').style.display = 'block';
+  $('message').style.background = error ? '#fce4e4' : '#e5f5e4';
+  $('message').textContent = s;
+  if (autoHide) messageTimer = setTimeout(() => $('message').style.display = 'none', 4500);
+}
 
 function restockOptions(){
-
-  const machine =
-    $('machine').value;
-
-
-  const cats =
-    [
-      ...new Set(
-
-        state.inventory
-          .filter(
-            x =>
-              x.machine === machine
-          )
-          .map(
-            x => x.category
-          )
-
-      )
-    ];
-
-
-  options(
-    'category',
-    cats.map(
-      x => [x,x]
-    ),
-    $('category').value
-  );
-
-
-  options(
-    'item',
-
-    state.inventory
-      .filter(
-        x =>
-          x.machine === machine
-          &&
-          x.category ===
-            $('category').value
-      )
-      .map(
-        x => [x.item,x.item]
-      ),
-
-    $('item').value
-  );
-
+  const machine = $('machine').value;
+  const cats = [...new Set(state.inventory.filter(x => x.machine === machine).map(x => x.category))];
+  options('category', cats.map(x => [x,x]), $('category').value);
+  options('item', state.inventory.filter(x => x.machine === machine && x.category === $('category').value).map(x => [x.item,x.item]), $('item').value);
 }
-
 
 function countOptions(){
-
-  options(
-    'countItem',
-
-    state.inventory
-      .filter(
-        x =>
-          x.machine ===
-            $('countMachine').value
-      )
-      .map(
-        x => [x.item,x.item]
-      ),
-
-    $('countItem').value
-  );
-
-
-  const c =
-    state.inventory.find(
-      x =>
-        x.machine ===
-          $('countMachine').value
-        &&
-        x.item ===
-          $('countItem').value
-    );
-
-
-  $('onHand').value =
-    c?.onHand ?? '';
-
-  $('target').value =
-    c?.target ?? '';
-
+  options('countItem', state.inventory.filter(x => x.machine === $('countMachine').value).map(x => [x.item,x.item]), $('countItem').value);
+  const c = state.inventory.find(x => x.machine === $('countMachine').value && x.item === $('countItem').value);
+  $('onHand').value = c?.onHand ?? '';
+  $('target').value = c?.target ?? '';
 }
-
 
 function renderBuy(){
-
-  const needed =
-    state.inventory.filter(
-      x =>
-        needNum(x.need) > 0
-    );
-
-
-  const shown =
-    buyShowAll
-      ? state.inventory
-      : needed;
-
-
-  $('buySummary').textContent =
-
-    buyShowAll
-
-      ? `${state.inventory.length} vending products shown.`
-
-      : needed.length
-
-      ? `${needed.length} product${needed.length === 1 ? '' : 's'} currently need stock.`
-
-      : 'No items currently show a reorder need based on saved counts and targets.';
-
-
-  $('buyToggle').textContent =
-
-    buyShowAll
-      ? 'Show only items to buy'
-      : 'Show everything';
-
-
-  if(!shown.length){
-
-    $('buyRows').innerHTML =
-      `<tr>
-        <td class="empty" data-label="">
-          No items to show.
-        </td>
-      </tr>`;
-
+  const needed = state.inventory.filter(x => needNum(x.need) > 0);
+  const shown = buyShowAll ? state.inventory : needed;
+  $('buySummary').textContent = buyShowAll
+    ? `${state.inventory.length} products shown.`
+    : needed.length
+    ? `${needed.length} product${needed.length === 1 ? '' : 's'} to order.`
+    : 'No items currently show a reorder need based on saved counts and targets.';
+  $('buyToggle').textContent = buyShowAll ? 'Show only items to buy' : 'Show everything';
+  if (!shown.length){
+    $('buyRows').innerHTML = '<tr><td class="empty" data-label="">No items to show.</td></tr>';
     return;
-
   }
-
-
-  $('buyRows').innerHTML =
-
-    shown
-      .map(
-        x => `
-
-          <tr>
-
-            <td data-label="Machine">
-              ${esc(names[x.machine] || x.machine)}
-            </td>
-
-            <td data-label="Product">
-              ${esc(x.item)}
-              ${
-                x.slots
-                  ? ' (' + esc(x.slots) + ')'
-                  : ''
-              }
-            </td>
-
-            <td data-label="Have">
-              ${esc(x.onHand)}
-            </td>
-
-            <td data-label="Target">
-              ${esc(x.target)}
-            </td>
-
-            <td data-label="Need">
-              ${esc(x.need)}
-            </td>
-
-            <td data-label="Buy from">
-              ${esc(x.vendor)}
-            </td>
-
-            <td data-label="Cases">
-              ${esc(x.cases)}
-            </td>
-
-            <td data-label="Est. cost">
-              ${esc(x.estimate)}
-            </td>
-
-            <td data-label="Buy by">
-              ${esc(x.buyBy)}
-            </td>
-
-            <td data-label="Status">
-              ${esc(x.status)}
-            </td>
-
-          </tr>
-
-        `
-      )
-      .join('');
-
+  $('buyRows').innerHTML = shown.map(x => `<tr>
+<td data-label="Group">${esc(names[x.machine] || x.machine)}</td>
+<td data-label="Product">${esc(x.item)}${x.slots ? ' (' + esc(x.slots) + ')' : ''}</td>
+<td data-label="Have">${esc(x.onHand)}</td>
+<td data-label="Target">${esc(x.target)}</td>
+<td data-label="Need">${esc(x.need)}</td>
+<td data-label="Buy from">${esc(x.vendor)}</td>
+<td data-label="Cases">${esc(x.cases)}</td>
+<td data-label="Est. cost">${esc(x.estimate)}</td>
+<td data-label="Buy by">${esc(x.buyBy)}</td>
+<td data-label="Status">${esc(x.status)}</td>
+</tr>`).join('');
 }
-
 
 function renderHistory(){
-
-  const reversed =
-    state.history
-      .slice()
-      .reverse();
-
-
-  const shown =
-    reversed.slice(
-      0,
-      historyShown
-    );
-
-
-  $('historySummary').textContent =
-
-    reversed.length
-
-      ? `Showing ${shown.length} of ${reversed.length} saved restock entr${reversed.length === 1 ? 'y' : 'ies'}.`
-
-      : 'No restock history has been saved yet.';
-
-
-  if(!shown.length){
-
-    $('historyRows').innerHTML =
-      `<tr>
-        <td class="empty" data-label="">
-          No restock entries yet.
-        </td>
-      </tr>`;
-
-  }else{
-
-    $('historyRows').innerHTML =
-
-      shown
-        .map(
-          x => `
-
-            <tr>
-
-              <td data-label="Date">
-                ${esc(x.date)}
-              </td>
-
-              <td data-label="Machine">
-                ${esc(names[x.machine] || x.machine)}
-              </td>
-
-              <td data-label="Category">
-                ${esc(x.category)}
-              </td>
-
-              <td data-label="Item">
-                ${esc(x.item)}
-              </td>
-
-              <td data-label="Replaced">
-                ${esc(x.qty)}
-              </td>
-
-              <td data-label="Slot">
-                ${esc(x.slot)}
-              </td>
-
-              <td data-label="Note">
-                ${esc(x.note)}
-              </td>
-
-              <td data-label="">
-                <button
-                  class="danger"
-                  data-delete="${esc(x.id)}">
-                  Delete
-                </button>
-              </td>
-
-            </tr>
-
-          `
-        )
-        .join('');
-
+  const reversed = state.history.slice().reverse();
+  const shown = reversed.slice(0, historyShown);
+  $('historySummary').textContent = reversed.length
+    ? `Showing ${shown.length} of ${reversed.length} saved restock entr${reversed.length === 1 ? 'y' : 'ies'}.`
+    : 'No restock history has been saved yet.';
+  if (!shown.length){
+    $('historyRows').innerHTML = '<tr><td class="empty" data-label="">No restock entries yet.</td></tr>';
+  } else {
+    $('historyRows').innerHTML = shown.map(x => `<tr>
+<td data-label="Date">${esc(x.date)}</td>
+<td data-label="Group">${esc(names[x.machine] || x.machine)}</td>
+<td data-label="Category">${esc(x.category)}</td>
+<td data-label="Item">${esc(x.item)}</td>
+<td data-label="Replaced">${esc(x.qty)}</td>
+<td data-label="Slot">${esc(x.slot)}</td>
+<td data-label="Note">${esc(x.note)}</td>
+<td data-label=""><button class="danger" data-delete="${esc(x.id)}">Delete</button></td>
+</tr>`).join('');
   }
-
-
-  $('loadMore').style.display =
-
-    historyShown < reversed.length
-      ? 'block'
-      : 'none';
-
+  $('loadMore').style.display = historyShown < reversed.length ? 'block' : 'none';
 }
-
 
 function render(){
-
-  for(
-    const id of [
-      'machine',
-      'countMachine'
-    ]
-  ){
-
-    options(
-      id,
-      Object.entries(names),
-      $(id).value
-    );
-
-  }
-
-
+  for (const id of ['machine','countMachine']) options(id, Object.entries(names), $(id).value);
   restockOptions();
-
   countOptions();
-
   renderBuy();
-
   renderHistory();
-
 }
 
-
-$('machine').onchange =
-  restockOptions;
-
-
-$('category').onchange =
-  restockOptions;
-
-
-$('countMachine').onchange =
-  countOptions;
-
-
-$('countItem').onchange =
-  countOptions;
-
-
-$('buyToggle').onclick = () => {
-
-  buyShowAll =
-    !buyShowAll;
-
-  renderBuy();
-
-};
-
-
-$('loadMore').onclick = () => {
-
-  historyShown += PAGE;
-
-  renderHistory();
-
-};
-
+$('machine').onchange = restockOptions;
+$('category').onchange = restockOptions;
+$('countMachine').onchange = countOptions;
+$('countItem').onchange = countOptions;
+$('buyToggle').onclick = () => { buyShowAll = !buyShowAll; renderBuy(); };
+$('loadMore').onclick = () => { historyShown += PAGE; renderHistory(); };
 
 $('saveRestock').onclick = () => {
-
   const form = {
-
-    id:
-      entryId,
-
-    date:
-      $('date').value,
-
-    machine:
-      $('machine').value,
-
-    category:
-      $('category').value,
-
-    item:
-      $('item').value,
-
-    qty:
-      $('qty').value,
-
-    slot:
-      $('slot').value,
-
-    note:
-      $('note').value
-
+    id: entryId,
+    date: $('date').value,
+    machine: $('machine').value,
+    category: $('category').value,
+    item: $('item').value,
+    qty: $('qty').value,
+    slot: $('slot').value,
+    note: $('note').value
   };
-
-
-  if(
-    !form.date
-    ||
-    !form.item
-    ||
-    !Number.isInteger(
-      Number(form.qty)
-    )
-    ||
-    Number(form.qty) < 1
-  ){
-
-    message(
-      'Choose an item and enter a whole-number quantity.',
-      true
-    );
-
+  if (!form.date || !form.item || !Number.isInteger(Number(form.qty)) || Number(form.qty) < 1){
+    message('Choose an item and enter a whole-number quantity.', true);
     return;
-
   }
-
-
-  call(
-    'saveRestock',
-    form,
-    () => {
-
-      entryId =
-        newId();
-
-      $('qty').value =
-        '';
-
-      $('slot').value =
-        '';
-
-      $('note').value =
-        '';
-
-    }
-  );
-
+  call('saveRestock', form, () => {
+    entryId = newId();
+    $('qty').value = '';
+    $('slot').value = '';
+    $('note').value = '';
+  });
 };
-
 
 $('saveCount').onclick = () => {
-
   const form = {
-
-    machine:
-      $('countMachine').value,
-
-    item:
-      $('countItem').value,
-
-    onHand:
-      $('onHand').value,
-
-    target:
-      $('target').value
-
+    machine: $('countMachine').value,
+    item: $('countItem').value,
+    onHand: $('onHand').value,
+    target: $('target').value
   };
-
-
-  if(
-    !Number.isInteger(
-      Number(form.onHand)
-    )
-    ||
-    form.onHand === ''
-    ||
-    Number(form.onHand) < 0
-    ||
-    !Number.isInteger(
-      Number(form.target)
-    )
-    ||
-    form.target === ''
-    ||
-    Number(form.target) < 0
-  ){
-
-    message(
-      'Enter both counts as whole numbers.',
-      true
-    );
-
+  if (!Number.isInteger(Number(form.onHand)) || form.onHand === '' || Number(form.onHand) < 0 ||
+      !Number.isInteger(Number(form.target)) || form.target === '' || Number(form.target) < 0){
+    message('Enter both counts as whole numbers.', true);
     return;
-
   }
-
-
-  call(
-    'saveInventory',
-    form
-  );
-
+  call('saveInventory', form);
 };
-
 
 $('historyRows').onclick = e => {
-
-  const deleteButton =
-    e.target.closest(
-      '[data-delete]'
-    );
-
-
-  const id =
-    deleteButton
-      ?.dataset.delete;
-
-
-  if(
-    id
-    &&
-    confirm(
-      'Delete this restock entry?'
-    )
-  ){
-
-    call(
-      'deleteRestock',
-      id
-    );
-
-  }
-
+  const id = e.target.closest('[data-delete]')?.dataset.delete;
+  if (id && confirm('Delete this restock entry?')) call('deleteRestock', id);
 };
 
+document.querySelectorAll('.tab').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.tab,.page').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    $(b.dataset.page).classList.add('active');
+    window.scrollTo(0, 0);
+  };
+});
 
-document
-  .querySelectorAll('.tab')
-  .forEach(
-    b => {
-
-      b.onclick = () => {
-
-        document
-          .querySelectorAll(
-            '.tab,.page'
-          )
-          .forEach(
-            x =>
-              x.classList.remove(
-                'active'
-              )
-          );
-
-
-        b.classList.add(
-          'active'
-        );
-
-
-        $(
-          b.dataset.page
-        )
-        .classList.add(
-          'active'
-        );
-
-
-        window.scrollTo(0, 0);
-
-      };
-
-    }
-  );
-
-
-function csvCell(x){
-
-  return `"${String(x ?? '').replaceAll('"','""')}"`;
-
-}
-
+function csvCell(x){ return `"${String(x ?? '').replaceAll('"','""')}"`; }
 
 $('exportCsv').onclick = () => {
-
   const rows = [
-
-    [
-      'Date',
-      'Machine',
-      'Category',
-      'Item',
-      'Quantity',
-      'Slot',
-      'Note'
-    ],
-
-    ...state.history.map(
-      x => [
-        x.date,
-        x.machine,
-        x.category,
-        x.item,
-        x.qty,
-        x.slot,
-        x.note
-      ]
-    )
-
+    ['Date','Machine','Category','Item','Quantity','Slot','Note'],
+    ...state.history.map(x => [x.date,x.machine,x.category,x.item,x.qty,x.slot,x.note])
   ];
-
-
-  const blob =
-    new Blob(
-
-      [
-        rows
-          .map(
-            r =>
-              r
-                .map(csvCell)
-                .join(',')
-          )
-          .join('\r\n')
-      ],
-
-      {
-        type:'text/csv'
-      }
-
-    );
-
-
-  const url =
-    URL.createObjectURL(blob);
-
-
-  const a =
-    document.createElement('a');
-
-
-  a.href =
-    url;
-
-
-  a.download =
-    'oaks_vending_backup.csv';
-
-
+  const url = URL.createObjectURL(new Blob([rows.map(r => r.map(csvCell).join(',')).join('\r\n')], {type:'text/csv'}));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'oaks_inventory_backup.csv';
   a.click();
-
-
-  setTimeout(
-    () =>
-      URL.revokeObjectURL(
-        url
-      ),
-    3000
-  );
-
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
 };
 
-
 function parseCsv(t){
-
-  const rows =
-    [];
-
-  let row =
-    [];
-
-  let field =
-    '';
-
-  let quoted =
-    false;
-
-
-  for(
-    let i = 0;
-    i < t.length;
-    i++
-  ){
-
-    const c =
-      t[i];
-
-
-    if(quoted){
-
-      if(
-        c === '"'
-        &&
-        t[i + 1] === '"'
-      ){
-
-        field += '"';
-
-        i++;
-
-      }else if(
-        c === '"'
-      ){
-
-        quoted =
-          false;
-
-      }else{
-
-        field +=
-          c;
-
-      }
-
-    }else if(
-      c === '"'
-      &&
-      field === ''
-    ){
-
-      quoted =
-        true;
-
-    }else if(
-      c === ','
-    ){
-
-      row.push(
-        field
-      );
-
-      field =
-        '';
-
-    }else if(
-      c === '\r'
-      ||
-      c === '\n'
-    ){
-
-      if(
-        c === '\r'
-        &&
-        t[i + 1] === '\n'
-      ){
-
-        i++;
-
-      }
-
-
-      row.push(
-        field
-      );
-
-
-      if(
-        row.some(
-          x =>
-            String(x).length
-        )
-      ){
-
-        rows.push(
-          row
-        );
-
-      }
-
-
-      row =
-        [];
-
-      field =
-        '';
-
-    }else{
-
-      field +=
-        c;
-
-    }
-
+  const rows = [];
+  let row = [], field = '', quoted = false;
+  for (let i = 0; i < t.length; i++){
+    const c = t[i];
+    if (quoted){
+      if (c === '"' && t[i+1] === '"'){ field += '"'; i++; }
+      else if (c === '"') quoted = false;
+      else field += c;
+    } else if (c === '"' && field === '') quoted = true;
+    else if (c === ',') { row.push(field); field = ''; }
+    else if (c === '\r' || c === '\n'){
+      if (c === '\r' && t[i+1] === '\n') i++;
+      row.push(field);
+      if (row.some(x => String(x).length)) rows.push(row);
+      row = []; field = '';
+    } else field += c;
   }
-
-
-  if(
-    field
-    ||
-    row.length
-  ){
-
-    row.push(
-      field
-    );
-
-    if(
-      row.some(
-        x =>
-          String(x).length
-      )
-    ){
-      rows.push(
-        row
-      );
-    }
-
+  if (field || row.length){
+    row.push(field);
+    if (row.some(x => String(x).length)) rows.push(row);
   }
-
-
   return rows;
-
 }
 
+$('importCsv').onclick = () => $('file').click();
 
-$('importCsv').onclick =
-  () =>
-    $('file').click();
+$('file').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const [head, ...data] = parseCsv((await file.text()).replace(/^\uFEFF/, ''));
+    const old = JSON.stringify(head) === '["Date","Category","Item","Quantity","Slot","Note"]';
+    const newer = JSON.stringify(head) === '["Date","Machine","Category","Item","Quantity","Slot","Note"]';
+    if (!old && !newer) throw Error('This is not an Oaks Vending CSV.');
+    const rows = data.filter(r => r.length >= (old ? 6 : 7)).map(r => {
+      const [date,machine,category,item,qty,slot,note] = old ? [r[0],'snacks',...r.slice(1)] : r;
+      return {date,machine,category,item,qty,slot,note};
+    });
+    call('importHistory', rows, () => {
+      historyShown = PAGE;
+      renderHistory();
+      window.scrollTo(0, 0);
+    });
+  } catch (err){
+    message(err.message, true);
+  } finally {
+    e.target.value = '';
+  }
+};
 
+const d = new Date();
+$('date').value = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
 
-$('file').onchange =
-  async e => {
-
-    const file =
-      e.target.files[0];
-
-
-    if(!file){
-      return;
-    }
-
-
-    try{
-
-      const [
-        head,
-        ...data
-      ] =
-        parseCsv(
-          (
-            await file.text()
-          )
-          .replace(
-            /^\uFEFF/,
-            ''
-          )
-        );
-
-
-      const old =
-        JSON.stringify(head)
-        ===
-        '["Date","Category","Item","Quantity","Slot","Note"]';
-
-
-      const newer =
-        JSON.stringify(head)
-        ===
-        '["Date","Machine","Category","Item","Quantity","Slot","Note"]';
-
-
-      if(
-        !old
-        &&
-        !newer
-      ){
-
-        throw Error(
-          'This is not an Oaks Vending CSV.'
-        );
-
-      }
-
-
-      const rows =
-        data
-
-          .filter(
-            r =>
-              r.length >=
-              (
-                old
-                  ? 6
-                  : 7
-              )
-          )
-
-          .map(
-            r => {
-
-              const [
-                date,
-                machine,
-                category,
-                item,
-                qty,
-                slot,
-                note
-              ] =
-
-                old
-
-                  ? [
-                      r[0],
-                      'snacks',
-                      ...r.slice(1)
-                    ]
-
-                  : r;
-
-
-              return {
-
-                date,
-                machine,
-                category,
-                item,
-                qty,
-                slot,
-                note
-
-              };
-
-            }
-          );
-
-
-      call(
-        'importHistory',
-        rows,
-        () => {
-
-          historyShown =
-            PAGE;
-
-          renderHistory();
-
-          window.scrollTo(0, 0);
-
-        }
-      );
-
-
-    }catch(err){
-
-      message(
-        err.message,
-        true
-      );
-
-    }finally{
-
-      e.target.value =
-        '';
-
-    }
-
-  };
-
-
-const d =
-  new Date();
-
-
-$('date').value = [
-
-  d.getFullYear(),
-
-  String(
-    d.getMonth() + 1
-  )
-  .padStart(
-    2,
-    '0'
-  ),
-
-  String(
-    d.getDate()
-  )
-  .padStart(
-    2,
-    '0'
-  )
-
-].join('-');
-
-
-message(
-  'Loading tracker…'
-);
-
+message('Loading tracker…');
 
 google.script.run
-
-  .withSuccessHandler(
-    data => {
-
-      state =
-        data;
-
-      render();
-
-      $('message').style.display =
-        'none';
-
-    }
-  )
-
-  .withFailureHandler(
-    e =>
-      message(
-        e.message || String(e),
-        true
-      )
-  )
-
+  .withSuccessHandler(data => { state = data; render(); $('message').style.display = 'none'; })
+  .withFailureHandler(e => message(e.message || String(e), true))
   .getState();
-
 </script>
 
 </body>
