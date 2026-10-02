@@ -1,617 +1,488 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
-
+<meta charset="UTF-8">
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1">
 
-<title>
-Oaks Inventory Tracker
-</title>
+<title>Oaks Inventory</title>
 
 <style>
 
-:root{
-  font-family:Arial,sans-serif;
-  color:#18212e;
-  background:#f7f9fc;
-  font-size:22px;
+* {
+  box-sizing: border-box;
 }
 
-*{
-  box-sizing:border-box;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #172231;
 }
 
-html{
-  -webkit-text-size-adjust:100%;
-  text-size-adjust:100%;
+header {
+  background: #17365d;
+  color: white;
+  padding: 18px;
 }
 
-body{
-  margin:0;
-  font-size:22px;
-  line-height:1.4;
+header h1 {
+  margin: 0;
+  font-size: 27px;
 }
 
-header{
-  background:#17365d;
-  color:white;
-  padding:18px 16px;
+header p {
+  margin: 6px 0 0;
 }
 
-header h1{
-  margin:0;
-  font-size:31px;
-  line-height:1.15;
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 7px;
+  padding: 10px;
+
+  background: white;
+  border-bottom: 1px solid #ccd2da;
 }
 
-header p{
-  margin:6px 0 0;
-  font-size:18px;
-  opacity:.9;
-}
+button {
+  border: 0;
+  border-radius: 9px;
 
-nav{
-  position:sticky;
-  top:0;
-  z-index:20;
+  padding: 13px 8px;
 
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  font-size: 16px;
+  font-weight: bold;
 
-  gap:8px;
-  padding:10px;
+  background: #e6ebf1;
+  color: #17365d;
 
-  background:white;
-
-  border-bottom:
-    1px solid #d9e2f3;
-}
-
-button{
-  cursor:pointer;
-
-  border:0;
-  border-radius:14px;
-
-  min-height:62px;
-
-  padding:13px 10px;
-
-  font-size:20px;
-  font-weight:700;
-
-  background:#eaf0f7;
-  color:#17365d;
+  cursor: pointer;
 }
 
 button.active,
-button.primary{
-  background:#1f4e78;
-  color:white;
+button.primary {
+  background: #1f4e78;
+  color: white;
 }
 
-button.smallButton{
-  min-height:48px;
-  font-size:17px;
-  padding:8px 12px;
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 12px;
 }
 
-main{
-  width:100%;
-  max-width:900px;
-
-  margin:auto;
-  padding:12px;
+.page {
+  display: none;
 }
 
-.page{
-  display:none;
+.page.active {
+  display: block;
 }
 
-.page.active{
-  display:block;
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 5px rgba(0,0,0,.08);
 }
 
-.card{
-  background:white;
-
-  border:
-    1px solid #d9e2f3;
-
-  border-radius:16px;
-
-  padding:16px 14px;
-
-  margin-bottom:16px;
+h2,
+h3 {
+  color: #17365d;
 }
 
-h2{
-  color:#17365d;
-
-  font-size:28px;
-
-  margin:
-    0 0 14px;
+h2 {
+  margin-top: 0;
 }
 
-h3{
-  color:#17365d;
-
-  font-size:23px;
-
-  margin:
-    20px 0 10px;
+h3 {
+  margin-top: 25px;
 }
 
-label{
-  display:block;
-
-  margin:
-    16px 0 7px;
-
-  font-size:20px;
-  font-weight:700;
+.notice {
+  background: #fff3cd;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
 }
 
-input,
+.good {
+  background: #e6f4ea;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.message {
+  display: none;
+  padding: 12px;
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
 select,
-textarea{
-  width:100%;
+input {
+  width: 100%;
+  padding: 12px;
 
-  min-height:64px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
 
-  padding:13px;
-
-  border:
-    2px solid #aebbc9;
-
-  border-radius:13px;
-
-  font-size:21px;
-
-  background:white;
+  font-size: 18px;
+  background: white;
 }
 
-textarea{
-  min-height:100px;
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
-.row{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:0;
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
-.message{
-  display:none;
-
-  padding:
-    14px 16px;
-
-  font-size:19px;
+.metric {
+  background: #edf2f7;
+  border-radius: 8px;
+  padding: 10px;
 }
 
-.small{
-  color:#596675;
-  font-size:18px;
+.metric strong {
+  display: block;
+  font-size: 21px;
+  color: #17365d;
 }
 
-.metrics{
-  display:grid;
-
-  grid-template-columns:
-    repeat(2,1fr);
-
-  gap:10px;
-
-  margin:
-    12px 0 18px;
+.metric span {
+  font-size: 13px;
+  color: #5d6875;
 }
 
-.metric{
-  background:#f7f9fc;
-
-  border:
-    1px solid #d9e2f3;
-
-  border-radius:12px;
-
-  padding:12px;
+.small {
+  color: #5d6875;
+  font-size: 14px;
 }
 
-.metric strong{
-  display:block;
+.shared {
+  display: inline-block;
 
-  color:#17365d;
+  background: #e9defa;
+  color: #57358a;
 
-  font-size:23px;
+  font-size: 11px;
+  font-weight: bold;
+
+  border-radius: 12px;
+  padding: 3px 7px;
+  margin-left: 5px;
 }
 
-.metric span{
-  display:block;
+.discontinue {
+  display: inline-block;
 
-  color:#596675;
+  background: #fde2e2;
+  color: #9b1c1c;
 
-  font-size:16px;
+  font-size: 11px;
+  font-weight: bold;
+
+  border-radius: 12px;
+  padding: 3px 7px;
+  margin-left: 5px;
 }
 
-table,
-thead,
-tbody,
-tr,
-th,
-td{
-  display:block;
+tr.discontinued-row {
+  background: #fafafa;
 }
 
-table{
-  width:100%;
+tr.discontinued-row td {
+  color: #59636e;
 }
 
-thead{
-  display:none;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-tbody{
-  display:grid;
-  gap:12px;
+th {
+  background: #1f4e78;
+  color: white;
+
+  text-align: left;
+  padding: 8px;
 }
 
-tr{
-  background:white;
-
-  border:
-    2px solid #d9e2f3;
-
-  border-radius:14px;
-
-  padding:
-    10px 13px;
+td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
 }
 
-td{
-  display:grid;
+@media(max-width:700px) {
 
-  grid-template-columns:
-    120px minmax(0,1fr);
-
-  gap:10px;
-
-  padding:
-    9px 0;
-
-  border-bottom:
-    1px solid #e8edf4;
-
-  font-size:18px;
-
-  overflow-wrap:anywhere;
-}
-
-td:last-child{
-  border-bottom:0;
-}
-
-td::before{
-  content:
-    attr(data-label);
-
-  color:#596675;
-
-  font-weight:700;
-}
-
-.itemName{
-  font-size:22px;
-  font-weight:700;
-  color:#17365d;
-}
-
-.flag{
-  font-weight:700;
-}
-
-.good{
-  color:#227447;
-}
-
-.watch{
-  color:#a15c00;
-}
-
-.bad{
-  color:#b42323;
-}
-
-.empty{
-  display:block;
-  color:#596675;
-}
-
-.hide{
-  display:none !important;
-}
-
-@media(min-width:760px){
-
-  :root,
-  body{
-    font-size:18px;
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
   }
 
-  nav{
-    grid-template-columns:
-      repeat(5,1fr);
+  thead {
+    display: none;
   }
 
-  .row{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
-
-    gap:12px;
+  tr {
+    border: 1px solid #ccd2da;
+    border-radius: 9px;
+    padding: 7px;
+    margin-bottom: 10px;
   }
 
-  .metrics{
-    grid-template-columns:
-      repeat(4,1fr);
+  td {
+    display: grid;
+    grid-template-columns: 145px 1fr;
+    gap: 7px;
   }
 
-  table{
-    display:table;
-    border-collapse:collapse;
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #5d6875;
+  }
+}
+
+@media(min-width:800px) {
+
+  nav {
+    grid-template-columns: repeat(5,1fr);
   }
 
-  thead{
-    display:table-header-group;
+  .grid2 {
+    grid-template-columns: 1fr 1fr;
   }
 
-  tbody{
-    display:table-row-group;
+  .metrics {
+    grid-template-columns: repeat(4,1fr);
   }
-
-  tr{
-    display:table-row;
-    padding:0;
-    border:0;
-  }
-
-  th,
-  td{
-    display:table-cell;
-
-    padding:9px;
-
-    border-bottom:
-      1px solid #e8edf4;
-
-    font-size:15px;
-  }
-
-  th{
-    background:#1f4e78;
-    color:white;
-    text-align:left;
-  }
-
-  td::before{
-    display:none;
-  }
-
-  .itemName{
-    font-size:15px;
-  }
-
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <header>
-
-<h1>
-Oaks Inventory Tracker
-</h1>
-
-<p>
-Fluff & Fold • Snack Vending • Laundry Vending
-</p>
-
+  <h1>Oaks Inventory</h1>
+  <p>
+    Restock • Shopping • Snack • Laundry • Fluff &amp; Fold
+  </p>
 </header>
-
 
 <nav>
 
 <button
   class="tab active"
-  data-page="fluff">
-
-Fluff & Fold
-
+  data-page="restock">
+  Restock
 </button>
-
 
 <button
   class="tab"
-  data-page="snacks">
-
-Snack Vending
-
+  data-page="shopping">
+  Shopping List
 </button>
 
+<button
+  class="tab"
+  data-page="snack">
+  Snack Vending
+</button>
 
 <button
   class="tab"
   data-page="laundry">
-
-Laundry Vending
-
+  Laundry Vending
 </button>
-
 
 <button
   class="tab"
-  data-page="tracker">
-
-Tracker
-
-</button>
-
-
-<button
-  class="tab"
-  data-page="prices">
-
-Price Changes
-
+  data-page="fluff">
+  Fluff &amp; Fold
 </button>
 
 </nav>
 
-
 <div
   id="message"
-  class="message"
-  role="status">
+  class="message">
 </div>
-
 
 <main>
 
-
-<!-- =========================
-     FLUFF & FOLD
-========================== -->
+<!-- =========================================================
+     RESTOCK
+========================================================= -->
 
 <section
-  id="fluff"
+  id="restock"
   class="page active">
 
 <div class="card">
 
-<h2>
-Fluff & Fold
-</h2>
+<h2>Restock</h2>
 
-<p class="small">
-
-Counter retail inventory.
-Cleantie movement, supplier cost,
-retail pricing and physical stock
-all stay separate from vending.
-
-</p>
-
-<div
-  id="fluffMetrics"
-  class="metrics">
+<div class="notice">
+Enter the exact number of units you put into the vending machine.
+That quantity is
+<strong>subtracted from current inventory.</strong>
 </div>
+
+<label>
+Machine
+</label>
+
+<select id="restockArea">
+
+<option value="snacks">
+Snack Vending
+</option>
+
+<option value="laundry">
+Laundry Vending
+</option>
+
+</select>
 
 <label>
 Product
 </label>
 
-<select id="fluffItem">
+<select id="restockItem">
 </select>
 
+<div
+  id="restockCurrent"
+  class="small"
+  style="margin-top:8px">
+</div>
 
-<div class="row">
+<div class="grid2">
 
 <div>
 
 <label>
-Physical on hand
+Date
 </label>
 
 <input
-  id="fluffOnHand"
-  type="number"
-  min="0"
-  step="1">
+  id="restockDate"
+  type="date">
 
 </div>
-
 
 <div>
 
 <label>
-Reorder point
+Quantity Put In Machine
 </label>
 
 <input
-  id="fluffReorder"
+  id="restockQty"
   type="number"
-  min="0"
+  min="1"
   step="1">
 
 </div>
 
 </div>
 
+<label>
+Note
+</label>
+
+<input
+  id="restockNote"
+  type="text"
+  placeholder="Optional">
 
 <button
+  id="saveRestock"
   class="primary"
-  style="width:100%;margin-top:18px"
-  id="saveFluff">
+  style="width:100%;margin-top:14px">
 
-Save Fluff & Fold Count
+Save Restock
 
 </button>
 
-
-<h3>
-Products
-</h3>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Product</th>
-<th>Cost</th>
-<th>Sell</th>
-<th>Margin</th>
-<th>Cleantie Units</th>
-<th>Weekly</th>
-<th>On Hand</th>
-<th>Need</th>
-<th>Buy From</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-
-<tbody
-  id="fluffRows">
-</tbody>
-
-</table>
+<div
+  id="restockResult"
+  class="good"
+  style="display:none">
+</div>
 
 </div>
 
 </section>
 
 
-
-<!-- =========================
-     SNACK VENDING
-========================== -->
+<!-- =========================================================
+     SHOPPING
+========================================================= -->
 
 <section
-  id="snacks"
+  id="shopping"
+  class="page">
+
+<div class="card">
+
+<h2>
+Shopping List
+</h2>
+
+<div class="notice">
+Discontinued products are automatically excluded.
+Cases to buy are rounded
+<strong>up to full cases.</strong>
+</div>
+
+<div
+  id="shoppingMetrics"
+  class="metrics">
+</div>
+
+<div id="shoppingGroups">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     SNACK VENDING
+========================================================= -->
+
+<section
+  id="snack"
   class="page">
 
 <div class="card">
@@ -626,112 +497,58 @@ Snack Vending
 </div>
 
 <h3>
-Count Stock
+Correct Physical Count
 </h3>
 
-<label>
-Product
-</label>
-
-<select id="snackItem">
-</select>
-
-<div class="row">
-
-<div>
-
-<label>
-On hand
-</label>
-
-<input
-  id="snackOnHand"
-  type="number"
-  min="0"
-  step="1">
-
+<div id="snackCountBox">
 </div>
-
-<div>
-
-<label>
-Target
-</label>
-
-<input
-  id="snackTarget"
-  type="number"
-  min="0"
-  step="1">
-
-</div>
-
-</div>
-
-<button
-  class="primary"
-  style="width:100%;margin-top:18px"
-  id="saveSnack">
-
-Save Snack Count
-
-</button>
-
 
 <h3>
-Buy List
+Inventory
 </h3>
 
 <table>
 
 <thead>
-
 <tr>
 
-<th>Product</th>
-<th>Have</th>
+<th>Item</th>
+<th>On Hand</th>
+<th>Weekly</th>
 <th>Target</th>
 <th>Need</th>
-<th>Cases</th>
 <th>Supplier</th>
-<th>Est. Cost</th>
-<th>Status</th>
+<th>Unit Cost</th>
 
 </tr>
-
 </thead>
 
-<tbody
-  id="snackBuyRows">
+<tbody id="snackRows">
 </tbody>
 
 </table>
 
-
 <h3>
-Machine Slots
+Machine Map
 </h3>
 
 <table>
 
 <thead>
-
 <tr>
 
 <th>Slot</th>
-<th>Product</th>
-<th>Vend Price</th>
-<th>Cost</th>
-<th>Profit</th>
+<th>Item</th>
+<th>Sell Price</th>
+<th>Unit Cost</th>
+<th>Profit Each</th>
 <th>Margin</th>
-<th>Full Qty</th>
+<th>Capacity</th>
 
 </tr>
-
 </thead>
 
-<tbody
-  id="snackSlots">
+<tbody id="snackSlots">
 </tbody>
 
 </table>
@@ -741,10 +558,9 @@ Machine Slots
 </section>
 
 
-
-<!-- =========================
+<!-- =========================================================
      LAUNDRY VENDING
-========================== -->
+========================================================= -->
 
 <section
   id="laundry"
@@ -762,112 +578,58 @@ Laundry Vending
 </div>
 
 <h3>
-Count Stock
+Correct Physical Count
 </h3>
 
-<label>
-Product
-</label>
-
-<select id="laundryItem">
-</select>
-
-<div class="row">
-
-<div>
-
-<label>
-On hand
-</label>
-
-<input
-  id="laundryOnHand"
-  type="number"
-  min="0"
-  step="1">
-
+<div id="laundryCountBox">
 </div>
-
-<div>
-
-<label>
-Target
-</label>
-
-<input
-  id="laundryTarget"
-  type="number"
-  min="0"
-  step="1">
-
-</div>
-
-</div>
-
-<button
-  class="primary"
-  style="width:100%;margin-top:18px"
-  id="saveLaundry">
-
-Save Laundry Count
-
-</button>
-
 
 <h3>
-Buy List
+Inventory
 </h3>
 
 <table>
 
 <thead>
-
 <tr>
 
-<th>Product</th>
-<th>Have</th>
+<th>Item</th>
+<th>On Hand</th>
+<th>Weekly</th>
 <th>Target</th>
 <th>Need</th>
-<th>Cases</th>
 <th>Supplier</th>
-<th>Est. Cost</th>
-<th>Status</th>
+<th>Unit Cost</th>
 
 </tr>
-
 </thead>
 
-<tbody
-  id="laundryBuyRows">
+<tbody id="laundryRows">
 </tbody>
 
 </table>
 
-
 <h3>
-Machine Slots
+Machine Map
 </h3>
 
 <table>
 
 <thead>
-
 <tr>
 
 <th>Slot</th>
-<th>Product</th>
-<th>Vend Price</th>
-<th>Cost</th>
-<th>Profit</th>
+<th>Item</th>
+<th>Sell Price</th>
+<th>Unit Cost</th>
+<th>Profit Each</th>
 <th>Margin</th>
-<th>Full Qty</th>
+<th>Capacity</th>
 
 </tr>
-
 </thead>
 
-<tbody
-  id="laundrySlots">
+<tbody id="laundrySlots">
 </tbody>
 
 </table>
@@ -877,52 +639,63 @@ Machine Slots
 </section>
 
 
-
-<!-- =========================
-     TRACKER
-========================== -->
+<!-- =========================================================
+     FLUFF AND FOLD
+========================================================= -->
 
 <section
-  id="tracker"
+  id="fluff"
   class="page">
 
 <div class="card">
 
 <h2>
-Movement Tracker
+Fluff &amp; Fold
 </h2>
 
-<p class="small">
-
-Latest Cleantie movement and gross profit view.
-
-</p>
+<div class="notice">
+Items marked
+<strong>DISCONTINUE</strong>
+stay visible while inventory remains,
+but they will not be reordered.
+</div>
 
 <div
-  id="trackerMetrics"
+  id="fluffMetrics"
   class="metrics">
 </div>
 
+<h3>
+Correct Physical Count
+</h3>
+
+<div id="fluffCountBox">
+</div>
+
+<h3>
+Inventory / Pricing
+</h3>
+
 <table>
 
 <thead>
-
 <tr>
 
-<th>Product</th>
-<th>Units</th>
-<th>Sales</th>
-<th>Gross Profit</th>
+<th>Item</th>
+<th>On Hand</th>
+<th>Weekly Cleantie</th>
+<th>Target</th>
+<th>Need</th>
+<th>Supplier / Status</th>
+<th>Unit Cost</th>
+<th>Sell Price</th>
+<th>Profit Each</th>
 <th>Margin</th>
-<th>Weekly Units</th>
-<th>Action</th>
 
 </tr>
-
 </thead>
 
-<tbody
-  id="trackerRows">
+<tbody id="fluffRows">
 </tbody>
 
 </table>
@@ -930,54 +703,8 @@ Latest Cleantie movement and gross profit view.
 </div>
 
 </section>
-
-
-
-<!-- =========================
-     PRICE CHANGES
-========================== -->
-
-<section
-  id="prices"
-  class="page">
-
-<div class="card">
-
-<h2>
-Price Change Log
-</h2>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Date</th>
-<th>Product</th>
-<th>Old</th>
-<th>New</th>
-<th>Change</th>
-<th>Reason</th>
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody
-  id="priceRows">
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
 
 </main>
-
 
 
 <script>
@@ -988,53 +715,68 @@ const $ =
 
 
 let state = {
-  flufffold:[],
 
-  snacks:{
-    slots:[],
-    buying:[]
-  },
+  today: '',
 
-  laundry:{
-    slots:[],
-    buying:[]
-  },
+  targetWeeks: 2,
 
-  tracker:[],
-  priceChanges:[]
+  inventory: [],
+
+  shopping: [],
+
+  snackSlots: [],
+
+  laundrySlots: []
+
 };
 
 
-let pending = false;
+/* =========================================================
+   HELPERS
+========================================================= */
 
-let messageTimer;
+function esc(v) {
+
+  return String(
+    v === null ||
+    v === undefined
+      ? ''
+      : v
+  )
+  .replace(
+    /[&<>"']/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[c])
+  );
+
+}
 
 
-const esc =
-  value =>
-    String(value ?? '')
-      .replace(
-        /[&<>"']/g,
-        c => ({
-          '&':'&amp;',
-          '<':'&lt;',
-          '>':'&gt;',
-          '"':'&quot;',
-          "'":'&#39;'
-        }[c])
-      );
+function num(v) {
 
+  const cleaned =
+    String(
+      v === null ||
+      v === undefined
+        ? ''
+        : v
+    )
+    .replace(
+      /[^0-9.-]/g,
+      ''
+    );
 
-function number_(value) {
+  if (!cleaned) {
+    return 0;
+  }
 
   const n =
-    Number(
-      String(value ?? '')
-        .replace(
-          /[^0-9.-]/g,
-          ''
-        )
-    );
+    Number(cleaned);
 
   return Number.isFinite(n)
     ? n
@@ -1043,216 +785,204 @@ function number_(value) {
 }
 
 
-function money(value) {
+function hasValue(v) {
 
-  if (
-    value === '' ||
-    value === null ||
-    value === undefined
-  ) {
-    return '—';
+  return !(
+    v === '' ||
+    v === null ||
+    v === undefined
+  );
+
+}
+
+
+function money(v) {
+
+  if (!hasValue(v)) {
+    return 'UNKNOWN';
   }
-
-  const n =
-    number_(value);
 
   return '$' +
-    n.toFixed(2);
+    num(v).toFixed(2);
 
 }
 
 
-function percent(value) {
+function one(v) {
 
-  if (
-    value === '' ||
-    value === null ||
-    value === undefined
-  ) {
+  if (!hasValue(v)) {
     return '—';
   }
 
-  const text =
-    String(value);
-
-  if (
-    text.includes('%')
-  ) {
-    return text;
-  }
-
-  let n =
-    number_(value);
-
-  if (Math.abs(n) <= 1) {
-    n *= 100;
-  }
-
-  return n.toFixed(1) + '%';
+  return Number(v)
+    .toFixed(1);
 
 }
 
 
-function optionList(
-  id,
-  items,
-  old
+function metric(
+  value,
+  label
 ) {
 
-  $(id).innerHTML =
-    items
-      .map(
-        x =>
-          `<option value="${esc(x)}">${esc(x)}</option>`
-      )
-      .join('');
+  return (
+    '<div class="metric">' +
 
-  if (
-    items.includes(old)
-  ) {
-    $(id).value =
-      old;
-  }
+      '<strong>' +
+      esc(value) +
+      '</strong>' +
 
-}
+      '<span>' +
+      esc(label) +
+      '</span>' +
 
-
-function message(
-  text,
-  error = false,
-  autoHide = false
-) {
-
-  clearTimeout(
-    messageTimer
+    '</div>'
   );
+
+}
+
+
+function msg(
+  text,
+  error
+) {
 
   $('message').style.display =
     'block';
 
   $('message').style.background =
     error
-      ? '#fce4e4'
-      : '#e5f5e4';
+      ? '#ffdede'
+      : '#dff4df';
 
   $('message').textContent =
     text;
 
-  if (autoHide) {
-    messageTimer =
-      setTimeout(
-        () =>
-          $('message').style.display =
-            'none',
-        4500
-      );
-  }
+}
+
+
+function hideMsg() {
+
+  $('message').style.display =
+    'none';
 
 }
 
 
-function call(
-  method,
-  arg,
-  done
-) {
+function sharedTag(x) {
 
-  if (pending) {
-    return;
+  return x.shared
+
+    ?
+      '<span class="shared">' +
+      'SHARED' +
+      '</span>'
+
+    :
+      '';
+
+}
+
+
+/*
+A product is discontinued if:
+1. the backend explicitly sends discontinued=true
+2. supplier is DISCONTINUE
+3. status/action/note contains DISCONTINUE
+*/
+function isDiscontinued(x) {
+
+  if (!x) {
+    return false;
   }
 
-  pending = true;
+  if (x.discontinued === true) {
+    return true;
+  }
 
-  message(
-    'Saving…'
+  const supplier =
+    String(
+      x.supplier || ''
+    ).trim().toUpperCase();
+
+  if (
+    supplier === 'DISCONTINUE' ||
+    supplier === 'DISCONTINUED'
+  ) {
+    return true;
+  }
+
+  const text = [
+    x.status,
+    x.action,
+    x.note,
+    x.notes,
+    x.statusNote
+  ]
+  .filter(Boolean)
+  .join(' ')
+  .toUpperCase();
+
+  return text.includes(
+    'DISCONTINUE'
   );
 
-  const runner =
-    google.script.run
-
-      .withSuccessHandler(
-        result => {
-
-          pending =
-            false;
-
-          state =
-            result;
-
-          render();
-
-          message(
-            'Saved to Google Sheet.',
-            false,
-            true
-          );
-
-          if (done) {
-            done();
-          }
-
-        }
-      )
-
-      .withFailureHandler(
-        e => {
-
-          pending =
-            false;
-
-          message(
-            e.message ||
-              String(e),
-            true
-          );
-
-        }
-      );
+}
 
 
-  if (arg === undefined) {
-    runner[method]();
-  } else {
-    runner[method](arg);
-  }
+function discontinueTag(x) {
+
+  return isDiscontinued(x)
+
+    ?
+      '<span class="discontinue">' +
+      'DISCONTINUE' +
+      '</span>'
+
+    :
+      '';
 
 }
 
 
-/* ========================================
+/* =========================================================
    TABS
-======================================== */
+========================================================= */
 
 document
-  .querySelectorAll('.tab')
+  .querySelectorAll(
+    '.tab'
+  )
   .forEach(
-    button => {
+    btn => {
 
-      button.onclick =
-        () => {
+      btn.onclick =
+        function() {
 
           document
             .querySelectorAll(
               '.tab,.page'
             )
             .forEach(
-              el =>
-                el.classList.remove(
+              element =>
+                element.classList.remove(
                   'active'
                 )
             );
 
-          button
-            .classList.add(
-              'active'
-            );
+
+          btn.classList.add(
+            'active'
+          );
+
 
           $(
-            button.dataset.page
+            btn.dataset.page
           )
-            .classList.add(
-              'active'
-            );
+          .classList.add(
+            'active'
+          );
+
 
           window.scrollTo(
             0,
@@ -1265,876 +995,1663 @@ document
   );
 
 
-/* ========================================
-   FLUFF & FOLD
-======================================== */
+/* =========================================================
+   INVENTORY FILTER
+========================================================= */
 
-function updateFluffForm() {
+function inventoryFor(
+  channel
+) {
 
-  const item =
-    $('fluffItem').value;
+  return state.inventory
 
-  const found =
-    state.flufffold.find(
-      x =>
-        x.item === item
+    .filter(
+      x => {
+
+        if (
+          !Array.isArray(
+            x.channels
+          ) ||
+          !x.channels.includes(
+            channel
+          )
+        ) {
+          return false;
+        }
+
+
+        /*
+        Discontinued products stay visible
+        until stock reaches zero.
+        */
+        if (
+          channel ===
+          'Fluff & Fold' &&
+          isDiscontinued(x) &&
+          hasValue(x.onHand) &&
+          num(x.onHand) <= 0
+        ) {
+          return false;
+        }
+
+
+        return true;
+
+      }
+    )
+
+    .sort(
+      (a,b) =>
+        String(a.item)
+        .localeCompare(
+          String(b.item)
+        )
     );
-
-  $('fluffOnHand').value =
-    found?.onHand ?? '';
-
-  $('fluffReorder').value =
-    found?.reorderPoint ?? '';
 
 }
 
 
-function renderFluff() {
+/* =========================================================
+   RESTOCK
+========================================================= */
 
-  optionList(
-    'fluffItem',
+function refreshRestock() {
 
-    state.flufffold.map(
-      x =>
-        x.item
-    ),
-
-    $('fluffItem').value
-  );
-
-
-  updateFluffForm();
-
-
-  const revenue =
-    state.tracker.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.sales),
-      0
-    );
-
-
-  const gp =
-    state.tracker.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.grossProfit),
-      0
-    );
-
-
-  const units =
-    state.tracker.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.units),
-      0
-    );
-
-
-  $('fluffMetrics').innerHTML = `
-
-    <div class="metric">
-      <strong>
-        ${state.flufffold.length}
-      </strong>
-      <span>
-        Products
-      </span>
-    </div>
-
-    <div class="metric">
-      <strong>
-        ${Math.round(units)}
-      </strong>
-      <span>
-        Latest Cleantie units
-      </span>
-    </div>
-
-    <div class="metric">
-      <strong>
-        ${money(revenue)}
-      </strong>
-      <span>
-        Latest sales
-      </span>
-    </div>
-
-    <div class="metric">
-      <strong>
-        ${money(gp)}
-      </strong>
-      <span>
-        Gross profit
-      </span>
-    </div>
-
-  `;
-
-
-  $('fluffRows').innerHTML =
-    state.flufffold.length
+  const channel =
+    $('restockArea').value ===
+    'snacks'
 
       ?
-        state.flufffold
-
-          .map(
-            x => `
-
-              <tr>
-
-                <td
-                  class="itemName"
-                  data-label="Product">
-                  ${esc(x.item)}
-                </td>
-
-                <td data-label="Cost">
-                  ${esc(x.unitCost || '—')}
-                </td>
-
-                <td data-label="Sell">
-                  ${esc(x.sellPrice || '—')}
-                </td>
-
-                <td data-label="Margin">
-                  ${esc(x.margin || '—')}
-                </td>
-
-                <td data-label="Cleantie Units">
-                  ${esc(x.cleantieUnits || '—')}
-                </td>
-
-                <td data-label="Weekly">
-                  ${esc(x.weeklySales || '—')}
-                </td>
-
-                <td data-label="On Hand">
-                  ${esc(x.onHand || 'NEED COUNT')}
-                </td>
-
-                <td data-label="Need">
-                  ${esc(x.needUnits || '—')}
-                </td>
-
-                <td data-label="Buy From">
-                  ${esc(x.vendor || 'UNKNOWN')}
-                </td>
-
-                <td
-                  class="flag"
-                  data-label="Action">
-                  ${esc(x.action || '—')}
-                </td>
-
-              </tr>
-
-            `
-          )
-
-          .join('')
+        'Snack Vending'
 
       :
-        `<tr>
-          <td
-            class="empty"
-            data-label="">
-            No Fluff & Fold products found.
-          </td>
-        </tr>`;
+        'Laundry Vending';
+
+
+  const items =
+    inventoryFor(
+      channel
+    );
+
+
+  const select =
+    $('restockItem');
+
+
+  const previous =
+    select.value;
+
+
+  select.innerHTML =
+    items
+
+      .filter(
+        x =>
+          !isDiscontinued(x)
+      )
+
+      .map(
+        x =>
+
+          '<option value="' +
+          esc(x.sku) +
+          '">' +
+
+          esc(x.item) +
+
+          '</option>'
+      )
+
+      .join('');
+
+
+  if (
+    items.some(
+      x =>
+        x.sku === previous
+    )
+  ) {
+
+    select.value =
+      previous;
+
+  }
+
+
+  showRestockCurrent();
 
 }
 
 
-$('fluffItem').onchange =
-  updateFluffForm;
+function showRestockCurrent() {
+
+  const sku =
+    $('restockItem').value;
 
 
-$('saveFluff').onclick =
-  () => {
+  const x =
+    state.inventory.find(
+      item =>
+        item.sku === sku
+    );
 
-    const form = {
-      item:
-        $('fluffItem').value,
 
-      onHand:
-        $('fluffOnHand').value,
+  if (!x) {
 
-      reorderPoint:
-        $('fluffReorder').value
-    };
+    $('restockCurrent').textContent =
+      'No products available.';
+
+    return;
+
+  }
+
+
+  let text =
+    'Current inventory: ';
+
+
+  text +=
+    (
+      x.onHand === ''
+
+        ?
+          'NEED PHYSICAL COUNT'
+
+        :
+          x.onHand
+    );
+
+
+  if (
+    x.shared
+  ) {
+
+    text +=
+      ' — shared across ' +
+      x.channels.join(
+        ' + '
+      );
+
+  }
+
+
+  $('restockCurrent').textContent =
+    text;
+
+}
+
+
+$('restockArea').onchange =
+  refreshRestock;
+
+
+$('restockItem').onchange =
+  showRestockCurrent;
+
+
+$('saveRestock').onclick =
+  function() {
+
+    const qty =
+      $('restockQty').value;
 
 
     if (
-      !form.item ||
+      qty === '' ||
+      Number(qty) < 1 ||
       !Number.isInteger(
-        Number(
-          form.onHand
-        )
-      ) ||
-      Number(
-        form.onHand
-      ) < 0 ||
-      !Number.isInteger(
-        Number(
-          form.reorderPoint
-        )
-      ) ||
-      Number(
-        form.reorderPoint
-      ) < 0
+        Number(qty)
+      )
     ) {
 
-      message(
-        'Enter valid whole-number stock values.',
+      msg(
+        'Enter the exact number of units put in the machine.',
         true
       );
 
       return;
+
     }
 
 
-    call(
-      'saveFluffCount',
-      form
+    msg(
+      'Saving restock…'
     );
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function(result) {
+
+          state =
+            result.state;
+
+
+          renderAll();
+
+
+          const r =
+            result.result;
+
+
+          $('restockResult').style.display =
+            'block';
+
+
+          $('restockResult').innerHTML =
+
+            '<strong>' +
+            esc(r.item) +
+            '</strong><br>' +
+
+            esc(r.oldStock) +
+            ' − ' +
+            esc(r.quantity) +
+            ' = ' +
+
+            '<strong>' +
+            esc(r.newStock) +
+            ' remaining</strong>';
+
+
+          $('restockQty').value =
+            '';
+
+
+          $('restockNote').value =
+            '';
+
+
+          msg(
+            'Restock saved.'
+          );
+
+        }
+      )
+
+      .withFailureHandler(
+        function(e) {
+
+          msg(
+            e.message ||
+            String(e),
+            true
+          );
+
+        }
+      )
+
+      .saveRestock({
+
+        area:
+          $('restockArea').value,
+
+        sku:
+          $('restockItem').value,
+
+        date:
+          $('restockDate').value,
+
+        quantity:
+          qty,
+
+        note:
+          $('restockNote').value
+
+      });
 
   };
 
 
-/* ========================================
-   VENDING
-======================================== */
+/* =========================================================
+   PHYSICAL COUNT CONTROL
+========================================================= */
 
-function updateVendingForm(
-  group
+function countControl(
+  boxId,
+  channel,
+  area
 ) {
 
-  const prefix =
-    group === 'snacks'
-      ? 'snack'
-      : 'laundry';
-
-
-  const item =
-    $(
-      prefix + 'Item'
-    ).value;
-
-
-  const found =
-    state[group]
-      .buying
-      .find(
-        x =>
-          x.item === item
-      );
-
-
-  $(
-    prefix + 'OnHand'
-  ).value =
-    found?.onHand ?? '';
-
-
-  $(
-    prefix + 'Target'
-  ).value =
-    found?.target ?? '';
-
-}
-
-
-function renderVending(
-  group
-) {
-
-  const prefix =
-    group === 'snacks'
-      ? 'snack'
-      : 'laundry';
-
-
-  const obj =
-    state[group];
-
-
-  optionList(
-    prefix + 'Item',
-
-    obj.buying.map(
-      x =>
-        x.item
-    ),
-
-    $(
-      prefix + 'Item'
-    ).value
-  );
-
-
-  updateVendingForm(
-    group
-  );
-
-
-  const need =
-    obj.buying.filter(
-      x =>
-        number_(x.needUnits) > 0
+  const items =
+    inventoryFor(
+      channel
     );
 
 
-  const totalCost =
-    need.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.estimatedCost),
-      0
-    );
+  $(boxId).innerHTML = `
 
+    <label>
+      Product
+    </label>
 
-  $(
-    prefix + 'Metrics'
-  ).innerHTML = `
+    <select id="${boxId}Item">
+    </select>
 
-    <div class="metric">
-      <strong>
-        ${obj.slots.length}
-      </strong>
-      <span>
-        Slots
-      </span>
+    <label>
+      Current Physical Count
+    </label>
+
+    <input
+      id="${boxId}Count"
+      type="number"
+      min="0"
+      step="1">
+
+    <div
+      id="${boxId}Info"
+      class="small"
+      style="margin-top:6px">
     </div>
 
-    <div class="metric">
-      <strong>
-        ${obj.buying.length}
-      </strong>
-      <span>
-        Products
-      </span>
-    </div>
+    <button
+      class="primary"
+      id="${boxId}Save"
+      style="width:100%;margin-top:10px">
 
-    <div class="metric">
-      <strong>
-        ${need.length}
-      </strong>
-      <span>
-        Need reorder
-      </span>
-    </div>
+      Correct Count
 
-    <div class="metric">
-      <strong>
-        ${money(totalCost)}
-      </strong>
-      <span>
-        Estimated buy
-      </span>
-    </div>
+    </button>
 
   `;
 
 
-  $(
-    prefix + 'BuyRows'
-  ).innerHTML =
+  const select =
+    $(
+      boxId +
+      'Item'
+    );
 
-    obj.buying.length
 
-      ?
-        obj.buying
+  select.innerHTML =
+    items
 
-          .map(
-            x => `
+      .map(
+        x => {
 
-              <tr>
+          const label =
+            isDiscontinued(x)
 
-                <td
-                  class="itemName"
-                  data-label="Product">
+              ?
+                x.item +
+                ' — DISCONTINUE'
 
-                  ${esc(x.item)}
+              :
+                x.item;
 
-                </td>
 
-                <td data-label="Have">
-                  ${esc(x.onHand || 'NEED COUNT')}
-                </td>
+          return (
+            '<option value="' +
+            esc(x.sku) +
+            '">' +
 
-                <td data-label="Target">
-                  ${esc(x.target || '—')}
-                </td>
+            esc(label) +
 
-                <td data-label="Need">
-                  ${esc(x.needUnits || '—')}
-                </td>
+            '</option>'
+          );
 
-                <td data-label="Cases">
-                  ${esc(x.casesToBuy || '—')}
-                </td>
+        }
+      )
 
-                <td data-label="Supplier">
-                  ${esc(x.vendor || 'UNKNOWN')}
-                </td>
+      .join('');
 
-                <td data-label="Est. Cost">
-                  ${esc(x.estimatedCost || '—')}
-                </td>
 
-                <td
-                  class="flag"
-                  data-label="Status">
-                  ${esc(x.status || '—')}
-                </td>
+  function refresh() {
 
-              </tr>
+    const x =
+      state.inventory
+        .find(
+          item =>
+            item.sku ===
+            select.value
+        );
 
-            `
+
+    if (!x) {
+      return;
+    }
+
+
+    $(
+      boxId +
+      'Count'
+    ).value =
+
+      x.onHand === ''
+        ? ''
+        : x.onHand;
+
+
+    let info =
+
+      x.shared
+
+        ?
+          'Enter the TOTAL combined inventory. Shared across: ' +
+          x.channels.join(
+            ' + '
           )
 
-          .join('')
-
-      :
-        `<tr>
-          <td
-            class="empty"
-            data-label="">
-            No buying-plan products found.
-          </td>
-        </tr>`;
+        :
+          'Inventory location: ' +
+          x.channels.join(
+            ' + '
+          );
 
 
-  $(
-    prefix + 'Slots'
-  ).innerHTML =
+    if (
+      isDiscontinued(x)
+    ) {
 
-    obj.slots.length
+      info +=
+        ' — DISCONTINUE WHEN CURRENT STOCK RUNS OUT. DO NOT REORDER.';
 
-      ?
-        obj.slots
-
-          .map(
-            x => `
-
-              <tr>
-
-                <td data-label="Slot">
-                  ${esc(x.slot)}
-                </td>
-
-                <td
-                  class="itemName"
-                  data-label="Product">
-                  ${esc(x.item)}
-                </td>
-
-                <td data-label="Vend">
-                  ${esc(x.vendPrice || '—')}
-                </td>
-
-                <td data-label="Cost">
-                  ${esc(x.unitCost || '—')}
-                </td>
-
-                <td data-label="Profit">
-                  ${esc(x.profit || '—')}
-                </td>
-
-                <td data-label="Margin">
-                  ${esc(x.margin || '—')}
-                </td>
-
-                <td data-label="Full Qty">
-                  ${esc(x.fullQty || '—')}
-                </td>
-
-              </tr>
-
-            `
-          )
-
-          .join('')
-
-      :
-        `<tr>
-          <td
-            class="empty"
-            data-label="">
-            No slot data found.
-          </td>
-        </tr>`;
-
-}
+    }
 
 
-$('snackItem').onchange =
-  () =>
-    updateVendingForm(
-      'snacks'
-    );
+    $(
+      boxId +
+      'Info'
+    ).textContent =
+      info;
 
-
-$('laundryItem').onchange =
-  () =>
-    updateVendingForm(
-      'laundry'
-    );
-
-
-$('saveSnack').onclick =
-  () =>
-    saveVending(
-      'snacks'
-    );
-
-
-$('saveLaundry').onclick =
-  () =>
-    saveVending(
-      'laundry'
-    );
-
-
-function saveVending(
-  group
-) {
-
-  const prefix =
-    group === 'snacks'
-      ? 'snack'
-      : 'laundry';
-
-
-  const form = {
-    group,
-
-    item:
-      $(
-        prefix + 'Item'
-      ).value,
-
-    onHand:
-      $(
-        prefix + 'OnHand'
-      ).value,
-
-    target:
-      $(
-        prefix + 'Target'
-      ).value
-  };
-
-
-  if (
-    !form.item ||
-    !Number.isInteger(
-      Number(
-        form.onHand
-      )
-    ) ||
-    Number(
-      form.onHand
-    ) < 0 ||
-    !Number.isInteger(
-      Number(
-        form.target
-      )
-    ) ||
-    Number(
-      form.target
-    ) < 0
-  ) {
-
-    message(
-      'Enter valid whole-number stock values.',
-      true
-    );
-
-    return;
   }
 
 
-  call(
-    'saveVendingCount',
-    form
+  select.onchange =
+    refresh;
+
+
+  refresh();
+
+
+  $(
+    boxId +
+    'Save'
+  ).onclick =
+    function() {
+
+      const count =
+        $(
+          boxId +
+          'Count'
+        ).value;
+
+
+      if (
+        count === '' ||
+        Number(count) < 0 ||
+        !Number.isInteger(
+          Number(count)
+        )
+      ) {
+
+        msg(
+          'Enter a valid whole-number physical count.',
+          true
+        );
+
+        return;
+
+      }
+
+
+      msg(
+        'Saving physical count…'
+      );
+
+
+      google.script.run
+
+        .withSuccessHandler(
+          function(data) {
+
+            state =
+              data;
+
+
+            renderAll();
+
+
+            msg(
+              'Physical count updated.'
+            );
+
+          }
+        )
+
+        .withFailureHandler(
+          function(e) {
+
+            msg(
+              e.message ||
+              String(e),
+              true
+            );
+
+          }
+        )
+
+        .savePhysicalCount({
+
+          sku:
+            select.value,
+
+          area:
+            area,
+
+          count:
+            count
+
+        });
+
+    };
+
+}
+
+
+/* =========================================================
+   INVENTORY TABLES
+========================================================= */
+
+function renderInventory(
+  channel,
+  prefix,
+  area
+) {
+
+  const items =
+    inventoryFor(
+      channel
+    );
+
+
+  const low =
+    items.filter(
+      x =>
+        !isDiscontinued(x) &&
+        x.need !== '' &&
+        num(x.need) > 0
+    ).length;
+
+
+  const totalStock =
+    items.reduce(
+      (sum, x) =>
+
+        sum +
+        (
+          x.onHand === ''
+            ? 0
+            : num(
+                x.onHand
+              )
+        ),
+
+      0
+    );
+
+
+  const activeCount =
+    items.filter(
+      x =>
+        !isDiscontinued(x)
+    ).length;
+
+
+  const discontinuedCount =
+    items.filter(
+      x =>
+        isDiscontinued(x)
+    ).length;
+
+
+  if (
+    channel ===
+    'Fluff & Fold'
+  ) {
+
+    $(
+      prefix +
+      'Metrics'
+    ).innerHTML =
+
+      metric(
+        activeCount,
+        'Active Products'
+      ) +
+
+      metric(
+        discontinuedCount,
+        'Run-Out / Discontinue'
+      ) +
+
+      metric(
+        totalStock,
+        'Inventory Units'
+      ) +
+
+      metric(
+        low,
+        'Need Purchase'
+      );
+
+  } else {
+
+    $(
+      prefix +
+      'Metrics'
+    ).innerHTML =
+
+      metric(
+        items.length,
+        'Products'
+      ) +
+
+      metric(
+        totalStock,
+        'Inventory Units'
+      ) +
+
+      metric(
+        low,
+        'Need Purchase'
+      ) +
+
+      metric(
+        state.targetWeeks,
+        'Target Weeks'
+      );
+
+  }
+
+
+  countControl(
+    prefix +
+    'CountBox',
+    channel,
+    area
   );
 
+
+  $(
+    prefix +
+    'Rows'
+  ).innerHTML =
+
+    items
+
+      .map(
+        x => {
+
+          const discontinued =
+            isDiscontinued(x);
+
+
+          const weekly =
+            channel ===
+            'Fluff & Fold'
+
+              ?
+                x.fluffWeekly
+
+              :
+                x.vendingWeekly;
+
+
+          /*
+          Discontinued stock should never
+          have a reorder target or need.
+          */
+          const target =
+            discontinued
+              ? 0
+              : x.target;
+
+
+          const need =
+            discontinued
+              ? 0
+              : x.need;
+
+
+          const supplierText =
+            discontinued
+
+              ?
+                'DISCONTINUE'
+
+              :
+                (
+                  x.supplier ||
+                  'UNKNOWN'
+                );
+
+
+          const costText =
+            discontinued &&
+            !hasValue(x.unitCost)
+
+              ?
+                'N/A — DISCONTINUE'
+
+              :
+                (
+                  hasValue(
+                    x.unitCost
+                  )
+
+                    ?
+                      money(
+                        x.unitCost
+                      )
+
+                    :
+                      'UNKNOWN'
+                );
+
+
+          let extraColumns =
+            '';
+
+
+          if (
+            channel ===
+            'Fluff & Fold'
+          ) {
+
+            const hasCost =
+              hasValue(
+                x.unitCost
+              );
+
+
+            const hasSell =
+              hasValue(
+                x.sellPrice
+              );
+
+
+            const cost =
+              hasCost
+                ? num(
+                    x.unitCost
+                  )
+                : null;
+
+
+            const sell =
+              hasSell
+                ? num(
+                    x.sellPrice
+                  )
+                : null;
+
+
+            let profit =
+              null;
+
+
+            let margin =
+              null;
+
+
+            if (
+              cost !== null &&
+              sell !== null &&
+              sell > 0
+            ) {
+
+              profit =
+                sell -
+                cost;
+
+
+              margin =
+                profit /
+                sell;
+
+            }
+
+
+            const sellText =
+              sell !== null
+
+                ?
+                  money(
+                    sell
+                  )
+
+                :
+                  (
+                    discontinued
+
+                      ?
+                        'UNKNOWN — RUN OUT'
+
+                      :
+                        'UNKNOWN'
+                  );
+
+
+            const profitText =
+              profit !== null
+
+                ?
+                  money(
+                    profit
+                  )
+
+                :
+                  (
+                    discontinued
+
+                      ?
+                        'N/A — DISCONTINUE'
+
+                      :
+                        'UNKNOWN'
+                  );
+
+
+            const marginText =
+              margin !== null
+
+                ?
+                  (
+                    margin *
+                    100
+                  ).toFixed(1) +
+                  '%'
+
+                :
+                  (
+                    discontinued
+
+                      ?
+                        'N/A — DISCONTINUE'
+
+                      :
+                        'UNKNOWN'
+                  );
+
+
+            extraColumns = `
+
+              <td data-label="Sell Price">
+                ${esc(sellText)}
+              </td>
+
+              <td data-label="Profit Each">
+                ${esc(profitText)}
+              </td>
+
+              <td data-label="Margin">
+                ${esc(marginText)}
+              </td>
+
+            `;
+
+          }
+
+
+          return `
+
+            <tr class="${
+              discontinued
+                ? 'discontinued-row'
+                : ''
+            }">
+
+              <td data-label="Item">
+
+                ${esc(x.item)}
+
+                ${sharedTag(x)}
+
+                ${discontinueTag(x)}
+
+              </td>
+
+              <td data-label="On Hand">
+
+                ${
+                  x.onHand === ''
+
+                    ?
+                      'NEED COUNT'
+
+                    :
+                      esc(
+                        x.onHand
+                      )
+                }
+
+              </td>
+
+              <td data-label="Weekly">
+
+                ${
+                  discontinued
+
+                    ?
+                      'RUN OUT'
+
+                    :
+                      esc(
+                        one(
+                          weekly
+                        )
+                      )
+                }
+
+              </td>
+
+              <td data-label="Target">
+
+                ${
+                  discontinued
+
+                    ?
+                      '0'
+
+                    :
+                      (
+                        target === '' ||
+                        target === null ||
+                        target === undefined
+
+                          ?
+                            '—'
+
+                          :
+                            esc(
+                              target
+                            )
+                      )
+                }
+
+              </td>
+
+              <td data-label="Need">
+
+                ${
+                  discontinued
+
+                    ?
+                      '0'
+
+                    :
+                      (
+                        need === '' ||
+                        need === null ||
+                        need === undefined
+
+                          ?
+                            '—'
+
+                          :
+                            esc(
+                              need
+                            )
+                      )
+                }
+
+              </td>
+
+              <td data-label="Supplier / Status">
+
+                ${esc(
+                  supplierText
+                )}
+
+              </td>
+
+              <td data-label="Unit Cost">
+
+                ${esc(
+                  costText
+                )}
+
+              </td>
+
+              ${extraColumns}
+
+            </tr>
+
+          `;
+
+        }
+      )
+
+      .join('');
+
 }
 
 
-/* ========================================
-   TRACKER
-======================================== */
+/* =========================================================
+   MACHINE MAP
+========================================================= */
 
-function renderTracker() {
+function renderSlots(
+  id,
+  slots
+) {
 
-  const units =
-    state.tracker.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.units),
-      0
+  $(id).innerHTML =
+
+    (slots || [])
+
+      .map(
+        x => {
+
+          let marginText =
+            '—';
+
+
+          if (
+            hasValue(
+              x.margin
+            )
+          ) {
+
+            let margin =
+              num(
+                x.margin
+              );
+
+
+            if (
+              margin <= 1
+            ) {
+
+              margin =
+                margin * 100;
+
+            }
+
+
+            marginText =
+              margin.toFixed(1) +
+              '%';
+
+          }
+
+
+          return `
+
+            <tr>
+
+              <td data-label="Slot">
+                ${esc(x.slot)}
+              </td>
+
+              <td data-label="Item">
+                ${esc(x.item)}
+              </td>
+
+              <td data-label="Sell Price">
+
+                ${
+                  hasValue(
+                    x.vendPrice
+                  )
+
+                    ?
+                      esc(
+                        money(
+                          x.vendPrice
+                        )
+                      )
+
+                    :
+                      '—'
+                }
+
+              </td>
+
+              <td data-label="Unit Cost">
+
+                ${
+                  hasValue(
+                    x.unitCost
+                  )
+
+                    ?
+                      esc(
+                        money(
+                          x.unitCost
+                        )
+                      )
+
+                    :
+                      'UNKNOWN'
+                }
+
+              </td>
+
+              <td data-label="Profit Each">
+
+                ${
+                  hasValue(
+                    x.profit
+                  )
+
+                    ?
+                      esc(
+                        money(
+                          x.profit
+                        )
+                      )
+
+                    :
+                      '—'
+                }
+
+              </td>
+
+              <td data-label="Margin">
+                ${esc(
+                  marginText
+                )}
+              </td>
+
+              <td data-label="Capacity">
+                ${esc(
+                  x.capacity ||
+                  'VERIFY'
+                )}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+
+      .join('');
+
+}
+
+
+/* =========================================================
+   SHOPPING LIST
+========================================================= */
+
+function renderShopping() {
+
+  /*
+  HARD RULE:
+  discontinued items are removed from
+  the shopping list even if backend
+  accidentally sends them.
+  */
+  const rows =
+    (
+      state.shopping ||
+      []
+    )
+    .filter(
+      x =>
+        !isDiscontinued(x)
     );
 
 
-  const revenue =
-    state.tracker.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.sales),
-      0
-    );
+  const groups = {};
 
 
-  const gp =
-    state.tracker.reduce(
-      (sum,x) =>
-        sum +
-        number_(x.grossProfit),
-      0
-    );
+  rows.forEach(
+    x => {
+
+      const supplier =
+        x.supplier ||
+        'UNKNOWN';
 
 
-  const margin =
-    revenue
-      ? gp / revenue
-      : 0;
+      if (
+        !groups[supplier]
+      ) {
+
+        groups[supplier] =
+          [];
+
+      }
 
 
-  $('trackerMetrics').innerHTML = `
+      groups[supplier]
+        .push(x);
 
-    <div class="metric">
-      <strong>
-        ${Math.round(units)}
-      </strong>
-      <span>
-        Units sold
-      </span>
-    </div>
-
-    <div class="metric">
-      <strong>
-        ${money(revenue)}
-      </strong>
-      <span>
-        Revenue
-      </span>
-    </div>
-
-    <div class="metric">
-      <strong>
-        ${money(gp)}
-      </strong>
-      <span>
-        Gross profit
-      </span>
-    </div>
-
-    <div class="metric">
-      <strong>
-        ${(margin * 100).toFixed(1)}%
-      </strong>
-      <span>
-        Overall margin
-      </span>
-    </div>
-
-  `;
+    }
+  );
 
 
-  $('trackerRows').innerHTML =
+  const suppliers =
+    Object.keys(
+      groups
+    )
+    .sort();
 
-    state.tracker.length
 
-      ?
-        state.tracker
+  const totalEstimated =
+    rows.reduce(
+      (sum, x) => {
 
-          .map(
-            x => `
-
-              <tr>
-
-                <td
-                  class="itemName"
-                  data-label="Product">
-                  ${esc(x.item)}
-                </td>
-
-                <td data-label="Units">
-                  ${esc(x.units)}
-                </td>
-
-                <td data-label="Sales">
-                  ${esc(x.sales)}
-                </td>
-
-                <td data-label="Gross Profit">
-                  ${esc(x.grossProfit)}
-                </td>
-
-                <td data-label="Margin">
-                  ${esc(x.margin)}
-                </td>
-
-                <td data-label="Weekly">
-                  ${esc(x.weeklyUnits)}
-                </td>
-
-                <td
-                  class="flag"
-                  data-label="Action">
-                  ${esc(x.action || '—')}
-                </td>
-
-              </tr>
-
-            `
+        if (
+          !hasValue(
+            x.estimatedTotal
           )
+        ) {
 
-          .join('')
+          return sum;
 
-      :
-        `<tr>
-          <td
-            class="empty"
-            data-label="">
-            No movement data found.
-          </td>
-        </tr>`;
+        }
+
+
+        return sum +
+          num(
+            x.estimatedTotal
+          );
+
+      },
+      0
+    );
+
+
+  $('shoppingMetrics').innerHTML =
+
+    metric(
+      rows.length,
+      'Items to Buy'
+    ) +
+
+    metric(
+      suppliers.length,
+      'Suppliers'
+    ) +
+
+    metric(
+      state.targetWeeks,
+      'Weeks Target'
+    ) +
+
+    metric(
+      money(
+        totalEstimated
+      ),
+      'Estimated Spend'
+    );
+
+
+  if (
+    rows.length === 0
+  ) {
+
+    $('shoppingGroups').innerHTML =
+
+      '<div class="good">' +
+      'Nothing currently needs to be purchased.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  $('shoppingGroups').innerHTML =
+
+    suppliers
+
+      .map(
+        supplier => {
+
+          const items =
+            groups[supplier];
+
+
+          const supplierTotal =
+            items.reduce(
+              (sum, x) => {
+
+                if (
+                  !hasValue(
+                    x.estimatedTotal
+                  )
+                ) {
+
+                  return sum;
+
+                }
+
+
+                return sum +
+                  num(
+                    x.estimatedTotal
+                  );
+
+              },
+              0
+            );
+
+
+          return `
+
+            <div class="card">
+
+              <h3>
+                ${esc(supplier)}
+              </h3>
+
+              <div class="small">
+
+                Estimated supplier total:
+
+                <strong>
+                  ${esc(
+                    money(
+                      supplierTotal
+                    )
+                  )}
+                </strong>
+
+              </div>
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>Item</th>
+                    <th>Used In</th>
+                    <th>Current</th>
+                    <th>Need Units</th>
+                    <th>Cases to Buy</th>
+                    <th>Units / Case</th>
+                    <th>Price / Case</th>
+                    <th>Unit Price</th>
+                    <th>Estimated Total</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  ${
+                    items
+
+                      .map(
+                        x => {
+
+                          let casesText =
+                            'NEED CASE SIZE';
+
+
+                          if (
+                            hasValue(
+                              x.cases
+                            )
+                          ) {
+
+                            casesText =
+                              x.cases;
+
+                          }
+
+
+                          let caseSizeText =
+                            'NEED CASE SIZE';
+
+
+                          if (
+                            hasValue(
+                              x.caseSize
+                            )
+                          ) {
+
+                            caseSizeText =
+                              x.caseSize;
+
+                          }
+
+
+                          let casePriceText =
+                            'NEED CURRENT QUOTE';
+
+
+                          if (
+                            hasValue(
+                              x.casePrice
+                            )
+                          ) {
+
+                            casePriceText =
+                              money(
+                                x.casePrice
+                              );
+
+                          }
+
+
+                          let unitPriceText =
+                            'NEED CURRENT QUOTE';
+
+
+                          if (
+                            hasValue(
+                              x.unitCost
+                            )
+                          ) {
+
+                            unitPriceText =
+                              money(
+                                x.unitCost
+                              );
+
+                          }
+
+
+                          let totalText =
+                            'VERIFY';
+
+
+                          if (
+                            hasValue(
+                              x.estimatedTotal
+                            )
+                          ) {
+
+                            totalText =
+                              money(
+                                x.estimatedTotal
+                              );
+
+                          }
+
+
+                          return `
+
+                            <tr>
+
+                              <td data-label="Item">
+
+                                ${esc(x.item)}
+
+                                ${sharedTag(x)}
+
+                              </td>
+
+                              <td data-label="Used In">
+
+                                ${esc(
+                                  (
+                                    x.channels ||
+                                    []
+                                  )
+                                  .join(
+                                    ' + '
+                                  )
+                                )}
+
+                              </td>
+
+                              <td data-label="Current">
+
+                                ${
+                                  x.onHand === ''
+
+                                    ?
+                                      'NEED COUNT'
+
+                                    :
+                                      esc(
+                                        x.onHand
+                                      )
+                                }
+
+                              </td>
+
+                              <td data-label="Need Units">
+                                ${esc(x.need)}
+                              </td>
+
+                              <td data-label="Cases to Buy">
+                                ${esc(casesText)}
+                              </td>
+
+                              <td data-label="Units / Case">
+                                ${esc(caseSizeText)}
+                              </td>
+
+                              <td data-label="Price / Case">
+                                ${esc(casePriceText)}
+                              </td>
+
+                              <td data-label="Unit Price">
+                                ${esc(unitPriceText)}
+                              </td>
+
+                              <td data-label="Estimated Total">
+                                ${esc(totalText)}
+                              </td>
+
+                            </tr>
+
+                          `;
+
+                        }
+                      )
+
+                      .join('')
+                  }
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          `;
+
+        }
+      )
+
+      .join('');
 
 }
 
 
-/* ========================================
-   PRICE CHANGES
-======================================== */
+/* =========================================================
+   MASTER RENDER
+========================================================= */
 
-function renderPrices() {
+function renderAll() {
 
-  $('priceRows').innerHTML =
-
-    state.priceChanges.length
-
-      ?
-        state.priceChanges
-
-          .slice()
-          .reverse()
-
-          .map(
-            x => `
-
-              <tr>
-
-                <td data-label="Date">
-                  ${esc(x.date || '—')}
-                </td>
-
-                <td
-                  class="itemName"
-                  data-label="Product">
-                  ${esc(x.item)}
-                </td>
-
-                <td data-label="Old">
-                  ${esc(x.oldPrice)}
-                </td>
-
-                <td data-label="New">
-                  ${esc(x.newPrice)}
-                </td>
-
-                <td data-label="Change">
-                  ${esc(x.change)}
-                </td>
-
-                <td data-label="Reason">
-                  ${esc(x.reason)}
-                </td>
-
-                <td
-                  class="flag"
-                  data-label="Status">
-                  ${esc(x.status)}
-                </td>
-
-              </tr>
-
-            `
-          )
-
-          .join('')
-
-      :
-        `<tr>
-          <td
-            class="empty"
-            data-label="">
-            No price changes found.
-          </td>
-        </tr>`;
-
-}
+  refreshRestock();
 
 
-/* ========================================
-   FULL RENDER
-======================================== */
+  renderShopping();
 
-function render() {
 
-  renderFluff();
-
-  renderVending(
+  renderInventory(
+    'Snack Vending',
+    'snack',
     'snacks'
   );
 
-  renderVending(
+
+  renderInventory(
+    'Laundry Vending',
+    'laundry',
     'laundry'
   );
 
-  renderTracker();
 
-  renderPrices();
+  renderInventory(
+    'Fluff & Fold',
+    'fluff',
+    'fluff'
+  );
+
+
+  renderSlots(
+    'snackSlots',
+    state.snackSlots
+  );
+
+
+  renderSlots(
+    'laundrySlots',
+    state.laundrySlots
+  );
+
+
+  if (
+    !$('restockDate').value
+  ) {
+
+    $('restockDate').value =
+      state.today;
+
+  }
 
 }
 
 
-/* ========================================
-   INITIAL LOAD
-======================================== */
+/* =========================================================
+   LOAD APP
+========================================================= */
 
-message(
-  'Loading tracker…'
+msg(
+  'Loading inventory…'
 );
 
 
 google.script.run
 
   .withSuccessHandler(
-    data => {
+    function(data) {
 
       state =
         data;
 
-      render();
 
-      $('message').style.display =
-        'none';
+      renderAll();
+
+
+      hideMsg();
 
     }
   )
 
   .withFailureHandler(
-    e => {
+    function(e) {
 
-      message(
+      msg(
         e.message ||
-          String(e),
+        String(e),
         true
       );
 
@@ -2143,9 +2660,7 @@ google.script.run
 
   .getState();
 
-
 </script>
 
 </body>
-
 </html>
